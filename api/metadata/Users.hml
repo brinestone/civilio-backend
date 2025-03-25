@@ -1,0 +1,235 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Users
+  fields:
+    - name: createdAt
+      type: Timestamp!
+    - name: id
+      type: Uuid!
+    - name: password
+      type: Text!
+    - name: role
+      type: UserRoles!
+    - name: updatedAt
+      type: Timestamp!
+    - name: username
+      type: Varchar!
+  graphql:
+    typeName: Users
+    inputTypeName: UsersInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: users
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Users
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - id
+          - password
+          - role
+          - updatedAt
+          - username
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: UsersBoolExp
+  operand:
+    object:
+      type: Users
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: id
+          booleanExpressionType: UuidBoolExp
+        - fieldName: password
+          booleanExpressionType: TextBoolExp
+        - fieldName: role
+          booleanExpressionType: UserRolesBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: username
+          booleanExpressionType: VarcharBoolExp
+      comparableRelationships:
+        - relationshipName: inventoryItems
+        - relationshipName: inventoryItemsByLastUpdatedBy
+        - relationshipName: inventoryMovements
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: UsersBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: UsersAggExp
+  operand:
+    object:
+      aggregatedType: Users
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: id
+          aggregateExpression: UuidAggExp
+        - fieldName: password
+          aggregateExpression: TextAggExp
+        - fieldName: role
+          aggregateExpression: UserRolesAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: username
+          aggregateExpression: VarcharAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: UsersAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: UsersOrderByExp
+  operand:
+    object:
+      orderedType: Users
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: id
+          orderByExpression: UuidOrderByExp
+        - fieldName: password
+          orderByExpression: TextOrderByExp
+        - fieldName: role
+          orderByExpression: UserRolesOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: username
+          orderByExpression: VarcharOrderByExp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: UsersOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Users
+  objectType: Users
+  source:
+    dataConnectorName: db
+    collection: users
+  filterExpressionType: UsersBoolExp
+  aggregateExpression: UsersAggExp
+  orderByExpression: UsersOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: users
+      subscription:
+        rootField: users
+    selectUniques:
+      - queryRootField: usersById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: usersById
+      - queryRootField: usersByUsername
+        uniqueIdentifier:
+          - username
+        subscription:
+          rootField: usersByUsername
+    filterInputTypeName: UsersFilterInput
+    aggregate:
+      queryRootField: usersAggregate
+      subscription:
+        rootField: usersAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Users
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItems
+  sourceType: Users
+  target:
+    model:
+      name: InventoryItems
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryItemsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: addedBy
+  graphql:
+    aggregateFieldName: inventoryItemsAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItemsByLastUpdatedBy
+  sourceType: Users
+  target:
+    model:
+      name: InventoryItems
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryItemsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: lastUpdatedBy
+  graphql:
+    aggregateFieldName: inventoryItemsByLastUpdatedByAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryMovements
+  sourceType: Users
+  target:
+    model:
+      name: InventoryMovements
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryMovementsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: recordedBy
+  graphql:
+    aggregateFieldName: inventoryMovementsAggregate
+

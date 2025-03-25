@@ -1,0 +1,1457 @@
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Timestamp
+  graphql:
+    typeName: Timestamp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: TimestampBoolExp
+  operand:
+    scalar:
+      type: Timestamp
+      comparisonOperators:
+        - name: _eq
+          argumentType: Timestamp!
+        - name: _gt
+          argumentType: Timestamp!
+        - name: _gte
+          argumentType: Timestamp!
+        - name: _in
+          argumentType: "[Timestamp!]!"
+        - name: _lt
+          argumentType: Timestamp!
+        - name: _lte
+          argumentType: Timestamp!
+        - name: _neq
+          argumentType: Timestamp!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: timestamp
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: TimestampBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: timestamp
+  representation: Timestamp
+  graphql:
+    comparisonExpressionTypeName: TimestampComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Text
+  graphql:
+    typeName: Text
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: TextBoolExp
+  operand:
+    scalar:
+      type: Text
+      comparisonOperators:
+        - name: _eq
+          argumentType: Text!
+        - name: _gt
+          argumentType: Text!
+        - name: _gte
+          argumentType: Text!
+        - name: _ilike
+          argumentType: Text!
+        - name: _in
+          argumentType: "[Text!]!"
+        - name: _iregex
+          argumentType: Text!
+        - name: _like
+          argumentType: Text!
+        - name: _lt
+          argumentType: Text!
+        - name: _lte
+          argumentType: Text!
+        - name: _neq
+          argumentType: Text!
+        - name: _nilike
+          argumentType: Text!
+        - name: _niregex
+          argumentType: Text!
+        - name: _nlike
+          argumentType: Text!
+        - name: _nregex
+          argumentType: Text!
+        - name: _regex
+          argumentType: Text!
+        - name: st_coveredby
+          argumentType: Text!
+        - name: st_covers
+          argumentType: Text!
+        - name: st_intersects
+          argumentType: Text!
+        - name: st_relatematch
+          argumentType: Text!
+        - name: starts_with
+          argumentType: Text!
+        - name: ts_match_tt
+          argumentType: Text!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: text
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: TextBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: text
+  representation: Text
+  graphql:
+    comparisonExpressionTypeName: TextComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Uuid
+  graphql:
+    typeName: Uuid
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: UuidBoolExp
+  operand:
+    scalar:
+      type: Uuid
+      comparisonOperators:
+        - name: _eq
+          argumentType: Uuid!
+        - name: _gt
+          argumentType: Uuid!
+        - name: _gte
+          argumentType: Uuid!
+        - name: _in
+          argumentType: "[Uuid!]!"
+        - name: _lt
+          argumentType: Uuid!
+        - name: _lte
+          argumentType: Uuid!
+        - name: _neq
+          argumentType: Uuid!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: uuid
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: UuidBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: uuid
+  representation: Uuid
+  graphql:
+    comparisonExpressionTypeName: UuidComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Geometry
+  graphql:
+    typeName: Geometry
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Int4
+  graphql:
+    typeName: Int4
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: Int4BoolExp
+  operand:
+    scalar:
+      type: Int4
+      comparisonOperators:
+        - name: _eq
+          argumentType: Int4!
+        - name: _gt
+          argumentType: Int4!
+        - name: _gte
+          argumentType: Int4!
+        - name: _in
+          argumentType: "[Int4!]!"
+        - name: _lt
+          argumentType: Int4!
+        - name: _lte
+          argumentType: Int4!
+        - name: _neq
+          argumentType: Int4!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: int4
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: Int4BoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: int4
+  representation: Int4
+  graphql:
+    comparisonExpressionTypeName: Int4ComparisonExp
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: GeometryBoolExp
+  operand:
+    scalar:
+      type: Geometry
+      comparisonOperators:
+        - name: _eq
+          argumentType: Geometry!
+        - name: _gt
+          argumentType: Geometry!
+        - name: _gte
+          argumentType: Geometry!
+        - name: _in
+          argumentType: "[Geometry!]!"
+        - name: _like
+          argumentType: Geometry!
+        - name: _lt
+          argumentType: Geometry!
+        - name: _lte
+          argumentType: Geometry!
+        - name: _neq
+          argumentType: Geometry!
+        - name: _regex
+          argumentType: Geometry!
+        - name: box_above
+          argumentType: Geometry!
+        - name: box_below
+          argumentType: Geometry!
+        - name: box_contain
+          argumentType: Geometry!
+        - name: box_contained
+          argumentType: Geometry!
+        - name: box_left
+          argumentType: Geometry!
+        - name: box_overabove
+          argumentType: Geometry!
+        - name: box_overbelow
+          argumentType: Geometry!
+        - name: box_overlap
+          argumentType: Geometry!
+        - name: box_overleft
+          argumentType: Geometry!
+        - name: box_overright
+          argumentType: Geometry!
+        - name: box_right
+          argumentType: Geometry!
+        - name: box_same
+          argumentType: Geometry!
+        - name: equals
+          argumentType: Geometry!
+        - name: geography_overlaps
+          argumentType: Geometry!
+        - name: geometry_above
+          argumentType: Geometry!
+        - name: geometry_below
+          argumentType: Geometry!
+        - name: geometry_contained_3d
+          argumentType: Geometry!
+        - name: geometry_contains
+          argumentType: Geometry!
+        - name: geometry_contains_3d
+          argumentType: Geometry!
+        - name: geometry_contains_nd
+          argumentType: Geometry!
+        - name: geometry_left
+          argumentType: Geometry!
+        - name: geometry_overabove
+          argumentType: Geometry!
+        - name: geometry_overbelow
+          argumentType: Geometry!
+        - name: geometry_overlaps
+          argumentType: Geometry!
+        - name: geometry_overlaps_3d
+          argumentType: Geometry!
+        - name: geometry_overlaps_nd
+          argumentType: Geometry!
+        - name: geometry_overleft
+          argumentType: Geometry!
+        - name: geometry_overright
+          argumentType: Geometry!
+        - name: geometry_right
+          argumentType: Geometry!
+        - name: geometry_same
+          argumentType: Geometry!
+        - name: geometry_same_3d
+          argumentType: Geometry!
+        - name: geometry_same_nd
+          argumentType: Geometry!
+        - name: geometry_within
+          argumentType: Geometry!
+        - name: geometry_within_nd
+          argumentType: Geometry!
+        - name: st_3dintersects
+          argumentType: Geometry!
+        - name: st_contains
+          argumentType: Geometry!
+        - name: st_containsproperly
+          argumentType: Geometry!
+        - name: st_coveredby
+          argumentType: Geometry!
+        - name: st_covers
+          argumentType: Geometry!
+        - name: st_crosses
+          argumentType: Geometry!
+        - name: st_disjoint
+          argumentType: Geometry!
+        - name: st_equals
+          argumentType: Geometry!
+        - name: st_intersects
+          argumentType: Geometry!
+        - name: st_isvalid
+          argumentType: Int4!
+        - name: st_orderingequals
+          argumentType: Geometry!
+        - name: st_overlaps
+          argumentType: Geometry!
+        - name: st_touches
+          argumentType: Geometry!
+        - name: st_within
+          argumentType: Geometry!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: geometry
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: GeometryBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: geometry
+  representation: Geometry
+  graphql:
+    comparisonExpressionTypeName: GeometryComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: AdministrativeUnitTypes
+  graphql:
+    typeName: AdministrativeUnitTypes
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: AdministrativeUnitTypesBoolExp
+  operand:
+    scalar:
+      type: AdministrativeUnitTypes
+      comparisonOperators:
+        - name: _eq
+          argumentType: AdministrativeUnitTypes!
+        - name: _gt
+          argumentType: AdministrativeUnitTypes!
+        - name: _gte
+          argumentType: AdministrativeUnitTypes!
+        - name: _in
+          argumentType: "[AdministrativeUnitTypes!]!"
+        - name: _lt
+          argumentType: AdministrativeUnitTypes!
+        - name: _lte
+          argumentType: AdministrativeUnitTypes!
+        - name: _neq
+          argumentType: AdministrativeUnitTypes!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: administrative_unit_types
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: AdministrativeUnitTypesBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: administrative_unit_types
+  representation: AdministrativeUnitTypes
+  graphql:
+    comparisonExpressionTypeName: AdministrativeUnitTypesComparisonExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: TimestampAggExp
+  operand:
+    scalar:
+      aggregatedType: Timestamp
+      aggregationFunctions:
+        - name: max
+          returnType: Timestamp
+        - name: min
+          returnType: Timestamp
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: timestamp
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: TimestampAggExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: TextAggExp
+  operand:
+    scalar:
+      aggregatedType: Text
+      aggregationFunctions:
+        - name: max
+          returnType: Text
+        - name: min
+          returnType: Text
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: text
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: TextAggExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: UuidAggExp
+  operand:
+    scalar:
+      aggregatedType: Uuid
+      aggregationFunctions: []
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: uuid
+          functionMapping: {}
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: UuidAggExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Box3D
+  graphql:
+    typeName: Box3D
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: Box3DBoolExp
+  operand:
+    scalar:
+      type: Box3D
+      comparisonOperators:
+        - name: _eq
+          argumentType: Box3D!
+        - name: _gt
+          argumentType: Box3D!
+        - name: _gte
+          argumentType: Box3D!
+        - name: _in
+          argumentType: "[Box3D!]!"
+        - name: _like
+          argumentType: Box3D!
+        - name: _lt
+          argumentType: Box3D!
+        - name: _lte
+          argumentType: Box3D!
+        - name: _neq
+          argumentType: Box3D!
+        - name: _regex
+          argumentType: Box3D!
+        - name: box_above
+          argumentType: Box3D!
+        - name: box_below
+          argumentType: Box3D!
+        - name: box_contain
+          argumentType: Box3D!
+        - name: box_contained
+          argumentType: Box3D!
+        - name: box_left
+          argumentType: Box3D!
+        - name: box_overabove
+          argumentType: Box3D!
+        - name: box_overbelow
+          argumentType: Box3D!
+        - name: box_overlap
+          argumentType: Box3D!
+        - name: box_overleft
+          argumentType: Box3D!
+        - name: box_overright
+          argumentType: Box3D!
+        - name: box_right
+          argumentType: Box3D!
+        - name: box_same
+          argumentType: Box3D!
+        - name: equals
+          argumentType: Box3D!
+        - name: geography_overlaps
+          argumentType: Box3D!
+        - name: geometry_above
+          argumentType: Box3D!
+        - name: geometry_below
+          argumentType: Box3D!
+        - name: geometry_contained_3d
+          argumentType: Box3D!
+        - name: geometry_contains
+          argumentType: Box3D!
+        - name: geometry_contains_3d
+          argumentType: Box3D!
+        - name: geometry_contains_nd
+          argumentType: Box3D!
+        - name: geometry_left
+          argumentType: Box3D!
+        - name: geometry_overabove
+          argumentType: Box3D!
+        - name: geometry_overbelow
+          argumentType: Box3D!
+        - name: geometry_overlaps
+          argumentType: Box3D!
+        - name: geometry_overlaps_3d
+          argumentType: Box3D!
+        - name: geometry_overlaps_nd
+          argumentType: Box3D!
+        - name: geometry_overleft
+          argumentType: Box3D!
+        - name: geometry_overright
+          argumentType: Box3D!
+        - name: geometry_right
+          argumentType: Box3D!
+        - name: geometry_same
+          argumentType: Box3D!
+        - name: geometry_same_3d
+          argumentType: Box3D!
+        - name: geometry_same_nd
+          argumentType: Box3D!
+        - name: geometry_within
+          argumentType: Box3D!
+        - name: geometry_within_nd
+          argumentType: Box3D!
+        - name: st_3dintersects
+          argumentType: Box3D!
+        - name: st_contains
+          argumentType: Box3D!
+        - name: st_containsproperly
+          argumentType: Box3D!
+        - name: st_coveredby
+          argumentType: Box3D!
+        - name: st_covers
+          argumentType: Box3D!
+        - name: st_crosses
+          argumentType: Box3D!
+        - name: st_disjoint
+          argumentType: Box3D!
+        - name: st_equals
+          argumentType: Box3D!
+        - name: st_intersects
+          argumentType: Box3D!
+        - name: st_isvalid
+          argumentType: Int4!
+        - name: st_orderingequals
+          argumentType: Box3D!
+        - name: st_overlaps
+          argumentType: Box3D!
+        - name: st_touches
+          argumentType: Box3D!
+        - name: st_within
+          argumentType: Box3D!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: box3d
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: Box3DBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: box3d
+  representation: Box3D
+  graphql:
+    comparisonExpressionTypeName: Box3DComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Box2D
+  graphql:
+    typeName: Box2D
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: Box2DBoolExp
+  operand:
+    scalar:
+      type: Box2D
+      comparisonOperators:
+        - name: _eq
+          argumentType: Box2D!
+        - name: _gt
+          argumentType: Box2D!
+        - name: _gte
+          argumentType: Box2D!
+        - name: _in
+          argumentType: "[Box2D!]!"
+        - name: _like
+          argumentType: Box2D!
+        - name: _lt
+          argumentType: Box2D!
+        - name: _lte
+          argumentType: Box2D!
+        - name: _neq
+          argumentType: Box2D!
+        - name: _regex
+          argumentType: Box2D!
+        - name: box_above
+          argumentType: Box2D!
+        - name: box_below
+          argumentType: Box2D!
+        - name: box_contain
+          argumentType: Box2D!
+        - name: box_contained
+          argumentType: Box2D!
+        - name: box_left
+          argumentType: Box2D!
+        - name: box_overabove
+          argumentType: Box2D!
+        - name: box_overbelow
+          argumentType: Box2D!
+        - name: box_overlap
+          argumentType: Box2D!
+        - name: box_overleft
+          argumentType: Box2D!
+        - name: box_overright
+          argumentType: Box2D!
+        - name: box_right
+          argumentType: Box2D!
+        - name: box_same
+          argumentType: Box2D!
+        - name: equals
+          argumentType: Box2D!
+        - name: geography_overlaps
+          argumentType: Box2D!
+        - name: geometry_above
+          argumentType: Box2D!
+        - name: geometry_below
+          argumentType: Box2D!
+        - name: geometry_contained_3d
+          argumentType: Box2D!
+        - name: geometry_contains
+          argumentType: Box2D!
+        - name: geometry_contains_3d
+          argumentType: Box2D!
+        - name: geometry_contains_nd
+          argumentType: Box2D!
+        - name: geometry_left
+          argumentType: Box2D!
+        - name: geometry_overabove
+          argumentType: Box2D!
+        - name: geometry_overbelow
+          argumentType: Box2D!
+        - name: geometry_overlaps
+          argumentType: Box2D!
+        - name: geometry_overlaps_3d
+          argumentType: Box2D!
+        - name: geometry_overlaps_nd
+          argumentType: Box2D!
+        - name: geometry_overleft
+          argumentType: Box2D!
+        - name: geometry_overright
+          argumentType: Box2D!
+        - name: geometry_right
+          argumentType: Box2D!
+        - name: geometry_same
+          argumentType: Box2D!
+        - name: geometry_same_3d
+          argumentType: Box2D!
+        - name: geometry_same_nd
+          argumentType: Box2D!
+        - name: geometry_within
+          argumentType: Box2D!
+        - name: geometry_within_nd
+          argumentType: Box2D!
+        - name: st_3dintersects
+          argumentType: Box2D!
+        - name: st_contains
+          argumentType: Box2D!
+        - name: st_containsproperly
+          argumentType: Box2D!
+        - name: st_coveredby
+          argumentType: Box2D!
+        - name: st_covers
+          argumentType: Box2D!
+        - name: st_crosses
+          argumentType: Box2D!
+        - name: st_disjoint
+          argumentType: Box2D!
+        - name: st_equals
+          argumentType: Box2D!
+        - name: st_intersects
+          argumentType: Box2D!
+        - name: st_isvalid
+          argumentType: Int4!
+        - name: st_orderingequals
+          argumentType: Box2D!
+        - name: st_overlaps
+          argumentType: Box2D!
+        - name: st_touches
+          argumentType: Box2D!
+        - name: st_within
+          argumentType: Box2D!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: box2d
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: Box2DBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: box2d
+  representation: Box2D
+  graphql:
+    comparisonExpressionTypeName: Box2DComparisonExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: GeometryAggExp
+  operand:
+    scalar:
+      aggregatedType: Geometry
+      aggregationFunctions:
+        - name: st_3dextent
+          returnType: Box3D
+        - name: st_collect
+          returnType: Geometry
+        - name: st_coverageunion
+          returnType: Geometry
+        - name: st_extent
+          returnType: Box2D
+        - name: st_makeline
+          returnType: Geometry
+        - name: st_memcollect
+          returnType: Geometry
+        - name: st_memunion
+          returnType: Geometry
+        - name: st_polygonize
+          returnType: Geometry
+        - name: st_union
+          returnType: Geometry
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: geometry
+          functionMapping:
+            st_3dextent:
+              name: st_3dextent
+            st_collect:
+              name: st_collect
+            st_coverageunion:
+              name: st_coverageunion
+            st_extent:
+              name: st_extent
+            st_makeline:
+              name: st_makeline
+            st_memcollect:
+              name: st_memcollect
+            st_memunion:
+              name: st_memunion
+            st_polygonize:
+              name: st_polygonize
+            st_union:
+              name: st_union
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: GeometryAggExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: AdministrativeUnitTypesAggExp
+  operand:
+    scalar:
+      aggregatedType: AdministrativeUnitTypes
+      aggregationFunctions:
+        - name: max
+          returnType: AdministrativeUnitTypes
+        - name: min
+          returnType: AdministrativeUnitTypes
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: administrative_unit_types
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: AdministrativeUnitTypesAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: TimestampOrderByExp
+  operand:
+    scalar:
+      orderedType: Timestamp
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: TimestampOrderByExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: TextOrderByExp
+  operand:
+    scalar:
+      orderedType: Text
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: TextOrderByExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: UuidOrderByExp
+  operand:
+    scalar:
+      orderedType: Uuid
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: UuidOrderByExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: GeometryOrderByExp
+  operand:
+    scalar:
+      orderedType: Geometry
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: GeometryOrderByExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: AdministrativeUnitTypesOrderByExp
+  operand:
+    scalar:
+      orderedType: AdministrativeUnitTypes
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: AdministrativeUnitTypesOrderByExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Float4
+  graphql:
+    typeName: Float4
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: Float4BoolExp
+  operand:
+    scalar:
+      type: Float4
+      comparisonOperators:
+        - name: _eq
+          argumentType: Float4!
+        - name: _gt
+          argumentType: Float4!
+        - name: _gte
+          argumentType: Float4!
+        - name: _in
+          argumentType: "[Float4!]!"
+        - name: _lt
+          argumentType: Float4!
+        - name: _lte
+          argumentType: Float4!
+        - name: _neq
+          argumentType: Float4!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: float4
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: Float4BoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: float4
+  representation: Float4
+  graphql:
+    comparisonExpressionTypeName: Float4ComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Float8
+  graphql:
+    typeName: Float8
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: Float8BoolExp
+  operand:
+    scalar:
+      type: Float8
+      comparisonOperators:
+        - name: _eq
+          argumentType: Float8!
+        - name: _gt
+          argumentType: Float8!
+        - name: _gte
+          argumentType: Float8!
+        - name: _in
+          argumentType: "[Float8!]!"
+        - name: _lt
+          argumentType: Float8!
+        - name: _lte
+          argumentType: Float8!
+        - name: _neq
+          argumentType: Float8!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: float8
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: Float8BoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: float8
+  representation: Float8
+  graphql:
+    comparisonExpressionTypeName: Float8ComparisonExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: Float4AggExp
+  operand:
+    scalar:
+      aggregatedType: Float4
+      aggregationFunctions:
+        - name: avg
+          returnType: Float8
+        - name: max
+          returnType: Float4
+        - name: min
+          returnType: Float4
+        - name: stddev
+          returnType: Float8
+        - name: stddev_pop
+          returnType: Float8
+        - name: stddev_samp
+          returnType: Float8
+        - name: sum
+          returnType: Float4
+        - name: var_pop
+          returnType: Float8
+        - name: var_samp
+          returnType: Float8
+        - name: variance
+          returnType: Float8
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: float4
+          functionMapping:
+            avg:
+              name: avg
+            max:
+              name: max
+            min:
+              name: min
+            stddev:
+              name: stddev
+            stddev_pop:
+              name: stddev_pop
+            stddev_samp:
+              name: stddev_samp
+            sum:
+              name: sum
+            var_pop:
+              name: var_pop
+            var_samp:
+              name: var_samp
+            variance:
+              name: variance
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: Float4AggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: Float4OrderByExp
+  operand:
+    scalar:
+      orderedType: Float4
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: Float4OrderByExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Bool
+  graphql:
+    typeName: Bool
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: BoolBoolExp
+  operand:
+    scalar:
+      type: Bool
+      comparisonOperators:
+        - name: _eq
+          argumentType: Bool!
+        - name: _gt
+          argumentType: Bool!
+        - name: _gte
+          argumentType: Bool!
+        - name: _in
+          argumentType: "[Bool!]!"
+        - name: _lt
+          argumentType: Bool!
+        - name: _lte
+          argumentType: Bool!
+        - name: _neq
+          argumentType: Bool!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: bool
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: BoolBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: bool
+  representation: Bool
+  graphql:
+    comparisonExpressionTypeName: BoolComparisonExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: BoolAggExp
+  operand:
+    scalar:
+      aggregatedType: Bool
+      aggregationFunctions:
+        - name: bool_and
+          returnType: Bool
+        - name: bool_or
+          returnType: Bool
+        - name: every
+          returnType: Bool
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: bool
+          functionMapping:
+            bool_and:
+              name: bool_and
+            bool_or:
+              name: bool_or
+            every:
+              name: every
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: BoolAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: BoolOrderByExp
+  operand:
+    scalar:
+      orderedType: Bool
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: BoolOrderByExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: UserRoles
+  graphql:
+    typeName: UserRoles
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: UserRolesBoolExp
+  operand:
+    scalar:
+      type: UserRoles
+      comparisonOperators:
+        - name: _eq
+          argumentType: UserRoles!
+        - name: _gt
+          argumentType: UserRoles!
+        - name: _gte
+          argumentType: UserRoles!
+        - name: _in
+          argumentType: "[UserRoles!]!"
+        - name: _lt
+          argumentType: UserRoles!
+        - name: _lte
+          argumentType: UserRoles!
+        - name: _neq
+          argumentType: UserRoles!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: user_roles
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: UserRolesBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: user_roles
+  representation: UserRoles
+  graphql:
+    comparisonExpressionTypeName: UserRolesComparisonExp
+
+---
+kind: ScalarType
+version: v1
+definition:
+  name: Varchar
+  graphql:
+    typeName: Varchar
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: VarcharBoolExp
+  operand:
+    scalar:
+      type: Varchar
+      comparisonOperators:
+        - name: _eq
+          argumentType: Varchar!
+        - name: _gt
+          argumentType: Varchar!
+        - name: _gte
+          argumentType: Varchar!
+        - name: _ilike
+          argumentType: Varchar!
+        - name: _in
+          argumentType: "[Varchar!]!"
+        - name: _iregex
+          argumentType: Varchar!
+        - name: _like
+          argumentType: Varchar!
+        - name: _lt
+          argumentType: Varchar!
+        - name: _lte
+          argumentType: Varchar!
+        - name: _neq
+          argumentType: Varchar!
+        - name: _nilike
+          argumentType: Varchar!
+        - name: _niregex
+          argumentType: Varchar!
+        - name: _nlike
+          argumentType: Varchar!
+        - name: _nregex
+          argumentType: Varchar!
+        - name: _regex
+          argumentType: Varchar!
+        - name: st_coveredby
+          argumentType: Varchar!
+        - name: st_covers
+          argumentType: Varchar!
+        - name: st_intersects
+          argumentType: Varchar!
+        - name: st_relatematch
+          argumentType: Varchar!
+        - name: starts_with
+          argumentType: Varchar!
+        - name: ts_match_tt
+          argumentType: Varchar!
+      dataConnectorOperatorMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: varchar
+          operatorMapping: {}
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: VarcharBoolExp
+
+---
+kind: DataConnectorScalarRepresentation
+version: v1
+definition:
+  dataConnectorName: db
+  dataConnectorScalarType: varchar
+  representation: Varchar
+  graphql:
+    comparisonExpressionTypeName: VarcharComparisonExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: UserRolesAggExp
+  operand:
+    scalar:
+      aggregatedType: UserRoles
+      aggregationFunctions:
+        - name: max
+          returnType: UserRoles
+        - name: min
+          returnType: UserRoles
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: user_roles
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: UserRolesAggExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: VarcharAggExp
+  operand:
+    scalar:
+      aggregatedType: Varchar
+      aggregationFunctions:
+        - name: max
+          returnType: Text
+        - name: min
+          returnType: Text
+      dataConnectorAggregationFunctionMapping:
+        - dataConnectorName: db
+          dataConnectorScalarType: varchar
+          functionMapping:
+            max:
+              name: max
+            min:
+              name: min
+  count:
+    enable: true
+  countDistinct:
+    enable: true
+  graphql:
+    selectTypeName: VarcharAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: UserRolesOrderByExp
+  operand:
+    scalar:
+      orderedType: UserRoles
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: UserRolesOrderByExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: VarcharOrderByExp
+  operand:
+    scalar:
+      orderedType: Varchar
+      enableOrderByDirections:
+        enableAll: true
+  graphql:
+    expressionTypeName: VarcharOrderByExp
+

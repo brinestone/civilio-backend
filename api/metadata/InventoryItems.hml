@@ -1,0 +1,300 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InventoryItems
+  fields:
+    - name: addedBy
+      type: Uuid!
+    - name: createdAt
+      type: Timestamp!
+    - name: equipment
+      type: Uuid!
+    - name: id
+      type: Uuid!
+    - name: inventory
+      type: Uuid!
+    - name: lastUpdatedBy
+      type: Uuid!
+    - name: maxThreshold
+      type: Float4
+    - name: minThreshold
+      type: Float4
+    - name: startingQuantity
+      type: Float4
+    - name: updatedAt
+      type: Timestamp!
+  graphql:
+    typeName: InventoryItems
+    inputTypeName: InventoryItemsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: inventory_items
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InventoryItems
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - equipment
+          - id
+          - inventory
+          - lastUpdatedBy
+          - maxThreshold
+          - minThreshold
+          - startingQuantity
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: InventoryItemsBoolExp
+  operand:
+    object:
+      type: InventoryItems
+      comparableFields:
+        - fieldName: addedBy
+          booleanExpressionType: UuidBoolExp
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: equipment
+          booleanExpressionType: UuidBoolExp
+        - fieldName: id
+          booleanExpressionType: UuidBoolExp
+        - fieldName: inventory
+          booleanExpressionType: UuidBoolExp
+        - fieldName: lastUpdatedBy
+          booleanExpressionType: UuidBoolExp
+        - fieldName: maxThreshold
+          booleanExpressionType: Float4BoolExp
+        - fieldName: minThreshold
+          booleanExpressionType: Float4BoolExp
+        - fieldName: startingQuantity
+          booleanExpressionType: Float4BoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: user
+        - relationshipName: equipmentByEquipment
+        - relationshipName: centerInventory
+        - relationshipName: userByLastUpdatedBy
+        - relationshipName: inventoryMovements
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: InventoryItemsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: InventoryItemsAggExp
+  operand:
+    object:
+      aggregatedType: InventoryItems
+      aggregatableFields:
+        - fieldName: addedBy
+          aggregateExpression: UuidAggExp
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: equipment
+          aggregateExpression: UuidAggExp
+        - fieldName: id
+          aggregateExpression: UuidAggExp
+        - fieldName: inventory
+          aggregateExpression: UuidAggExp
+        - fieldName: lastUpdatedBy
+          aggregateExpression: UuidAggExp
+        - fieldName: maxThreshold
+          aggregateExpression: Float4AggExp
+        - fieldName: minThreshold
+          aggregateExpression: Float4AggExp
+        - fieldName: startingQuantity
+          aggregateExpression: Float4AggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: InventoryItemsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: InventoryItemsOrderByExp
+  operand:
+    object:
+      orderedType: InventoryItems
+      orderableFields:
+        - fieldName: addedBy
+          orderByExpression: UuidOrderByExp
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: equipment
+          orderByExpression: UuidOrderByExp
+        - fieldName: id
+          orderByExpression: UuidOrderByExp
+        - fieldName: inventory
+          orderByExpression: UuidOrderByExp
+        - fieldName: lastUpdatedBy
+          orderByExpression: UuidOrderByExp
+        - fieldName: maxThreshold
+          orderByExpression: Float4OrderByExp
+        - fieldName: minThreshold
+          orderByExpression: Float4OrderByExp
+        - fieldName: startingQuantity
+          orderByExpression: Float4OrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: user
+        - relationshipName: equipmentByEquipment
+        - relationshipName: centerInventory
+        - relationshipName: userByLastUpdatedBy
+  graphql:
+    expressionTypeName: InventoryItemsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: InventoryItems
+  objectType: InventoryItems
+  source:
+    dataConnectorName: db
+    collection: inventory_items
+  filterExpressionType: InventoryItemsBoolExp
+  aggregateExpression: InventoryItemsAggExp
+  orderByExpression: InventoryItemsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: inventoryItems
+      subscription:
+        rootField: inventoryItems
+    selectUniques:
+      - queryRootField: inventoryItemsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: inventoryItemsById
+    filterInputTypeName: InventoryItemsFilterInput
+    aggregate:
+      queryRootField: inventoryItemsAggregate
+      subscription:
+        rootField: inventoryItemsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: InventoryItems
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: user
+  sourceType: InventoryItems
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: addedBy
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: equipmentByEquipment
+  sourceType: InventoryItems
+  target:
+    model:
+      name: Equipment
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: equipment
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: centerInventory
+  sourceType: InventoryItems
+  target:
+    model:
+      name: CenterInventories
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: inventory
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: userByLastUpdatedBy
+  sourceType: InventoryItems
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: lastUpdatedBy
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryMovements
+  sourceType: InventoryItems
+  target:
+    model:
+      name: InventoryMovements
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryMovementsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: item
+  graphql:
+    aggregateFieldName: inventoryMovementsAggregate
+

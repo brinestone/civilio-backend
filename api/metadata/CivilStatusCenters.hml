@@ -1,0 +1,164 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: CivilStatusCenters
+  fields:
+    - name: createdAt
+      type: Timestamp!
+    - name: id
+      type: Uuid!
+    - name: images
+      type: "[Text]"
+    - name: location
+      type: Geometry
+    - name: municipality
+      type: Uuid!
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp!
+  graphql:
+    typeName: CivilStatusCenters
+    inputTypeName: CivilStatusCentersInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: civil_status_centers
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: CivilStatusCenters
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - id
+          - images
+          - location
+          - municipality
+          - name
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: CivilStatusCentersBoolExp
+  operand:
+    object:
+      type: CivilStatusCenters
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: id
+          booleanExpressionType: UuidBoolExp
+        - fieldName: location
+          booleanExpressionType: GeometryBoolExp
+        - fieldName: municipality
+          booleanExpressionType: UuidBoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: CivilStatusCentersBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: CivilStatusCentersAggExp
+  operand:
+    object:
+      aggregatedType: CivilStatusCenters
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: id
+          aggregateExpression: UuidAggExp
+        - fieldName: location
+          aggregateExpression: GeometryAggExp
+        - fieldName: municipality
+          aggregateExpression: UuidAggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: CivilStatusCentersAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: CivilStatusCentersOrderByExp
+  operand:
+    object:
+      orderedType: CivilStatusCenters
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: id
+          orderByExpression: UuidOrderByExp
+        - fieldName: location
+          orderByExpression: GeometryOrderByExp
+        - fieldName: municipality
+          orderByExpression: UuidOrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: CivilStatusCentersOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: CivilStatusCenters
+  objectType: CivilStatusCenters
+  source:
+    dataConnectorName: db
+    collection: civil_status_centers
+  filterExpressionType: CivilStatusCentersBoolExp
+  aggregateExpression: CivilStatusCentersAggExp
+  orderByExpression: CivilStatusCentersOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: civilStatusCenters
+      subscription:
+        rootField: civilStatusCenters
+    selectUniques:
+      - queryRootField: civilStatusCentersById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: civilStatusCentersById
+    filterInputTypeName: CivilStatusCentersFilterInput
+    aggregate:
+      queryRootField: civilStatusCentersAggregate
+      subscription:
+        rootField: civilStatusCentersAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: CivilStatusCenters
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

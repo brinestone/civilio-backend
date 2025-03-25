@@ -1,0 +1,4982 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: db
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: API_DB_READ_URL
+      write:
+        valueFromEnv: API_DB_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: API_DB_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      scalar_types:
+        administrative_unit_types:
+          representation:
+            type: enum
+            one_of:
+              - region
+              - subdivision
+              - municipality
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: administrative_unit_types
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: administrative_unit_types
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: administrative_unit_types
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: administrative_unit_types
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: administrative_unit_types
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: administrative_unit_types
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: administrative_unit_types
+        bool:
+          representation:
+            type: boolean
+          aggregate_functions:
+            bool_and:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: bool
+            bool_or:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: bool
+            every:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: bool
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: bool
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: bool
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: bool
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: bool
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: bool
+        box2d:
+          aggregate_functions:
+            st_3dextent:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: box3d
+            st_collect:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_coverageunion:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_extent:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: box2d
+            st_makeline:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_memcollect:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_memunion:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_polygonize:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_union:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            _in:
+              type: in
+            _like:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            _regex:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_above:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_below:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_contain:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_contained:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_left:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_overabove:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_overbelow:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_overlap:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_overleft:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_overright:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_right:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            box_same:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            equals:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geography_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_above:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_below:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_contained_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_contains:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_contains_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_contains_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_left:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overabove:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overbelow:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overlaps_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overlaps_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overleft:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_overright:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_right:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_same:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_same_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_same_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_within:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            geometry_within_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_3dintersects:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_contains:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_containsproperly:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_coveredby:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_covers:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_crosses:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_disjoint:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_equals:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_intersects:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_isvalid:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            st_orderingequals:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_touches:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+            st_within:
+              type: custom
+              argument_type:
+                type: named
+                name: box2d
+        box3d:
+          aggregate_functions:
+            st_3dextent:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: box3d
+            st_collect:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_coverageunion:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_extent:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: box2d
+            st_makeline:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_memcollect:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_memunion:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_polygonize:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_union:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            _in:
+              type: in
+            _like:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            _regex:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_above:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_below:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_contain:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_contained:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_left:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_overabove:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_overbelow:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_overlap:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_overleft:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_overright:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_right:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            box_same:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            equals:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geography_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_above:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_below:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_contained_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_contains:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_contains_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_contains_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_left:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overabove:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overbelow:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overlaps_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overlaps_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overleft:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_overright:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_right:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_same:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_same_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_same_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_within:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            geometry_within_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_3dintersects:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_contains:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_containsproperly:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_coveredby:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_covers:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_crosses:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_disjoint:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_equals:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_intersects:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_isvalid:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            st_orderingequals:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_touches:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+            st_within:
+              type: custom
+              argument_type:
+                type: named
+                name: box3d
+        float4:
+          representation:
+            type: float32
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: float4
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: float4
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: float4
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: float4
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: float4
+        float8:
+          representation:
+            type: float64
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float8
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: float8
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: float8
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: float8
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: float8
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: float8
+        geometry:
+          aggregate_functions:
+            st_3dextent:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: box3d
+            st_collect:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_coverageunion:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_extent:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: box2d
+            st_makeline:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_memcollect:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_memunion:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_polygonize:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            st_union:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            _in:
+              type: in
+            _like:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            _regex:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_above:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_below:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_contain:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_contained:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_left:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_overabove:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_overbelow:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_overlap:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_overleft:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_overright:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_right:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            box_same:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            equals:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geography_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_above:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_below:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_contained_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_contains:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_contains_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_contains_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_left:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overabove:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overbelow:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overlaps_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overlaps_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overleft:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_overright:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_right:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_same:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_same_3d:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_same_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_within:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            geometry_within_nd:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_3dintersects:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_contains:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_containsproperly:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_coveredby:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_covers:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_crosses:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_disjoint:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_equals:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_intersects:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_isvalid:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            st_orderingequals:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_overlaps:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_touches:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+            st_within:
+              type: custom
+              argument_type:
+                type: named
+                name: geometry
+        int4:
+          representation:
+            type: int32
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            bit_and:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            bit_or:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            bit_xor:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int8
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: int4
+        int8:
+          representation:
+            type: int64
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            bit_and:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int8
+            bit_or:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int8
+            bit_xor:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int8
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int8
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int8
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: int8
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: int8
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: int8
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: int8
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: int8
+        numeric:
+          representation:
+            type: bigdecimal
+          aggregate_functions:
+            avg:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            stddev_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            sum:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            var_pop:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            var_samp:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+            variance:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: numeric
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: numeric
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: numeric
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: numeric
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: numeric
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: numeric
+        text:
+          representation:
+            type: string
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _ilike:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _in:
+              type: in
+            _iregex:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _like:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _nilike:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _niregex:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _nlike:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _nregex:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            _regex:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            st_coveredby:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            st_covers:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            st_intersects:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            st_relatematch:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            starts_with:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+            ts_match_tt:
+              type: custom
+              argument_type:
+                type: named
+                name: text
+        timestamp:
+          representation:
+            type: timestamp
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: timestamp
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: timestamp
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: timestamp
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: timestamp
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: timestamp
+        user_roles:
+          representation:
+            type: enum
+            one_of:
+              - admin
+              - user
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: user_roles
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: user_roles
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: user_roles
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: user_roles
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: user_roles
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: user_roles
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: user_roles
+        uuid:
+          representation:
+            type: uuid
+          aggregate_functions: {}
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: uuid
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: uuid
+            _in:
+              type: in
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: uuid
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: uuid
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: uuid
+        varchar:
+          representation:
+            type: string
+          aggregate_functions:
+            max:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            min:
+              result_type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+          comparison_operators:
+            _eq:
+              type: equal
+            _gt:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _gte:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _ilike:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _in:
+              type: in
+            _iregex:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _like:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _lt:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _lte:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _neq:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _nilike:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _niregex:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _nlike:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _nregex:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            _regex:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            st_coveredby:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            st_covers:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            st_intersects:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            st_relatematch:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            starts_with:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+            ts_match_tt:
+              type: custom
+              argument_type:
+                type: named
+                name: varchar
+      object_types:
+        administrative_units:
+          fields:
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            id:
+              type:
+                type: named
+                name: uuid
+            images:
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+            location:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            name:
+              type:
+                type: named
+                name: text
+            parent:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            type:
+              type:
+                type: named
+                name: administrative_unit_types
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+        center_inventories:
+          fields:
+            center:
+              type:
+                type: named
+                name: uuid
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            id:
+              type:
+                type: named
+                name: uuid
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+        civil_status_centers:
+          fields:
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            id:
+              type:
+                type: named
+                name: uuid
+            images:
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+            location:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            municipality:
+              type:
+                type: named
+                name: uuid
+            name:
+              type:
+                type: named
+                name: text
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+        delete_administrative_units_by_id_response:
+          description: Responses from the 'delete_administrative_units_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: administrative_units
+        delete_center_inventories_by_id_response:
+          description: Responses from the 'delete_center_inventories_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: center_inventories
+        delete_civil_status_centers_by_id_response:
+          description: Responses from the 'delete_civil_status_centers_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: civil_status_centers
+        delete_equipment_by_id_response:
+          description: Responses from the 'delete_equipment_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: equipment
+        delete_inventory_items_by_id_response:
+          description: Responses from the 'delete_inventory_items_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: inventory_items
+        delete_inventory_movements_by_id_response:
+          description: Responses from the 'delete_inventory_movements_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: inventory_movements
+        delete_spatial_ref_sys_by_srid_response:
+          description: Responses from the 'delete_spatial_ref_sys_by_srid' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: spatial_ref_sys
+        delete_users_by_id_response:
+          description: Responses from the 'delete_users_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: users
+        delete_users_by_username_response:
+          description: Responses from the 'delete_users_by_username' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: users
+        delete_variables_by_code_response:
+          description: Responses from the 'delete_variables_by_code' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: variables
+        delete_variables_by_id_response:
+          description: Responses from the 'delete_variables_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: variables
+        equipment:
+          fields:
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            id:
+              type:
+                type: named
+                name: uuid
+            images:
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+            name:
+              type:
+                type: named
+                name: text
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+        insert_administrative_units_object:
+          fields:
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            images:
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+            location:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            name:
+              type:
+                type: named
+                name: text
+            parent:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            type:
+              type:
+                type: named
+                name: administrative_unit_types
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_administrative_units_response:
+          description: Responses from the 'insert_administrative_units' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: administrative_units
+        insert_center_inventories_object:
+          fields:
+            center:
+              type:
+                type: named
+                name: uuid
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_center_inventories_response:
+          description: Responses from the 'insert_center_inventories' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: center_inventories
+        insert_civil_status_centers_object:
+          fields:
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            images:
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+            location:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+            municipality:
+              type:
+                type: named
+                name: uuid
+            name:
+              type:
+                type: named
+                name: text
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_civil_status_centers_response:
+          description: Responses from the 'insert_civil_status_centers' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: civil_status_centers
+        insert_equipment_object:
+          fields:
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            images:
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+            name:
+              type:
+                type: named
+                name: text
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_equipment_response:
+          description: Responses from the 'insert_equipment' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: equipment
+        insert_inventory_items_object:
+          fields:
+            addedBy:
+              type:
+                type: named
+                name: uuid
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            equipment:
+              type:
+                type: named
+                name: uuid
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            inventory:
+              type:
+                type: named
+                name: uuid
+            lastUpdatedBy:
+              type:
+                type: named
+                name: uuid
+            maxThreshold:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            minThreshold:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            startingQuantity:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_inventory_items_response:
+          description: Responses from the 'insert_inventory_items' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: inventory_items
+        insert_inventory_movements_object:
+          fields:
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            item:
+              type:
+                type: named
+                name: uuid
+            outMovement:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: bool
+            quantity:
+              type:
+                type: named
+                name: float4
+            recordedBy:
+              type:
+                type: named
+                name: uuid
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_inventory_movements_response:
+          description: Responses from the 'insert_inventory_movements' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: inventory_movements
+        insert_spatial_ref_sys_object:
+          fields:
+            auth_name:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+            auth_srid:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            proj4text:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+            srid:
+              type:
+                type: named
+                name: int4
+            srtext:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+        insert_spatial_ref_sys_response:
+          description: Responses from the 'insert_spatial_ref_sys' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: spatial_ref_sys
+        insert_users_object:
+          fields:
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            password:
+              type:
+                type: named
+                name: text
+            role:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: user_roles
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            username:
+              type:
+                type: named
+                name: varchar
+        insert_users_response:
+          description: Responses from the 'insert_users' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: users
+        insert_variables_object:
+          fields:
+            code:
+              type:
+                type: named
+                name: varchar
+            createdAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            id:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+            name:
+              type:
+                type: named
+                name: text
+            updatedAt:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: timestamp
+        insert_variables_response:
+          description: Responses from the 'insert_variables' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: variables
+        inventory_items:
+          fields:
+            addedBy:
+              type:
+                type: named
+                name: uuid
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            equipment:
+              type:
+                type: named
+                name: uuid
+            id:
+              type:
+                type: named
+                name: uuid
+            inventory:
+              type:
+                type: named
+                name: uuid
+            lastUpdatedBy:
+              type:
+                type: named
+                name: uuid
+            maxThreshold:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            minThreshold:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            startingQuantity:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+        inventory_movements:
+          fields:
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            id:
+              type:
+                type: named
+                name: uuid
+            item:
+              type:
+                type: named
+                name: uuid
+            outMovement:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: bool
+            quantity:
+              type:
+                type: named
+                name: float4
+            recordedBy:
+              type:
+                type: named
+                name: uuid
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+        spatial_ref_sys:
+          fields:
+            auth_name:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+            auth_srid:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+            proj4text:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+            srid:
+              type:
+                type: named
+                name: int4
+            srtext:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+        update_administrative_units_by_id_response:
+          description: Responses from the 'update_administrative_units_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: administrative_units
+        update_administrative_units_by_id_update_columns:
+          description: Update the columns of the 'administrative_units' collection
+          fields:
+            createdAt:
+              description: Update the 'createdAt' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_createdAt
+            description:
+              description: Update the 'description' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_description
+            id:
+              description: Update the 'id' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_id
+            images:
+              description: Update the 'images' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_images
+            location:
+              description: Update the 'location' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_location
+            name:
+              description: Update the 'name' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_name
+            parent:
+              description: Update the 'parent' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_parent
+            type:
+              description: Update the 'type' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_type
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'administrative_units' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_administrative_units_updatedAt
+        update_center_inventories_by_id_response:
+          description: Responses from the 'update_center_inventories_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: center_inventories
+        update_center_inventories_by_id_update_columns:
+          description: Update the columns of the 'center_inventories' collection
+          fields:
+            center:
+              description: Update the 'center' column in the 'center_inventories' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_center_inventories_center
+            createdAt:
+              description: Update the 'createdAt' column in the 'center_inventories' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_center_inventories_createdAt
+            id:
+              description: Update the 'id' column in the 'center_inventories' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_center_inventories_id
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'center_inventories' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_center_inventories_updatedAt
+        update_civil_status_centers_by_id_response:
+          description: Responses from the 'update_civil_status_centers_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: civil_status_centers
+        update_civil_status_centers_by_id_update_columns:
+          description: Update the columns of the 'civil_status_centers' collection
+          fields:
+            createdAt:
+              description: Update the 'createdAt' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_createdAt
+            id:
+              description: Update the 'id' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_id
+            images:
+              description: Update the 'images' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_images
+            location:
+              description: Update the 'location' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_location
+            municipality:
+              description: Update the 'municipality' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_municipality
+            name:
+              description: Update the 'name' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_name
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'civil_status_centers' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_civil_status_centers_updatedAt
+        update_column_administrative_units_createdAt:
+          description: Update the 'createdAt' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_administrative_units_description:
+          description: Update the 'description' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+        update_column_administrative_units_id:
+          description: Update the 'id' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_administrative_units_images:
+          description: Update the 'images' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+        update_column_administrative_units_location:
+          description: Update the 'location' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+        update_column_administrative_units_name:
+          description: Update the 'name' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: text
+        update_column_administrative_units_parent:
+          description: Update the 'parent' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: uuid
+        update_column_administrative_units_type:
+          description: Update the 'type' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: administrative_unit_types
+        update_column_administrative_units_updatedAt:
+          description: Update the 'updatedAt' column in the 'administrative_units' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_center_inventories_center:
+          description: Update the 'center' column in the 'center_inventories' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_center_inventories_createdAt:
+          description: Update the 'createdAt' column in the 'center_inventories' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_center_inventories_id:
+          description: Update the 'id' column in the 'center_inventories' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_center_inventories_updatedAt:
+          description: Update the 'updatedAt' column in the 'center_inventories' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_civil_status_centers_createdAt:
+          description: Update the 'createdAt' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_civil_status_centers_id:
+          description: Update the 'id' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_civil_status_centers_images:
+          description: Update the 'images' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+        update_column_civil_status_centers_location:
+          description: Update the 'location' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: geometry
+        update_column_civil_status_centers_municipality:
+          description: Update the 'municipality' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_civil_status_centers_name:
+          description: Update the 'name' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: text
+        update_column_civil_status_centers_updatedAt:
+          description: Update the 'updatedAt' column in the 'civil_status_centers' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_equipment_createdAt:
+          description: Update the 'createdAt' column in the 'equipment' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_equipment_description:
+          description: Update the 'description' column in the 'equipment' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+        update_column_equipment_id:
+          description: Update the 'id' column in the 'equipment' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_equipment_images:
+          description: Update the 'images' column in the 'equipment' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: array
+                  element_type:
+                    type: nullable
+                    underlying_type:
+                      type: named
+                      name: text
+        update_column_equipment_name:
+          description: Update the 'name' column in the 'equipment' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: text
+        update_column_equipment_updatedAt:
+          description: Update the 'updatedAt' column in the 'equipment' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_inventory_items_addedBy:
+          description: Update the 'addedBy' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_items_createdAt:
+          description: Update the 'createdAt' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_inventory_items_equipment:
+          description: Update the 'equipment' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_items_id:
+          description: Update the 'id' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_items_inventory:
+          description: Update the 'inventory' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_items_lastUpdatedBy:
+          description: Update the 'lastUpdatedBy' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_items_maxThreshold:
+          description: Update the 'maxThreshold' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+        update_column_inventory_items_minThreshold:
+          description: Update the 'minThreshold' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+        update_column_inventory_items_startingQuantity:
+          description: Update the 'startingQuantity' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: float4
+        update_column_inventory_items_updatedAt:
+          description: Update the 'updatedAt' column in the 'inventory_items' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_inventory_movements_createdAt:
+          description: Update the 'createdAt' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_inventory_movements_id:
+          description: Update the 'id' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_movements_item:
+          description: Update the 'item' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_movements_outMovement:
+          description: Update the 'outMovement' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: bool
+        update_column_inventory_movements_quantity:
+          description: Update the 'quantity' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: float4
+        update_column_inventory_movements_recordedBy:
+          description: Update the 'recordedBy' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_inventory_movements_updatedAt:
+          description: Update the 'updatedAt' column in the 'inventory_movements' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_spatial_ref_sys_auth_name:
+          description: Update the 'auth_name' column in the 'spatial_ref_sys' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+        update_column_spatial_ref_sys_auth_srid:
+          description: Update the 'auth_srid' column in the 'spatial_ref_sys' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: int4
+        update_column_spatial_ref_sys_proj4text:
+          description: Update the 'proj4text' column in the 'spatial_ref_sys' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+        update_column_spatial_ref_sys_srid:
+          description: Update the 'srid' column in the 'spatial_ref_sys' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: int4
+        update_column_spatial_ref_sys_srtext:
+          description: Update the 'srtext' column in the 'spatial_ref_sys' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: varchar
+        update_column_users_createdAt:
+          description: Update the 'createdAt' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_users_id:
+          description: Update the 'id' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_users_password:
+          description: Update the 'password' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: text
+        update_column_users_role:
+          description: Update the 'role' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: user_roles
+        update_column_users_updatedAt:
+          description: Update the 'updatedAt' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_users_username:
+          description: Update the 'username' column in the 'users' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: varchar
+        update_column_variables_code:
+          description: Update the 'code' column in the 'variables' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: varchar
+        update_column_variables_createdAt:
+          description: Update the 'createdAt' column in the 'variables' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_column_variables_description:
+          description: Update the 'description' column in the 'variables' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+        update_column_variables_id:
+          description: Update the 'id' column in the 'variables' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: uuid
+        update_column_variables_name:
+          description: Update the 'name' column in the 'variables' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: text
+        update_column_variables_updatedAt:
+          description: Update the 'updatedAt' column in the 'variables' collection
+          fields:
+            _set:
+              description: Set the column to this value
+              type:
+                type: named
+                name: timestamp
+        update_equipment_by_id_response:
+          description: Responses from the 'update_equipment_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: equipment
+        update_equipment_by_id_update_columns:
+          description: Update the columns of the 'equipment' collection
+          fields:
+            createdAt:
+              description: Update the 'createdAt' column in the 'equipment' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_equipment_createdAt
+            description:
+              description: Update the 'description' column in the 'equipment' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_equipment_description
+            id:
+              description: Update the 'id' column in the 'equipment' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_equipment_id
+            images:
+              description: Update the 'images' column in the 'equipment' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_equipment_images
+            name:
+              description: Update the 'name' column in the 'equipment' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_equipment_name
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'equipment' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_equipment_updatedAt
+        update_inventory_items_by_id_response:
+          description: Responses from the 'update_inventory_items_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: inventory_items
+        update_inventory_items_by_id_update_columns:
+          description: Update the columns of the 'inventory_items' collection
+          fields:
+            addedBy:
+              description: Update the 'addedBy' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_addedBy
+            createdAt:
+              description: Update the 'createdAt' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_createdAt
+            equipment:
+              description: Update the 'equipment' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_equipment
+            id:
+              description: Update the 'id' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_id
+            inventory:
+              description: Update the 'inventory' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_inventory
+            lastUpdatedBy:
+              description: Update the 'lastUpdatedBy' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_lastUpdatedBy
+            maxThreshold:
+              description: Update the 'maxThreshold' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_maxThreshold
+            minThreshold:
+              description: Update the 'minThreshold' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_minThreshold
+            startingQuantity:
+              description: Update the 'startingQuantity' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_startingQuantity
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'inventory_items' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_items_updatedAt
+        update_inventory_movements_by_id_response:
+          description: Responses from the 'update_inventory_movements_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: inventory_movements
+        update_inventory_movements_by_id_update_columns:
+          description: Update the columns of the 'inventory_movements' collection
+          fields:
+            createdAt:
+              description: Update the 'createdAt' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_createdAt
+            id:
+              description: Update the 'id' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_id
+            item:
+              description: Update the 'item' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_item
+            outMovement:
+              description: Update the 'outMovement' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_outMovement
+            quantity:
+              description: Update the 'quantity' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_quantity
+            recordedBy:
+              description: Update the 'recordedBy' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_recordedBy
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'inventory_movements' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_inventory_movements_updatedAt
+        update_spatial_ref_sys_by_srid_response:
+          description: Responses from the 'update_spatial_ref_sys_by_srid' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: spatial_ref_sys
+        update_spatial_ref_sys_by_srid_update_columns:
+          description: Update the columns of the 'spatial_ref_sys' collection
+          fields:
+            auth_name:
+              description: Update the 'auth_name' column in the 'spatial_ref_sys' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_spatial_ref_sys_auth_name
+            auth_srid:
+              description: Update the 'auth_srid' column in the 'spatial_ref_sys' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_spatial_ref_sys_auth_srid
+            proj4text:
+              description: Update the 'proj4text' column in the 'spatial_ref_sys' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_spatial_ref_sys_proj4text
+            srid:
+              description: Update the 'srid' column in the 'spatial_ref_sys' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_spatial_ref_sys_srid
+            srtext:
+              description: Update the 'srtext' column in the 'spatial_ref_sys' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_spatial_ref_sys_srtext
+        update_users_by_id_response:
+          description: Responses from the 'update_users_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: users
+        update_users_by_id_update_columns:
+          description: Update the columns of the 'users' collection
+          fields:
+            createdAt:
+              description: Update the 'createdAt' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_createdAt
+            id:
+              description: Update the 'id' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_id
+            password:
+              description: Update the 'password' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_password
+            role:
+              description: Update the 'role' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_role
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_updatedAt
+            username:
+              description: Update the 'username' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_username
+        update_users_by_username_response:
+          description: Responses from the 'update_users_by_username' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: users
+        update_users_by_username_update_columns:
+          description: Update the columns of the 'users' collection
+          fields:
+            createdAt:
+              description: Update the 'createdAt' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_createdAt
+            id:
+              description: Update the 'id' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_id
+            password:
+              description: Update the 'password' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_password
+            role:
+              description: Update the 'role' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_role
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_updatedAt
+            username:
+              description: Update the 'username' column in the 'users' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_users_username
+        update_variables_by_code_response:
+          description: Responses from the 'update_variables_by_code' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: variables
+        update_variables_by_code_update_columns:
+          description: Update the columns of the 'variables' collection
+          fields:
+            code:
+              description: Update the 'code' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_code
+            createdAt:
+              description: Update the 'createdAt' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_createdAt
+            description:
+              description: Update the 'description' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_description
+            id:
+              description: Update the 'id' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_id
+            name:
+              description: Update the 'name' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_name
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_updatedAt
+        update_variables_by_id_response:
+          description: Responses from the 'update_variables_by_id' procedure
+          fields:
+            affected_rows:
+              description: The number of rows affected by the mutation
+              type:
+                type: named
+                name: int4
+            returning:
+              description: Data from rows affected by the mutation
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: variables
+        update_variables_by_id_update_columns:
+          description: Update the columns of the 'variables' collection
+          fields:
+            code:
+              description: Update the 'code' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_code
+            createdAt:
+              description: Update the 'createdAt' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_createdAt
+            description:
+              description: Update the 'description' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_description
+            id:
+              description: Update the 'id' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_id
+            name:
+              description: Update the 'name' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_name
+            updatedAt:
+              description: Update the 'updatedAt' column in the 'variables' collection.
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: update_column_variables_updatedAt
+        users:
+          fields:
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            id:
+              type:
+                type: named
+                name: uuid
+            password:
+              type:
+                type: named
+                name: text
+            role:
+              type:
+                type: named
+                name: user_roles
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+            username:
+              type:
+                type: named
+                name: varchar
+        variables:
+          fields:
+            code:
+              type:
+                type: named
+                name: varchar
+            createdAt:
+              type:
+                type: named
+                name: timestamp
+            description:
+              type:
+                type: nullable
+                underlying_type:
+                  type: named
+                  name: text
+            id:
+              type:
+                type: named
+                name: uuid
+            name:
+              type:
+                type: named
+                name: text
+            updatedAt:
+              type:
+                type: named
+                name: timestamp
+      collections:
+        - name: administrative_units
+          arguments: {}
+          type: administrative_units
+          uniqueness_constraints:
+            administrative_units_pkey:
+              unique_columns:
+                - id
+          foreign_keys:
+            administrative_units_parent_administrative_units_id_fk:
+              column_mapping:
+                parent: id
+              foreign_collection: administrative_units
+        - name: center_inventories
+          arguments: {}
+          type: center_inventories
+          uniqueness_constraints:
+            center_inventories_pkey:
+              unique_columns:
+                - id
+          foreign_keys:
+            center_inventories_center_civil_status_centers_id_fk:
+              column_mapping:
+                center: id
+              foreign_collection: civil_status_centers
+        - name: civil_status_centers
+          arguments: {}
+          type: civil_status_centers
+          uniqueness_constraints:
+            cs_centers_pkey:
+              unique_columns:
+                - id
+          foreign_keys:
+            civil_status_centers_municipality_administrative_units_id_fk:
+              column_mapping:
+                municipality: id
+              foreign_collection: administrative_units
+        - name: equipment
+          arguments: {}
+          type: equipment
+          uniqueness_constraints:
+            equipment_pkey:
+              unique_columns:
+                - id
+          foreign_keys: {}
+        - name: inventory_items
+          arguments: {}
+          type: inventory_items
+          uniqueness_constraints:
+            inventory_items_pkey:
+              unique_columns:
+                - id
+          foreign_keys:
+            inventory_items_addedBy_users_id_fk:
+              column_mapping:
+                addedBy: id
+              foreign_collection: users
+            inventory_items_equipment_equipment_id_fk:
+              column_mapping:
+                equipment: id
+              foreign_collection: equipment
+            inventory_items_inventory_center_inventories_id_fk:
+              column_mapping:
+                inventory: id
+              foreign_collection: center_inventories
+            inventory_items_lastUpdatedBy_users_id_fk:
+              column_mapping:
+                lastUpdatedBy: id
+              foreign_collection: users
+        - name: inventory_movements
+          arguments: {}
+          type: inventory_movements
+          uniqueness_constraints:
+            inventory_movements_pkey:
+              unique_columns:
+                - id
+          foreign_keys:
+            inventory_movements_item_inventory_items_id_fk:
+              column_mapping:
+                item: id
+              foreign_collection: inventory_items
+            inventory_movements_recordedBy_users_id_fk:
+              column_mapping:
+                recordedBy: id
+              foreign_collection: users
+        - name: spatial_ref_sys
+          arguments: {}
+          type: spatial_ref_sys
+          uniqueness_constraints:
+            spatial_ref_sys_pkey:
+              unique_columns:
+                - srid
+          foreign_keys: {}
+        - name: users
+          arguments: {}
+          type: users
+          uniqueness_constraints:
+            users_pkey:
+              unique_columns:
+                - id
+            users_username_unique:
+              unique_columns:
+                - username
+          foreign_keys: {}
+        - name: variables
+          arguments: {}
+          type: variables
+          uniqueness_constraints:
+            variables_code_unique:
+              unique_columns:
+                - code
+            variables_pkey:
+              unique_columns:
+                - id
+          foreign_keys: {}
+      functions: []
+      procedures:
+        - name: delete_administrative_units_by_id
+          description: Delete any row on the 'administrative_units' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'administrative_units' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: administrative_units
+          result_type:
+            type: named
+            name: delete_administrative_units_by_id_response
+        - name: delete_center_inventories_by_id
+          description: Delete any row on the 'center_inventories' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'center_inventories' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: center_inventories
+          result_type:
+            type: named
+            name: delete_center_inventories_by_id_response
+        - name: delete_civil_status_centers_by_id
+          description: Delete any row on the 'civil_status_centers' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'civil_status_centers' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: civil_status_centers
+          result_type:
+            type: named
+            name: delete_civil_status_centers_by_id_response
+        - name: delete_equipment_by_id
+          description: Delete any row on the 'equipment' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'equipment' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: equipment
+          result_type:
+            type: named
+            name: delete_equipment_by_id_response
+        - name: delete_inventory_items_by_id
+          description: Delete any row on the 'inventory_items' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'inventory_items' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_items
+          result_type:
+            type: named
+            name: delete_inventory_items_by_id_response
+        - name: delete_inventory_movements_by_id
+          description: Delete any row on the 'inventory_movements' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'inventory_movements' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_movements
+          result_type:
+            type: named
+            name: delete_inventory_movements_by_id_response
+        - name: delete_spatial_ref_sys_by_srid
+          description: Delete any row on the 'spatial_ref_sys' collection using the 'srid' key
+          arguments:
+            key_srid:
+              type:
+                type: named
+                name: int4
+            pre_check:
+              description: Delete permission predicate over the 'spatial_ref_sys' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: spatial_ref_sys
+          result_type:
+            type: named
+            name: delete_spatial_ref_sys_by_srid_response
+        - name: delete_users_by_id
+          description: Delete any row on the 'users' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+          result_type:
+            type: named
+            name: delete_users_by_id_response
+        - name: delete_users_by_username
+          description: Delete any row on the 'users' collection using the 'username' key
+          arguments:
+            key_username:
+              type:
+                type: named
+                name: varchar
+            pre_check:
+              description: Delete permission predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+          result_type:
+            type: named
+            name: delete_users_by_username_response
+        - name: delete_variables_by_code
+          description: Delete any row on the 'variables' collection using the 'code' key
+          arguments:
+            key_code:
+              type:
+                type: named
+                name: varchar
+            pre_check:
+              description: Delete permission predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+          result_type:
+            type: named
+            name: delete_variables_by_code_response
+        - name: delete_variables_by_id
+          description: Delete any row on the 'variables' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            pre_check:
+              description: Delete permission predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+          result_type:
+            type: named
+            name: delete_variables_by_id_response
+        - name: insert_administrative_units
+          description: Insert into the administrative_units table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_administrative_units_object
+            post_check:
+              description: Insert permission predicate over the 'administrative_units' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: administrative_units
+          result_type:
+            type: named
+            name: insert_administrative_units_response
+        - name: insert_center_inventories
+          description: Insert into the center_inventories table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_center_inventories_object
+            post_check:
+              description: Insert permission predicate over the 'center_inventories' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: center_inventories
+          result_type:
+            type: named
+            name: insert_center_inventories_response
+        - name: insert_civil_status_centers
+          description: Insert into the civil_status_centers table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_civil_status_centers_object
+            post_check:
+              description: Insert permission predicate over the 'civil_status_centers' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: civil_status_centers
+          result_type:
+            type: named
+            name: insert_civil_status_centers_response
+        - name: insert_equipment
+          description: Insert into the equipment table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_equipment_object
+            post_check:
+              description: Insert permission predicate over the 'equipment' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: equipment
+          result_type:
+            type: named
+            name: insert_equipment_response
+        - name: insert_inventory_items
+          description: Insert into the inventory_items table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_inventory_items_object
+            post_check:
+              description: Insert permission predicate over the 'inventory_items' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_items
+          result_type:
+            type: named
+            name: insert_inventory_items_response
+        - name: insert_inventory_movements
+          description: Insert into the inventory_movements table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_inventory_movements_object
+            post_check:
+              description: Insert permission predicate over the 'inventory_movements' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_movements
+          result_type:
+            type: named
+            name: insert_inventory_movements_response
+        - name: insert_spatial_ref_sys
+          description: Insert into the spatial_ref_sys table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_spatial_ref_sys_object
+            post_check:
+              description: Insert permission predicate over the 'spatial_ref_sys' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: spatial_ref_sys
+          result_type:
+            type: named
+            name: insert_spatial_ref_sys_response
+        - name: insert_users
+          description: Insert into the users table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_users_object
+            post_check:
+              description: Insert permission predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+          result_type:
+            type: named
+            name: insert_users_response
+        - name: insert_variables
+          description: Insert into the variables table
+          arguments:
+            objects:
+              type:
+                type: array
+                element_type:
+                  type: named
+                  name: insert_variables_object
+            post_check:
+              description: Insert permission predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+          result_type:
+            type: named
+            name: insert_variables_response
+        - name: update_administrative_units_by_id
+          description: Update any row on the 'administrative_units' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'administrative_units' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: administrative_units
+            pre_check:
+              description: Update permission pre-condition predicate over the 'administrative_units' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: administrative_units
+            update_columns:
+              type:
+                type: named
+                name: update_administrative_units_by_id_update_columns
+          result_type:
+            type: named
+            name: update_administrative_units_by_id_response
+        - name: update_center_inventories_by_id
+          description: Update any row on the 'center_inventories' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'center_inventories' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: center_inventories
+            pre_check:
+              description: Update permission pre-condition predicate over the 'center_inventories' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: center_inventories
+            update_columns:
+              type:
+                type: named
+                name: update_center_inventories_by_id_update_columns
+          result_type:
+            type: named
+            name: update_center_inventories_by_id_response
+        - name: update_civil_status_centers_by_id
+          description: Update any row on the 'civil_status_centers' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'civil_status_centers' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: civil_status_centers
+            pre_check:
+              description: Update permission pre-condition predicate over the 'civil_status_centers' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: civil_status_centers
+            update_columns:
+              type:
+                type: named
+                name: update_civil_status_centers_by_id_update_columns
+          result_type:
+            type: named
+            name: update_civil_status_centers_by_id_response
+        - name: update_equipment_by_id
+          description: Update any row on the 'equipment' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'equipment' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: equipment
+            pre_check:
+              description: Update permission pre-condition predicate over the 'equipment' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: equipment
+            update_columns:
+              type:
+                type: named
+                name: update_equipment_by_id_update_columns
+          result_type:
+            type: named
+            name: update_equipment_by_id_response
+        - name: update_inventory_items_by_id
+          description: Update any row on the 'inventory_items' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'inventory_items' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_items
+            pre_check:
+              description: Update permission pre-condition predicate over the 'inventory_items' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_items
+            update_columns:
+              type:
+                type: named
+                name: update_inventory_items_by_id_update_columns
+          result_type:
+            type: named
+            name: update_inventory_items_by_id_response
+        - name: update_inventory_movements_by_id
+          description: Update any row on the 'inventory_movements' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'inventory_movements' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_movements
+            pre_check:
+              description: Update permission pre-condition predicate over the 'inventory_movements' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: inventory_movements
+            update_columns:
+              type:
+                type: named
+                name: update_inventory_movements_by_id_update_columns
+          result_type:
+            type: named
+            name: update_inventory_movements_by_id_response
+        - name: update_spatial_ref_sys_by_srid
+          description: Update any row on the 'spatial_ref_sys' collection using the 'srid' key
+          arguments:
+            key_srid:
+              type:
+                type: named
+                name: int4
+            post_check:
+              description: Update permission post-condition predicate over the 'spatial_ref_sys' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: spatial_ref_sys
+            pre_check:
+              description: Update permission pre-condition predicate over the 'spatial_ref_sys' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: spatial_ref_sys
+            update_columns:
+              type:
+                type: named
+                name: update_spatial_ref_sys_by_srid_update_columns
+          result_type:
+            type: named
+            name: update_spatial_ref_sys_by_srid_response
+        - name: update_users_by_id
+          description: Update any row on the 'users' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+            pre_check:
+              description: Update permission pre-condition predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+            update_columns:
+              type:
+                type: named
+                name: update_users_by_id_update_columns
+          result_type:
+            type: named
+            name: update_users_by_id_response
+        - name: update_users_by_username
+          description: Update any row on the 'users' collection using the 'username' key
+          arguments:
+            key_username:
+              type:
+                type: named
+                name: varchar
+            post_check:
+              description: Update permission post-condition predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+            pre_check:
+              description: Update permission pre-condition predicate over the 'users' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: users
+            update_columns:
+              type:
+                type: named
+                name: update_users_by_username_update_columns
+          result_type:
+            type: named
+            name: update_users_by_username_response
+        - name: update_variables_by_code
+          description: Update any row on the 'variables' collection using the 'code' key
+          arguments:
+            key_code:
+              type:
+                type: named
+                name: varchar
+            post_check:
+              description: Update permission post-condition predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+            pre_check:
+              description: Update permission pre-condition predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+            update_columns:
+              type:
+                type: named
+                name: update_variables_by_code_update_columns
+          result_type:
+            type: named
+            name: update_variables_by_code_response
+        - name: update_variables_by_id
+          description: Update any row on the 'variables' collection using the 'id' key
+          arguments:
+            key_id:
+              type:
+                type: named
+                name: uuid
+            post_check:
+              description: Update permission post-condition predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+            pre_check:
+              description: Update permission pre-condition predicate over the 'variables' collection
+              type:
+                type: nullable
+                underlying_type:
+                  type: predicate
+                  object_type_name: variables
+            update_columns:
+              type:
+                type: named
+                name: update_variables_by_id_update_columns
+          result_type:
+            type: named
+            name: update_variables_by_id_response
+    capabilities:
+      version: 0.1.6
+      capabilities:
+        query:
+          aggregates: {}
+          variables: {}
+          explain: {}
+          nested_fields:
+            filter_by: {}
+            order_by: {}
+          exists:
+            nested_collections: {}
+        mutation:
+          transactional: {}
+          explain: {}
+        relationships:
+          relation_comparisons: {}
+          order_by_aggregate: {}
