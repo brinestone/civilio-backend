@@ -1,0 +1,8 @@
+administrative_units
+center_inventories
+civil_status_centers
+equipment
+inventory_items
+inventory_movements
+user
+variables
