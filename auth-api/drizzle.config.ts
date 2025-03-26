@@ -5,6 +5,6 @@ export default defineConfig({
     dbCredentials: {
         url: String(process.env['DB_URL'])
     },
-    schema: 'db/schema',
-    out: 'db/migrations'
+    schema: 'src/db/schema',
+    out: 'src/db/migrations'
 });

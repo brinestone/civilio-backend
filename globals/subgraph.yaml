@@ -6,3 +6,6 @@ definition:
     rootPath: .
   includePaths:
     - metadata
+  envMapping: 
+    AUTH_WEBHOOK_URL:
+      fromEnv: IDENTITY_SERVICE_WEBHOOK_URL

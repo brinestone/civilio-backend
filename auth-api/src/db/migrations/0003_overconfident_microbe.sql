@@ -1,0 +1,1 @@
+ALTER TABLE "jwks" DROP CONSTRAINT "jwks_id_unique";

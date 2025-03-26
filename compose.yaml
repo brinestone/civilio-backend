@@ -1,5 +1,4 @@
-include:
-  - path: api/connector/db/compose.yaml
+include: []
 services:
   engine:
     build:
