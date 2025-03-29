@@ -1,0 +1,178 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Equipment
+  fields:
+    - name: createdAt
+      type: Timestamp!
+    - name: description
+      type: Text
+    - name: id
+      type: Uuid!
+    - name: images
+      type: "[Text]"
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp!
+  graphql:
+    typeName: Equipment
+    inputTypeName: EquipmentInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: equipment
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Equipment
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - images
+          - name
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: EquipmentBoolExp
+  operand:
+    object:
+      type: Equipment
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: description
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: UuidBoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: inventoryItems
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: EquipmentBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: EquipmentAggExp
+  operand:
+    object:
+      aggregatedType: Equipment
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: description
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: UuidAggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: EquipmentAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: EquipmentOrderByExp
+  operand:
+    object:
+      orderedType: Equipment
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: description
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: UuidOrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: EquipmentOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Equipment
+  objectType: Equipment
+  source:
+    dataConnectorName: db
+    collection: equipment
+  filterExpressionType: EquipmentBoolExp
+  aggregateExpression: EquipmentAggExp
+  orderByExpression: EquipmentOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: equipment
+      subscription:
+        rootField: equipment
+    selectUniques:
+      - queryRootField: equipmentById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: equipmentById
+    filterInputTypeName: EquipmentFilterInput
+    aggregate:
+      queryRootField: equipmentAggregate
+      subscription:
+        rootField: equipmentAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Equipment
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItems
+  sourceType: Equipment
+  target:
+    model:
+      name: InventoryItems
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryItemsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: equipment
+  graphql:
+    aggregateFieldName: inventoryItemsAggregate
+

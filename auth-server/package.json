@@ -1,0 +1,32 @@
+{
+  "name": "auth-server",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "migrate.local": "bunx drizzle-kit generate && bunx drizzle-kit migrate",
+    "dev": "bun run --watch index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/pg": "^8.11.11",
+    "@types/swagger-ui-express": "^4.1.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "better-auth": "^1.2.5",
+    "chalk": "^5.4.1",
+    "cors": "^2.8.5",
+    "drizzle-kit": "^0.30.6",
+    "drizzle-orm": "^0.41.0",
+    "express": "^4.21.2",
+    "pg": "^8.14.1",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2",
+    "zod-validation-error": "^3.4.0"
+  }
+}

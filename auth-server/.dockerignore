@@ -1,0 +1,7 @@
+README.md
+*.log
+node_modules
+.env
+db/*
+!db/schema
+drizzle.config.ts

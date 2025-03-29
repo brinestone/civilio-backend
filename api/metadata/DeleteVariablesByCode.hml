@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteVariablesByCodeResponse
+  description: Responses from the 'delete_variables_by_code' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Variables!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteVariablesByCodeResponse
+    inputTypeName: DeleteVariablesByCodeResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: delete_variables_by_code_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteVariablesByCodeResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteVariablesByCode
+  outputType: DeleteVariablesByCodeResponse!
+  arguments:
+    - name: keyCode
+      type: Varchar!
+    - name: preCheck
+      type: VariablesBoolExp
+      description: Delete permission predicate over the 'variables' collection
+  source:
+    dataConnectorName: db
+    dataConnectorCommand:
+      procedure: delete_variables_by_code
+    argumentMapping:
+      keyCode: key_code
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteVariablesByCode
+    rootFieldKind: Mutation
+  description: Delete any row on the 'variables' collection using the 'code' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteVariablesByCode
+  permissions:
+    - role: admin
+      allowExecution: true
+

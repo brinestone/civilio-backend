@@ -1,3 +1,5 @@
 engine/build
 .env
 .env.*
+
+*.log

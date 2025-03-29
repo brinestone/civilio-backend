@@ -1,0 +1,248 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: AdministrativeUnits
+  fields:
+    - name: createdAt
+      type: Timestamp!
+    - name: description
+      type: Text
+    - name: id
+      type: Uuid!
+    - name: images
+      type: "[Text]"
+    - name: location
+      type: Geometry
+    - name: name
+      type: Text!
+    - name: parent
+      type: Uuid
+    - name: type
+      type: AdministrativeUnitTypes!
+    - name: updatedAt
+      type: Timestamp!
+  graphql:
+    typeName: AdministrativeUnits
+    inputTypeName: AdministrativeUnitsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: administrative_units
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: AdministrativeUnits
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - images
+          - location
+          - name
+          - parent
+          - type
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: AdministrativeUnitsBoolExp
+  operand:
+    object:
+      type: AdministrativeUnits
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: description
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: UuidBoolExp
+        - fieldName: location
+          booleanExpressionType: GeometryBoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: parent
+          booleanExpressionType: UuidBoolExp
+        - fieldName: type
+          booleanExpressionType: AdministrativeUnitTypesBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: administrativeUnit
+        - relationshipName: administrativeUnits
+        - relationshipName: civilStatusCenters
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: AdministrativeUnitsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: AdministrativeUnitsAggExp
+  operand:
+    object:
+      aggregatedType: AdministrativeUnits
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: description
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: UuidAggExp
+        - fieldName: location
+          aggregateExpression: GeometryAggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: parent
+          aggregateExpression: UuidAggExp
+        - fieldName: type
+          aggregateExpression: AdministrativeUnitTypesAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: AdministrativeUnitsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: AdministrativeUnitsOrderByExp
+  operand:
+    object:
+      orderedType: AdministrativeUnits
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: description
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: UuidOrderByExp
+        - fieldName: location
+          orderByExpression: GeometryOrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: parent
+          orderByExpression: UuidOrderByExp
+        - fieldName: type
+          orderByExpression: AdministrativeUnitTypesOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: administrativeUnit
+  graphql:
+    expressionTypeName: AdministrativeUnitsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: AdministrativeUnits
+  objectType: AdministrativeUnits
+  source:
+    dataConnectorName: db
+    collection: administrative_units
+  filterExpressionType: AdministrativeUnitsBoolExp
+  aggregateExpression: AdministrativeUnitsAggExp
+  orderByExpression: AdministrativeUnitsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: administrativeUnits
+      subscription:
+        rootField: administrativeUnits
+    selectUniques:
+      - queryRootField: administrativeUnitsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: administrativeUnitsById
+    filterInputTypeName: AdministrativeUnitsFilterInput
+    aggregate:
+      queryRootField: administrativeUnitsAggregate
+      subscription:
+        rootField: administrativeUnitsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: AdministrativeUnits
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: administrativeUnit
+  sourceType: AdministrativeUnits
+  target:
+    model:
+      name: AdministrativeUnits
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: parent
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: administrativeUnits
+  sourceType: AdministrativeUnits
+  target:
+    model:
+      name: AdministrativeUnits
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: AdministrativeUnitsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: parent
+  graphql:
+    aggregateFieldName: administrativeUnitsAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: civilStatusCenters
+  sourceType: AdministrativeUnits
+  target:
+    model:
+      name: CivilStatusCenters
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: CivilStatusCentersAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: municipality
+  graphql:
+    aggregateFieldName: civilStatusCentersAggregate
+

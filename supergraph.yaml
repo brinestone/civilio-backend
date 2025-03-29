@@ -3,3 +3,4 @@ version: v2
 definition:
   subgraphs:
     - globals/subgraph.yaml
+    - api/subgraph.yaml

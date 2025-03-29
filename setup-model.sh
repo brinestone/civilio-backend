@@ -1,7 +1,7 @@
-models = "models.txt"
-commands = "commands.txt"
-relationships = $commands
-connectorName = $1
+export models="models.txt";
+export commands="commands.txt";
+export relationships="$commands";
+export connectorName=$1;
 
 for line in $(cat "$models"); do
     ddn model add $connectorName "$(echo -n "$line" | sed -e 's/[[:space:]]*$//')"

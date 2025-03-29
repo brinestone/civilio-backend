@@ -1,0 +1,429 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsCreatedAt
+  description: Update the 'createdAt' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Timestamp!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsCreatedAt
+    inputTypeName: UpdateColumnAdministrativeUnitsCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_createdAt
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsDescription
+  description: Update the 'description' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Text
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsDescription
+    inputTypeName: UpdateColumnAdministrativeUnitsDescriptionInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_description
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsDescription
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsId
+  description: Update the 'id' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Uuid!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsId
+    inputTypeName: UpdateColumnAdministrativeUnitsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsImages
+  description: Update the 'images' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: "[Text]"
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsImages
+    inputTypeName: UpdateColumnAdministrativeUnitsImagesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_images
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsImages
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsLocation
+  description: Update the 'location' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Geometry
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsLocation
+    inputTypeName: UpdateColumnAdministrativeUnitsLocationInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_location
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsLocation
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsName
+  description: Update the 'name' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsName
+    inputTypeName: UpdateColumnAdministrativeUnitsNameInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_name
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsName
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsParent
+  description: Update the 'parent' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Uuid
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsParent
+    inputTypeName: UpdateColumnAdministrativeUnitsParentInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_parent
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsParent
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsType
+  description: Update the 'type' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: AdministrativeUnitTypes!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsType
+    inputTypeName: UpdateColumnAdministrativeUnitsTypeInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_type
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsType
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAdministrativeUnitsUpdatedAt
+  description: Update the 'updatedAt' column in the 'administrative_units' collection
+  fields:
+    - name: set
+      type: Timestamp!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAdministrativeUnitsUpdatedAt
+    inputTypeName: UpdateColumnAdministrativeUnitsUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_column_administrative_units_updatedAt
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAdministrativeUnitsUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateAdministrativeUnitsByIdUpdateColumns
+  description: Update the columns of the 'administrative_units' collection
+  fields:
+    - name: createdAt
+      type: UpdateColumnAdministrativeUnitsCreatedAt
+      description: Update the 'createdAt' column in the 'administrative_units' collection.
+    - name: description
+      type: UpdateColumnAdministrativeUnitsDescription
+      description: Update the 'description' column in the 'administrative_units' collection.
+    - name: id
+      type: UpdateColumnAdministrativeUnitsId
+      description: Update the 'id' column in the 'administrative_units' collection.
+    - name: images
+      type: UpdateColumnAdministrativeUnitsImages
+      description: Update the 'images' column in the 'administrative_units' collection.
+    - name: location
+      type: UpdateColumnAdministrativeUnitsLocation
+      description: Update the 'location' column in the 'administrative_units' collection.
+    - name: name
+      type: UpdateColumnAdministrativeUnitsName
+      description: Update the 'name' column in the 'administrative_units' collection.
+    - name: parent
+      type: UpdateColumnAdministrativeUnitsParent
+      description: Update the 'parent' column in the 'administrative_units' collection.
+    - name: type
+      type: UpdateColumnAdministrativeUnitsType
+      description: Update the 'type' column in the 'administrative_units' collection.
+    - name: updatedAt
+      type: UpdateColumnAdministrativeUnitsUpdatedAt
+      description: Update the 'updatedAt' column in the 'administrative_units' collection.
+  graphql:
+    typeName: UpdateAdministrativeUnitsByIdUpdateColumns
+    inputTypeName: UpdateAdministrativeUnitsByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_administrative_units_by_id_update_columns
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateAdministrativeUnitsByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - images
+          - location
+          - name
+          - parent
+          - type
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateAdministrativeUnitsByIdResponse
+  description: Responses from the 'update_administrative_units_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[AdministrativeUnits!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateAdministrativeUnitsByIdResponse
+    inputTypeName: UpdateAdministrativeUnitsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: db
+      dataConnectorObjectType: update_administrative_units_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateAdministrativeUnitsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateAdministrativeUnitsById
+  outputType: UpdateAdministrativeUnitsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Uuid!
+    - name: postCheck
+      type: AdministrativeUnitsBoolExp
+      description: Update permission post-condition predicate over the
+        'administrative_units' collection
+    - name: preCheck
+      type: AdministrativeUnitsBoolExp
+      description: Update permission pre-condition predicate over the
+        'administrative_units' collection
+    - name: updateColumns
+      type: UpdateAdministrativeUnitsByIdUpdateColumns!
+  source:
+    dataConnectorName: db
+    dataConnectorCommand:
+      procedure: update_administrative_units_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateAdministrativeUnitsById
+    rootFieldKind: Mutation
+  description: Update any row on the 'administrative_units' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateAdministrativeUnitsById
+  permissions:
+    - role: admin
+      allowExecution: true
+
