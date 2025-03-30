@@ -1,6 +1,33 @@
 import type { NextFunction, Request, Response } from "express";
 import { auth } from "../auth";
 import { convertHeaders } from "../util";
+import type { AuthedRequest } from "../types";
+
+/**
+ * Middleware function to enforce Role-Based Access Control (RBAC).
+ * 
+ * This middleware checks if the authenticated user has the required role
+ * to access a specific route. If the user's role does not match the required
+ * role or is not an 'admin', the middleware responds with a 403 Forbidden status.
+ * 
+ * @param role - The required role to access the route.
+ * @returns An Express middleware function that validates the user's role.
+ * 
+ * @example
+ * // Apply RBAC middleware to a route
+ * app.get('/admin', rbacMiddleware('admin'), (req, res) => {
+ *   res.send('Welcome, admin!');
+ * });
+ */
+export function rbacMiddleware(role: 'admin' | 'user') {
+    return async (req: AuthedRequest, res: Response, next: NextFunction) => {
+        if (req.user?.role !== role && req.user?.role !== 'admin') {
+            res.status(403).json({ message: 'Forbidden operation' });
+            return;
+        }
+        next();
+    }
+}
 
 /**
  * Middleware to handle authentication for incoming requests.
@@ -22,13 +49,6 @@ import { convertHeaders } from "../util";
  * @throws {Error} If an unexpected error occurs during session validation.
  */
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-    const { authorization } = req.headers;
-
-    if (!authorization) {
-        res.status(401).json({ message: 'Unauthorized action' });
-        return;
-    }
-
     const result = await auth.api.getSession({ headers: convertHeaders(req.headers) });
     if (!result) {
         res.status(403).json({ message: 'Forbidden' });
