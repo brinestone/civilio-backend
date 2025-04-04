@@ -84,6 +84,6 @@ rootRouter.use("/", securedRouter);
 rootRouter.use("/auth", authRouter);
 rootRouter.use('/admin', adminRouter);
 
-app.use('/api', rootRouter);
+app.use('/', rootRouter);
 app.listen(port, () => logger.info(`Server is running on port ${port}`));
 

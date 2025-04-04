@@ -1,40 +1,16 @@
-include:
-  - path: api/connector/db/compose.yaml
+include: []
 services:
-  db:
-    build:
-      context: auth-server/db
-      dockerfile: db.Dockerfile
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: civilio-pass
-      POSTGRES_DB: civilio
-      POSTGRES_USER: civilio
-    container_name: database
-  auth:
-    build:
-      context: auth-server
-      dockerfile: server.Dockerfile
-    depends_on:
-      - db
-    environment:
-      PORT: 9100
-      DB_URL: postgres://civilio:civilio-pass@db:5432/civilio
-      BETTER_AUTH_SECRET: ${JWT_SECRET}
-      BETTER_AUTH_URL: http://auth:9100
   engine:
-    depends_on:
-      - db
-      - auth
     build:
       context: engine
       dockerfile: Dockerfile.engine
       pull: true
+    depends_on:
     environment:
-      IDENTITY_SERVICE_WEBHOOK_URL: http://auth:9100/api/hasura/session
       AUTHN_CONFIG_PATH: /md/auth_config.json
       ENABLE_CORS: "true"
       ENABLE_SQL_INTERFACE: "true"
+      IDENTITY_SERVICE_WEBHOOK_URL: http://auth:9100/api/hasura/session
       INTROSPECTION_METADATA_FILE: /md/metadata.json
       METADATA_PATH: /md/open_dd.json
       OTLP_ENDPOINT: http://local.hasura.dev:4317
@@ -50,15 +26,8 @@ services:
     environment:
       HASURA_DDN_PAT: ${HASURA_DDN_PAT}
     image: otel/opentelemetry-collector:0.104.0
-    # ports:
-    #   - 4317:4317
-    #   - 4318:4318
+    ports:
+      - 4317:4317
+      - 4318:4318
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-
-  gateway:
-    image: nginx:stable-perl
-    ports:
-      - 5000:80
-    volumes:
-      - ./generated/nginx/nginx.conf:/etc/nginx/nginx.conf:ro

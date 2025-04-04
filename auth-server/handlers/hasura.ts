@@ -30,7 +30,7 @@ export async function handleGetHasuraSessionVariables(req: AuthedRequest, res: R
     res.json({
         "X-Hasura-Role": user.role,
         "X-Hasura-User-Id": user.id,
-        'X-Hasura-Allowed-Roles': ['admin', 'user'],
+        'X-Hasura-Allowed-Roles': ['admin', 'employee', 'field-agent'],
         'X-Hasura-Default-Role': 'user',
         "X-Hasura-Session": session.id
     });
