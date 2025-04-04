@@ -1,11 +1,12 @@
-include: []
+include:
+  - path: api/connector/data/compose.yaml
 services:
   engine:
     build:
       context: engine
       dockerfile: Dockerfile.engine
       pull: true
-    depends_on:
+    depends_on: null
     environment:
       AUTHN_CONFIG_PATH: /md/auth_config.json
       ENABLE_CORS: "true"

@@ -1,0 +1,26 @@
+kind: DataConnectorLink
+version: v1
+definition:
+  name: data
+  url:
+    readWriteUrls:
+      read:
+        valueFromEnv: API_DATA_READ_URL
+      write:
+        valueFromEnv: API_DATA_WRITE_URL
+  headers:
+    Authorization:
+      valueFromEnv: API_DATA_AUTHORIZATION_HEADER
+  schema:
+    version: v0.1
+    schema:
+      scalar_types: {}
+      object_types: {}
+      collections: []
+      functions: []
+      procedures: []
+    capabilities:
+      version: ""
+      capabilities:
+        query: {}
+        mutation: {}
