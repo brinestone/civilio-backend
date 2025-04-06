@@ -1,0 +1,340 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnUserSessionsAccount
+  description: Update the 'account' column in the 'user_sessions' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnUserSessionsAccount
+    inputTypeName: UpdateColumnUserSessionsAccountInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_user_sessions_account
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnUserSessionsAccount
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnUserSessionsCreatedAt
+  description: Update the 'created_at' column in the 'user_sessions' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnUserSessionsCreatedAt
+    inputTypeName: UpdateColumnUserSessionsCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_user_sessions_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnUserSessionsCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnUserSessionsId
+  description: Update the 'id' column in the 'user_sessions' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnUserSessionsId
+    inputTypeName: UpdateColumnUserSessionsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_user_sessions_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnUserSessionsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnUserSessionsIp
+  description: Update the 'ip' column in the 'user_sessions' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnUserSessionsIp
+    inputTypeName: UpdateColumnUserSessionsIpInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_user_sessions_ip
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnUserSessionsIp
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnUserSessionsUpdatedAt
+  description: Update the 'updated_at' column in the 'user_sessions' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnUserSessionsUpdatedAt
+    inputTypeName: UpdateColumnUserSessionsUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_user_sessions_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnUserSessionsUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnUserSessionsUser
+  description: Update the 'user' column in the 'user_sessions' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnUserSessionsUser
+    inputTypeName: UpdateColumnUserSessionsUserInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_user_sessions_user
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnUserSessionsUser
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateUserSessionsByIdUpdateColumns
+  description: Update the columns of the 'user_sessions' collection
+  fields:
+    - name: account
+      type: UpdateColumnUserSessionsAccount
+      description: Update the 'account' column in the 'user_sessions' collection.
+    - name: createdAt
+      type: UpdateColumnUserSessionsCreatedAt
+      description: Update the 'created_at' column in the 'user_sessions' collection.
+    - name: id
+      type: UpdateColumnUserSessionsId
+      description: Update the 'id' column in the 'user_sessions' collection.
+    - name: ip
+      type: UpdateColumnUserSessionsIp
+      description: Update the 'ip' column in the 'user_sessions' collection.
+    - name: updatedAt
+      type: UpdateColumnUserSessionsUpdatedAt
+      description: Update the 'updated_at' column in the 'user_sessions' collection.
+    - name: user
+      type: UpdateColumnUserSessionsUser
+      description: Update the 'user' column in the 'user_sessions' collection.
+  graphql:
+    typeName: UpdateUserSessionsByIdUpdateColumns
+    inputTypeName: UpdateUserSessionsByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_user_sessions_by_id_update_columns
+      fieldMapping:
+        account:
+          column:
+            name: account
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        ip:
+          column:
+            name: ip
+        updatedAt:
+          column:
+            name: updated_at
+        user:
+          column:
+            name: user
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateUserSessionsByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - account
+          - createdAt
+          - id
+          - ip
+          - updatedAt
+          - user
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateUserSessionsByIdResponse
+  description: Responses from the 'update_user_sessions_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[UserSessions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateUserSessionsByIdResponse
+    inputTypeName: UpdateUserSessionsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_user_sessions_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateUserSessionsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateUserSessionsById
+  outputType: UpdateUserSessionsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: UserSessionsBoolExp
+      description: Update permission post-condition predicate over the 'user_sessions'
+        collection
+    - name: preCheck
+      type: UserSessionsBoolExp
+      description: Update permission pre-condition predicate over the 'user_sessions'
+        collection
+    - name: updateColumns
+      type: UpdateUserSessionsByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_user_sessions_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateUserSessionsById
+    rootFieldKind: Mutation
+  description: Update any row on the 'user_sessions' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateUserSessionsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

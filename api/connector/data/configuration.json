@@ -15,9 +15,3695 @@
     "isolationLevel": "ReadCommitted"
   },
   "metadata": {
-    "tables": {},
+    "tables": {
+      "accounts": {
+        "schemaName": "public",
+        "tableName": "accounts",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "owner": {
+            "name": "owner",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "password_hash": {
+            "name": "password_hash",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "should_change_password": {
+            "name": "should_change_password",
+            "type": {
+              "scalarType": "bool"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "username": {
+            "name": "username",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "accounts_pkey": [
+            "id"
+          ],
+          "accounts_username_unique": [
+            "username"
+          ]
+        },
+        "foreignRelations": {
+          "accounts_owner_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "owner": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "civil_status_centers": {
+        "schemaName": "public",
+        "tableName": "civil_status_centers",
+        "columns": {
+          "addedBy": {
+            "name": "addedBy",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "images": {
+            "name": "images",
+            "type": {
+              "arrayType": {
+                "scalarType": "text"
+              }
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "location": {
+            "name": "location",
+            "type": {
+              "scalarType": "geometry"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "municipality": {
+            "name": "municipality",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "civil_status_centers_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "civil_status_centers_addedBy_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "addedBy": "id"
+            }
+          },
+          "civil_status_centers_municipality_localities_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "localities",
+            "columnMapping": {
+              "municipality": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "equipment": {
+        "schemaName": "public",
+        "tableName": "equipment",
+        "columns": {
+          "addedBy": {
+            "name": "addedBy",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "description": {
+            "name": "description",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "images": {
+            "name": "images",
+            "type": {
+              "arrayType": {
+                "scalarType": "text"
+              }
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "lower_threshold": {
+            "name": "lower_threshold",
+            "type": {
+              "scalarType": "float4"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "upper_threshold": {
+            "name": "upper_threshold",
+            "type": {
+              "scalarType": "float4"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "equipment_name_unique": [
+            "name"
+          ],
+          "equipment_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "equipment_addedBy_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "addedBy": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "equipment_fields": {
+        "schemaName": "public",
+        "tableName": "equipment_fields",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "equipment": {
+            "name": "equipment",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "group": {
+            "name": "group",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "value": {
+            "name": "value",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "equipment_fields_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "equipment_fields_equipment_equipment_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "equipment",
+            "columnMapping": {
+              "equipment": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "equipment_units": {
+        "schemaName": "public",
+        "tableName": "equipment_units",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "equipment": {
+            "name": "equipment",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "scaleFactor": {
+            "name": "scaleFactor",
+            "type": {
+              "scalarType": "float4"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "equipment_units_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "equipment_units_equipment_equipment_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "equipment",
+            "columnMapping": {
+              "equipment": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "form_submissions": {
+        "schemaName": "public",
+        "tableName": "form_submissions",
+        "columns": {
+          "center": {
+            "name": "center",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "draft": {
+            "name": "draft",
+            "type": {
+              "scalarType": "bool"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "recordedBy": {
+            "name": "recordedBy",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "type": {
+            "name": "type",
+            "type": {
+              "scalarType": "form_types"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "form_submissions_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "form_submissions_center_civil_status_centers_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "civil_status_centers",
+            "columnMapping": {
+              "center": "id"
+            }
+          },
+          "form_submissions_recordedBy_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "recordedBy": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "inventories": {
+        "schemaName": "public",
+        "tableName": "inventories",
+        "columns": {
+          "center": {
+            "name": "center",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "createdBy": {
+            "name": "createdBy",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "inventories_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "inventories_center_civil_status_centers_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "civil_status_centers",
+            "columnMapping": {
+              "center": "id"
+            }
+          },
+          "inventories_createdBy_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "createdBy": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "inventory_item_field_overrides": {
+        "schemaName": "public",
+        "tableName": "inventory_item_field_overrides",
+        "columns": {
+          "field": {
+            "name": "field",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "inventoryItem": {
+            "name": "inventoryItem",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "value": {
+            "name": "value",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "inventory_item_field_overrides_inventoryItem_field_pk": [
+            "field",
+            "inventoryItem"
+          ]
+        },
+        "foreignRelations": {
+          "inventory_item_field_overrides_field_equipment_fields_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "equipment_fields",
+            "columnMapping": {
+              "field": "id"
+            }
+          },
+          "inventory_item_field_overrides_inventoryItem_inventory_items_id": {
+            "foreignSchema": "public",
+            "foreignTable": "inventory_items",
+            "columnMapping": {
+              "inventoryItem": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "inventory_items": {
+        "schemaName": "public",
+        "tableName": "inventory_items",
+        "columns": {
+          "addedBy": {
+            "name": "addedBy",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "equipment": {
+            "name": "equipment",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "inventory": {
+            "name": "inventory",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "starting_quantity": {
+            "name": "starting_quantity",
+            "type": {
+              "scalarType": "float4"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "inventory_items_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "inventory_items_addedBy_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "addedBy": "id"
+            }
+          },
+          "inventory_items_equipment_equipment_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "equipment",
+            "columnMapping": {
+              "equipment": "id"
+            }
+          },
+          "inventory_items_inventory_inventories_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "inventories",
+            "columnMapping": {
+              "inventory": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "inventory_movements": {
+        "schemaName": "public",
+        "tableName": "inventory_movements",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "is_inbound": {
+            "name": "is_inbound",
+            "type": {
+              "scalarType": "bool"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "item": {
+            "name": "item",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "quantity": {
+            "name": "quantity",
+            "type": {
+              "scalarType": "float4"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "recordedBy": {
+            "name": "recordedBy",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "tags": {
+            "name": "tags",
+            "type": {
+              "arrayType": {
+                "scalarType": "text"
+              }
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "unit": {
+            "name": "unit",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "inventory_movements_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "inventory_movements_item_inventory_items_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "inventory_items",
+            "columnMapping": {
+              "item": "id"
+            }
+          },
+          "inventory_movements_recordedBy_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "recordedBy": "id"
+            }
+          },
+          "inventory_movements_unit_equipment_units_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "equipment_units",
+            "columnMapping": {
+              "unit": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "localities": {
+        "schemaName": "public",
+        "tableName": "localities",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "description": {
+            "name": "description",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "images": {
+            "name": "images",
+            "type": {
+              "arrayType": {
+                "scalarType": "text"
+              }
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "location": {
+            "name": "location",
+            "type": {
+              "scalarType": "geometry"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "parent": {
+            "name": "parent",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "type": {
+            "name": "type",
+            "type": {
+              "scalarType": "locality_type"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "localities_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "localities_parent_localities_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "localities",
+            "columnMapping": {
+              "parent": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "properties": {
+        "schemaName": "public",
+        "tableName": "properties",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "description": {
+            "name": "description",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "name": {
+            "name": "name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "properties_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {},
+        "description": null
+      },
+      "property_options": {
+        "schemaName": "public",
+        "tableName": "property_options",
+        "columns": {
+          "code": {
+            "name": "code",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "group": {
+            "name": "group",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "label": {
+            "name": "label",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "property": {
+            "name": "property",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "property_options_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "property_options_property_properties_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "properties",
+            "columnMapping": {
+              "property": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "property_values": {
+        "schemaName": "public",
+        "tableName": "property_values",
+        "columns": {
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "property": {
+            "name": "property",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "table_name": {
+            "name": "table_name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "value": {
+            "name": "value",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "property_values_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "property_values_property_properties_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "properties",
+            "columnMapping": {
+              "property": "id"
+            }
+          },
+          "property_values_value_property_options_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "property_options",
+            "columnMapping": {
+              "value": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "spatial_ref_sys": {
+        "schemaName": "public",
+        "tableName": "spatial_ref_sys",
+        "columns": {
+          "auth_name": {
+            "name": "auth_name",
+            "type": {
+              "scalarType": "varchar"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "auth_srid": {
+            "name": "auth_srid",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "proj4text": {
+            "name": "proj4text",
+            "type": {
+              "scalarType": "varchar"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "srid": {
+            "name": "srid",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "srtext": {
+            "name": "srtext",
+            "type": {
+              "scalarType": "varchar"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "spatial_ref_sys_pkey": [
+            "srid"
+          ]
+        },
+        "foreignRelations": {},
+        "description": null
+      },
+      "submission_values": {
+        "schemaName": "public",
+        "tableName": "submission_values",
+        "columns": {
+          "field": {
+            "name": "field",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "submission": {
+            "name": "submission",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "value": {
+            "name": "value",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "submission_values_field_submission_pk": [
+            "field",
+            "submission"
+          ]
+        },
+        "foreignRelations": {
+          "submission_values_submission_form_submissions_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "form_submissions",
+            "columnMapping": {
+              "submission": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "user_sessions": {
+        "schemaName": "public",
+        "tableName": "user_sessions",
+        "columns": {
+          "account": {
+            "name": "account",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "ip": {
+            "name": "ip",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "user": {
+            "name": "user",
+            "type": {
+              "scalarType": "int8"
+            },
+            "nullable": "nullable",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "user_sessions_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {
+          "user_sessions_account_accounts_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "accounts",
+            "columnMapping": {
+              "account": "id"
+            }
+          },
+          "user_sessions_user_users_id_fk": {
+            "foreignSchema": "public",
+            "foreignTable": "users",
+            "columnMapping": {
+              "user": "id"
+            }
+          }
+        },
+        "description": null
+      },
+      "users": {
+        "schemaName": "public",
+        "tableName": "users",
+        "columns": {
+          "access_revoked": {
+            "name": "access_revoked",
+            "type": {
+              "scalarType": "bool"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "avatar": {
+            "name": "avatar",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "cni": {
+            "name": "cni",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "created_at": {
+            "name": "created_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "email": {
+            "name": "email",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "gender": {
+            "name": "gender",
+            "type": {
+              "scalarType": "genders"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "given_names": {
+            "name": "given_names",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nullable",
+            "description": null
+          },
+          "id": {
+            "name": "id",
+            "type": {
+              "scalarType": "int4"
+            },
+            "nullable": "nonNullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "last_name": {
+            "name": "last_name",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "niu": {
+            "name": "niu",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "phone": {
+            "name": "phone",
+            "type": {
+              "scalarType": "text"
+            },
+            "nullable": "nonNullable",
+            "description": null
+          },
+          "role": {
+            "name": "role",
+            "type": {
+              "scalarType": "user_roles"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          },
+          "updated_at": {
+            "name": "updated_at",
+            "type": {
+              "scalarType": "timestamp"
+            },
+            "nullable": "nullable",
+            "hasDefault": "hasDefault",
+            "description": null
+          }
+        },
+        "uniquenessConstraints": {
+          "users_email_unique": [
+            "email"
+          ],
+          "users_pkey": [
+            "id"
+          ]
+        },
+        "foreignRelations": {},
+        "description": null
+      }
+    },
     "types": {
-      "scalar": {},
+      "scalar": {
+        "bool": {
+          "typeName": "bool",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "bool_and": {
+              "returnType": "bool"
+            },
+            "bool_or": {
+              "returnType": "bool"
+            },
+            "every": {
+              "returnType": "bool"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "bool",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "bool",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "bool",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "bool",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "bool",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "bool",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "bool",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "boolean"
+        },
+        "box2d": {
+          "typeName": "box2d",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "st_3dextent": {
+              "returnType": "box3d"
+            },
+            "st_collect": {
+              "returnType": "geometry"
+            },
+            "st_coverageunion": {
+              "returnType": "geometry"
+            },
+            "st_extent": {
+              "returnType": "box2d"
+            },
+            "st_makeline": {
+              "returnType": "geometry"
+            },
+            "st_memcollect": {
+              "returnType": "geometry"
+            },
+            "st_memunion": {
+              "returnType": "geometry"
+            },
+            "st_polygonize": {
+              "returnType": "geometry"
+            },
+            "st_union": {
+              "returnType": "geometry"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_like": {
+              "operatorName": "~~",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "_regex": {
+              "operatorName": "~",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": true
+            },
+            "box_above": {
+              "operatorName": "box_above",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_below": {
+              "operatorName": "box_below",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_contain": {
+              "operatorName": "box_contain",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_contained": {
+              "operatorName": "box_contained",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_left": {
+              "operatorName": "box_left",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_overabove": {
+              "operatorName": "box_overabove",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_overbelow": {
+              "operatorName": "box_overbelow",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_overlap": {
+              "operatorName": "box_overlap",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_overleft": {
+              "operatorName": "box_overleft",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_overright": {
+              "operatorName": "box_overright",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_right": {
+              "operatorName": "box_right",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "box_same": {
+              "operatorName": "box_same",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "equals": {
+              "operatorName": "equals",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geography_overlaps": {
+              "operatorName": "geography_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_above": {
+              "operatorName": "geometry_above",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_below": {
+              "operatorName": "geometry_below",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_contained_3d": {
+              "operatorName": "geometry_contained_3d",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_contains": {
+              "operatorName": "geometry_contains",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_contains_3d": {
+              "operatorName": "geometry_contains_3d",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_contains_nd": {
+              "operatorName": "geometry_contains_nd",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_left": {
+              "operatorName": "geometry_left",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overabove": {
+              "operatorName": "geometry_overabove",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overbelow": {
+              "operatorName": "geometry_overbelow",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overlaps": {
+              "operatorName": "geometry_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overlaps_3d": {
+              "operatorName": "geometry_overlaps_3d",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overlaps_nd": {
+              "operatorName": "geometry_overlaps_nd",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overleft": {
+              "operatorName": "geometry_overleft",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_overright": {
+              "operatorName": "geometry_overright",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_right": {
+              "operatorName": "geometry_right",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_same": {
+              "operatorName": "geometry_same",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_same_3d": {
+              "operatorName": "geometry_same_3d",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_same_nd": {
+              "operatorName": "geometry_same_nd",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_within": {
+              "operatorName": "geometry_within",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "geometry_within_nd": {
+              "operatorName": "geometry_within_nd",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_3dintersects": {
+              "operatorName": "st_3dintersects",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_contains": {
+              "operatorName": "st_contains",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_containsproperly": {
+              "operatorName": "st_containsproperly",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_coveredby": {
+              "operatorName": "st_coveredby",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_covers": {
+              "operatorName": "st_covers",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_crosses": {
+              "operatorName": "st_crosses",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_disjoint": {
+              "operatorName": "st_disjoint",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_equals": {
+              "operatorName": "st_equals",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_intersects": {
+              "operatorName": "st_intersects",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_isvalid": {
+              "operatorName": "st_isvalid",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": false
+            },
+            "st_orderingequals": {
+              "operatorName": "st_orderingequals",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_overlaps": {
+              "operatorName": "st_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_touches": {
+              "operatorName": "st_touches",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            },
+            "st_within": {
+              "operatorName": "st_within",
+              "operatorKind": "custom",
+              "argumentType": "box2d",
+              "isInfix": false
+            }
+          },
+          "typeRepresentation": null
+        },
+        "box3d": {
+          "typeName": "box3d",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "st_3dextent": {
+              "returnType": "box3d"
+            },
+            "st_collect": {
+              "returnType": "geometry"
+            },
+            "st_coverageunion": {
+              "returnType": "geometry"
+            },
+            "st_extent": {
+              "returnType": "box2d"
+            },
+            "st_makeline": {
+              "returnType": "geometry"
+            },
+            "st_memcollect": {
+              "returnType": "geometry"
+            },
+            "st_memunion": {
+              "returnType": "geometry"
+            },
+            "st_polygonize": {
+              "returnType": "geometry"
+            },
+            "st_union": {
+              "returnType": "geometry"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_like": {
+              "operatorName": "~~",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "_regex": {
+              "operatorName": "~",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": true
+            },
+            "box_above": {
+              "operatorName": "box_above",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_below": {
+              "operatorName": "box_below",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_contain": {
+              "operatorName": "box_contain",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_contained": {
+              "operatorName": "box_contained",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_left": {
+              "operatorName": "box_left",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_overabove": {
+              "operatorName": "box_overabove",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_overbelow": {
+              "operatorName": "box_overbelow",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_overlap": {
+              "operatorName": "box_overlap",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_overleft": {
+              "operatorName": "box_overleft",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_overright": {
+              "operatorName": "box_overright",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_right": {
+              "operatorName": "box_right",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "box_same": {
+              "operatorName": "box_same",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "equals": {
+              "operatorName": "equals",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geography_overlaps": {
+              "operatorName": "geography_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_above": {
+              "operatorName": "geometry_above",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_below": {
+              "operatorName": "geometry_below",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_contained_3d": {
+              "operatorName": "geometry_contained_3d",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_contains": {
+              "operatorName": "geometry_contains",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_contains_3d": {
+              "operatorName": "geometry_contains_3d",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_contains_nd": {
+              "operatorName": "geometry_contains_nd",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_left": {
+              "operatorName": "geometry_left",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overabove": {
+              "operatorName": "geometry_overabove",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overbelow": {
+              "operatorName": "geometry_overbelow",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overlaps": {
+              "operatorName": "geometry_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overlaps_3d": {
+              "operatorName": "geometry_overlaps_3d",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overlaps_nd": {
+              "operatorName": "geometry_overlaps_nd",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overleft": {
+              "operatorName": "geometry_overleft",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_overright": {
+              "operatorName": "geometry_overright",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_right": {
+              "operatorName": "geometry_right",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_same": {
+              "operatorName": "geometry_same",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_same_3d": {
+              "operatorName": "geometry_same_3d",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_same_nd": {
+              "operatorName": "geometry_same_nd",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_within": {
+              "operatorName": "geometry_within",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "geometry_within_nd": {
+              "operatorName": "geometry_within_nd",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_3dintersects": {
+              "operatorName": "st_3dintersects",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_contains": {
+              "operatorName": "st_contains",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_containsproperly": {
+              "operatorName": "st_containsproperly",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_coveredby": {
+              "operatorName": "st_coveredby",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_covers": {
+              "operatorName": "st_covers",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_crosses": {
+              "operatorName": "st_crosses",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_disjoint": {
+              "operatorName": "st_disjoint",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_equals": {
+              "operatorName": "st_equals",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_intersects": {
+              "operatorName": "st_intersects",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_isvalid": {
+              "operatorName": "st_isvalid",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": false
+            },
+            "st_orderingequals": {
+              "operatorName": "st_orderingequals",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_overlaps": {
+              "operatorName": "st_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_touches": {
+              "operatorName": "st_touches",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            },
+            "st_within": {
+              "operatorName": "st_within",
+              "operatorKind": "custom",
+              "argumentType": "box3d",
+              "isInfix": false
+            }
+          },
+          "typeRepresentation": null
+        },
+        "float4": {
+          "typeName": "float4",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "avg": {
+              "returnType": "float8"
+            },
+            "max": {
+              "returnType": "float4"
+            },
+            "min": {
+              "returnType": "float4"
+            },
+            "stddev": {
+              "returnType": "float8"
+            },
+            "stddev_pop": {
+              "returnType": "float8"
+            },
+            "stddev_samp": {
+              "returnType": "float8"
+            },
+            "sum": {
+              "returnType": "float4"
+            },
+            "var_pop": {
+              "returnType": "float8"
+            },
+            "var_samp": {
+              "returnType": "float8"
+            },
+            "variance": {
+              "returnType": "float8"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "float4",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "float4",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "float4",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "float4",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "float4",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "float4",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "float4",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "float32"
+        },
+        "float8": {
+          "typeName": "float8",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "avg": {
+              "returnType": "float8"
+            },
+            "max": {
+              "returnType": "float8"
+            },
+            "min": {
+              "returnType": "float8"
+            },
+            "stddev": {
+              "returnType": "float8"
+            },
+            "stddev_pop": {
+              "returnType": "float8"
+            },
+            "stddev_samp": {
+              "returnType": "float8"
+            },
+            "sum": {
+              "returnType": "float8"
+            },
+            "var_pop": {
+              "returnType": "float8"
+            },
+            "var_samp": {
+              "returnType": "float8"
+            },
+            "variance": {
+              "returnType": "float8"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "float8",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "float8",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "float8",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "float8",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "float8",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "float8",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "float8",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "float64"
+        },
+        "form_types": {
+          "typeName": "form_types",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "form_types"
+            },
+            "min": {
+              "returnType": "form_types"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "form_types",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "form_types",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "form_types",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "form_types",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "form_types",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "form_types",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "!=",
+              "operatorKind": "custom",
+              "argumentType": "form_types",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": {
+            "enum": [
+              "cec",
+              "fosa",
+              "chefferie"
+            ]
+          }
+        },
+        "genders": {
+          "typeName": "genders",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "genders"
+            },
+            "min": {
+              "returnType": "genders"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "genders",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "genders",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "genders",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "genders",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "genders",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "genders",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "!=",
+              "operatorKind": "custom",
+              "argumentType": "genders",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": {
+            "enum": [
+              "male",
+              "female"
+            ]
+          }
+        },
+        "geometry": {
+          "typeName": "geometry",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "st_3dextent": {
+              "returnType": "box3d"
+            },
+            "st_collect": {
+              "returnType": "geometry"
+            },
+            "st_coverageunion": {
+              "returnType": "geometry"
+            },
+            "st_extent": {
+              "returnType": "box2d"
+            },
+            "st_makeline": {
+              "returnType": "geometry"
+            },
+            "st_memcollect": {
+              "returnType": "geometry"
+            },
+            "st_memunion": {
+              "returnType": "geometry"
+            },
+            "st_polygonize": {
+              "returnType": "geometry"
+            },
+            "st_union": {
+              "returnType": "geometry"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_like": {
+              "operatorName": "~~",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "_regex": {
+              "operatorName": "~",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": true
+            },
+            "box_above": {
+              "operatorName": "box_above",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_below": {
+              "operatorName": "box_below",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_contain": {
+              "operatorName": "box_contain",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_contained": {
+              "operatorName": "box_contained",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_left": {
+              "operatorName": "box_left",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_overabove": {
+              "operatorName": "box_overabove",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_overbelow": {
+              "operatorName": "box_overbelow",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_overlap": {
+              "operatorName": "box_overlap",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_overleft": {
+              "operatorName": "box_overleft",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_overright": {
+              "operatorName": "box_overright",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_right": {
+              "operatorName": "box_right",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "box_same": {
+              "operatorName": "box_same",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "equals": {
+              "operatorName": "equals",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geography_overlaps": {
+              "operatorName": "geography_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_above": {
+              "operatorName": "geometry_above",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_below": {
+              "operatorName": "geometry_below",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_contained_3d": {
+              "operatorName": "geometry_contained_3d",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_contains": {
+              "operatorName": "geometry_contains",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_contains_3d": {
+              "operatorName": "geometry_contains_3d",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_contains_nd": {
+              "operatorName": "geometry_contains_nd",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_left": {
+              "operatorName": "geometry_left",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overabove": {
+              "operatorName": "geometry_overabove",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overbelow": {
+              "operatorName": "geometry_overbelow",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overlaps": {
+              "operatorName": "geometry_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overlaps_3d": {
+              "operatorName": "geometry_overlaps_3d",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overlaps_nd": {
+              "operatorName": "geometry_overlaps_nd",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overleft": {
+              "operatorName": "geometry_overleft",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_overright": {
+              "operatorName": "geometry_overright",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_right": {
+              "operatorName": "geometry_right",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_same": {
+              "operatorName": "geometry_same",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_same_3d": {
+              "operatorName": "geometry_same_3d",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_same_nd": {
+              "operatorName": "geometry_same_nd",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_within": {
+              "operatorName": "geometry_within",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "geometry_within_nd": {
+              "operatorName": "geometry_within_nd",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_3dintersects": {
+              "operatorName": "st_3dintersects",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_contains": {
+              "operatorName": "st_contains",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_containsproperly": {
+              "operatorName": "st_containsproperly",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_coveredby": {
+              "operatorName": "st_coveredby",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_covers": {
+              "operatorName": "st_covers",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_crosses": {
+              "operatorName": "st_crosses",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_disjoint": {
+              "operatorName": "st_disjoint",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_equals": {
+              "operatorName": "st_equals",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_intersects": {
+              "operatorName": "st_intersects",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_isvalid": {
+              "operatorName": "st_isvalid",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": false
+            },
+            "st_orderingequals": {
+              "operatorName": "st_orderingequals",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_overlaps": {
+              "operatorName": "st_overlaps",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_touches": {
+              "operatorName": "st_touches",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            },
+            "st_within": {
+              "operatorName": "st_within",
+              "operatorKind": "custom",
+              "argumentType": "geometry",
+              "isInfix": false
+            }
+          },
+          "typeRepresentation": null
+        },
+        "int4": {
+          "typeName": "int4",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "avg": {
+              "returnType": "numeric"
+            },
+            "bit_and": {
+              "returnType": "int4"
+            },
+            "bit_or": {
+              "returnType": "int4"
+            },
+            "bit_xor": {
+              "returnType": "int4"
+            },
+            "max": {
+              "returnType": "int4"
+            },
+            "min": {
+              "returnType": "int4"
+            },
+            "stddev": {
+              "returnType": "numeric"
+            },
+            "stddev_pop": {
+              "returnType": "numeric"
+            },
+            "stddev_samp": {
+              "returnType": "numeric"
+            },
+            "sum": {
+              "returnType": "int8"
+            },
+            "var_pop": {
+              "returnType": "numeric"
+            },
+            "var_samp": {
+              "returnType": "numeric"
+            },
+            "variance": {
+              "returnType": "numeric"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "int4",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "int4",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "int4",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "int32"
+        },
+        "int8": {
+          "typeName": "int8",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "avg": {
+              "returnType": "numeric"
+            },
+            "bit_and": {
+              "returnType": "int8"
+            },
+            "bit_or": {
+              "returnType": "int8"
+            },
+            "bit_xor": {
+              "returnType": "int8"
+            },
+            "max": {
+              "returnType": "int8"
+            },
+            "min": {
+              "returnType": "int8"
+            },
+            "stddev": {
+              "returnType": "numeric"
+            },
+            "stddev_pop": {
+              "returnType": "numeric"
+            },
+            "stddev_samp": {
+              "returnType": "numeric"
+            },
+            "sum": {
+              "returnType": "numeric"
+            },
+            "var_pop": {
+              "returnType": "numeric"
+            },
+            "var_samp": {
+              "returnType": "numeric"
+            },
+            "variance": {
+              "returnType": "numeric"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "int8",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "int8",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "int8",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "int8",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "int8",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "int8",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "int8",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "int64AsString"
+        },
+        "locality_type": {
+          "typeName": "locality_type",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "locality_type"
+            },
+            "min": {
+              "returnType": "locality_type"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "locality_type",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "locality_type",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "locality_type",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "locality_type",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "locality_type",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "locality_type",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "!=",
+              "operatorKind": "custom",
+              "argumentType": "locality_type",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": {
+            "enum": [
+              "municipality",
+              "region",
+              "subdivision"
+            ]
+          }
+        },
+        "numeric": {
+          "typeName": "numeric",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "avg": {
+              "returnType": "numeric"
+            },
+            "max": {
+              "returnType": "numeric"
+            },
+            "min": {
+              "returnType": "numeric"
+            },
+            "stddev": {
+              "returnType": "numeric"
+            },
+            "stddev_pop": {
+              "returnType": "numeric"
+            },
+            "stddev_samp": {
+              "returnType": "numeric"
+            },
+            "sum": {
+              "returnType": "numeric"
+            },
+            "var_pop": {
+              "returnType": "numeric"
+            },
+            "var_samp": {
+              "returnType": "numeric"
+            },
+            "variance": {
+              "returnType": "numeric"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "numeric",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "numeric",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "numeric",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "numeric",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "numeric",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "numeric",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "numeric",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "bigDecimalAsString"
+        },
+        "text": {
+          "typeName": "text",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "text"
+            },
+            "min": {
+              "returnType": "text"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_ilike": {
+              "operatorName": "~~*",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_iregex": {
+              "operatorName": "~*",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_like": {
+              "operatorName": "~~",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_nilike": {
+              "operatorName": "!~~*",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_niregex": {
+              "operatorName": "!~*",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_nlike": {
+              "operatorName": "!~~",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_nregex": {
+              "operatorName": "!~",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "_regex": {
+              "operatorName": "~",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": true
+            },
+            "st_coveredby": {
+              "operatorName": "st_coveredby",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": false
+            },
+            "st_covers": {
+              "operatorName": "st_covers",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": false
+            },
+            "st_intersects": {
+              "operatorName": "st_intersects",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": false
+            },
+            "st_relatematch": {
+              "operatorName": "st_relatematch",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": false
+            },
+            "starts_with": {
+              "operatorName": "starts_with",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": false
+            },
+            "ts_match_tt": {
+              "operatorName": "ts_match_tt",
+              "operatorKind": "custom",
+              "argumentType": "text",
+              "isInfix": false
+            }
+          },
+          "typeRepresentation": "string"
+        },
+        "timestamp": {
+          "typeName": "timestamp",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "timestamp"
+            },
+            "min": {
+              "returnType": "timestamp"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "timestamp",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "timestamp",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "timestamp",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "timestamp",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "timestamp",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "timestamp",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "timestamp",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": "timestamp"
+        },
+        "user_roles": {
+          "typeName": "user_roles",
+          "schemaName": "public",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "user_roles"
+            },
+            "min": {
+              "returnType": "user_roles"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "user_roles",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "user_roles",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "user_roles",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "user_roles",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "user_roles",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "user_roles",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "!=",
+              "operatorKind": "custom",
+              "argumentType": "user_roles",
+              "isInfix": true
+            }
+          },
+          "typeRepresentation": {
+            "enum": [
+              "admin",
+              "employee",
+              "field_agent"
+            ]
+          }
+        },
+        "varchar": {
+          "typeName": "varchar",
+          "schemaName": "pg_catalog",
+          "description": null,
+          "aggregateFunctions": {
+            "max": {
+              "returnType": "text"
+            },
+            "min": {
+              "returnType": "text"
+            }
+          },
+          "comparisonOperators": {
+            "_eq": {
+              "operatorName": "=",
+              "operatorKind": "equal",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_gt": {
+              "operatorName": ">",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_gte": {
+              "operatorName": ">=",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_ilike": {
+              "operatorName": "~~*",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_in": {
+              "operatorName": "IN",
+              "operatorKind": "in",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_iregex": {
+              "operatorName": "~*",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_like": {
+              "operatorName": "~~",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_lt": {
+              "operatorName": "<",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_lte": {
+              "operatorName": "<=",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_neq": {
+              "operatorName": "<>",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_nilike": {
+              "operatorName": "!~~*",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_niregex": {
+              "operatorName": "!~*",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_nlike": {
+              "operatorName": "!~~",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_nregex": {
+              "operatorName": "!~",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "_regex": {
+              "operatorName": "~",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": true
+            },
+            "st_coveredby": {
+              "operatorName": "st_coveredby",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": false
+            },
+            "st_covers": {
+              "operatorName": "st_covers",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": false
+            },
+            "st_intersects": {
+              "operatorName": "st_intersects",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": false
+            },
+            "st_relatematch": {
+              "operatorName": "st_relatematch",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": false
+            },
+            "starts_with": {
+              "operatorName": "starts_with",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": false
+            },
+            "ts_match_tt": {
+              "operatorName": "ts_match_tt",
+              "operatorKind": "custom",
+              "argumentType": "varchar",
+              "isInfix": false
+            }
+          },
+          "typeRepresentation": "string"
+        }
+      },
       "composite": {}
     },
     "nativeOperations": {
@@ -30,6 +3716,7 @@
       "information_schema",
       "pg_catalog",
       "tiger",
+      "drizzle",
       "crdb_internal",
       "columnar",
       "columnar_internal",

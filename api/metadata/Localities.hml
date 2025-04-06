@@ -1,0 +1,276 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Localities
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: description
+      type: Text
+    - name: id
+      type: Int4!
+    - name: images
+      type: "[Text]"
+    - name: location
+      type: Geometry
+    - name: name
+      type: Text!
+    - name: parent
+      type: Int8
+    - name: type
+      type: LocalityType
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: Localities
+    inputTypeName: LocalitiesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: localities
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        location:
+          column:
+            name: location
+        name:
+          column:
+            name: name
+        parent:
+          column:
+            name: parent
+        type:
+          column:
+            name: type
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Localities
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - images
+          - location
+          - name
+          - parent
+          - type
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: LocalitiesBoolExp
+  operand:
+    object:
+      type: Localities
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: description
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: location
+          booleanExpressionType: GeometryBoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: parent
+          booleanExpressionType: Int8BoolExp
+        - fieldName: type
+          booleanExpressionType: LocalityTypeBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: civilStatusCenters
+        - relationshipName: locality
+        - relationshipName: localities
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: LocalitiesBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: LocalitiesAggExp
+  operand:
+    object:
+      aggregatedType: Localities
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: description
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: location
+          aggregateExpression: GeometryAggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: parent
+          aggregateExpression: Int8AggExp
+        - fieldName: type
+          aggregateExpression: LocalityTypeAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: LocalitiesAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: LocalitiesOrderByExp
+  operand:
+    object:
+      orderedType: Localities
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: description
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: location
+          orderByExpression: GeometryOrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: parent
+          orderByExpression: Int8OrderByExp
+        - fieldName: type
+          orderByExpression: LocalityTypeOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: locality
+  graphql:
+    expressionTypeName: LocalitiesOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Localities
+  objectType: Localities
+  source:
+    dataConnectorName: data
+    collection: localities
+  filterExpressionType: LocalitiesBoolExp
+  aggregateExpression: LocalitiesAggExp
+  orderByExpression: LocalitiesOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: localities
+      subscription:
+        rootField: localities
+    selectUniques:
+      - queryRootField: localitiesById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: localitiesById
+    filterInputTypeName: LocalitiesFilterInput
+    aggregate:
+      queryRootField: localitiesAggregate
+      subscription:
+        rootField: localitiesAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Localities
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: civilStatusCenters
+  sourceType: Localities
+  target:
+    model:
+      name: CivilStatusCenters
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: CivilStatusCentersAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: municipality
+  graphql:
+    aggregateFieldName: civilStatusCentersAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: locality
+  sourceType: Localities
+  target:
+    model:
+      name: Localities
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: parent
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: localities
+  sourceType: Localities
+  target:
+    model:
+      name: Localities
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: LocalitiesAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: parent
+  graphql:
+    aggregateFieldName: localitiesAggregate
+

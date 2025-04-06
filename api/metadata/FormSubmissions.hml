@@ -1,0 +1,255 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: FormSubmissions
+  fields:
+    - name: center
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: draft
+      type: Bool
+    - name: id
+      type: Int4!
+    - name: recordedBy
+      type: Int8
+    - name: type
+      type: FormTypes!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: FormSubmissions
+    inputTypeName: FormSubmissionsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: form_submissions
+      fieldMapping:
+        center:
+          column:
+            name: center
+        createdAt:
+          column:
+            name: created_at
+        draft:
+          column:
+            name: draft
+        id:
+          column:
+            name: id
+        recordedBy:
+          column:
+            name: recordedBy
+        type:
+          column:
+            name: type
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: FormSubmissions
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - center
+          - createdAt
+          - draft
+          - id
+          - recordedBy
+          - type
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: FormSubmissionsBoolExp
+  operand:
+    object:
+      type: FormSubmissions
+      comparableFields:
+        - fieldName: center
+          booleanExpressionType: Int8BoolExp
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: draft
+          booleanExpressionType: BoolBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: recordedBy
+          booleanExpressionType: Int8BoolExp
+        - fieldName: type
+          booleanExpressionType: FormTypesBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: civilStatusCenter
+        - relationshipName: user
+        - relationshipName: submissionValues
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: FormSubmissionsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: FormSubmissionsAggExp
+  operand:
+    object:
+      aggregatedType: FormSubmissions
+      aggregatableFields:
+        - fieldName: center
+          aggregateExpression: Int8AggExp
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: draft
+          aggregateExpression: BoolAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: recordedBy
+          aggregateExpression: Int8AggExp
+        - fieldName: type
+          aggregateExpression: FormTypesAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: FormSubmissionsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: FormSubmissionsOrderByExp
+  operand:
+    object:
+      orderedType: FormSubmissions
+      orderableFields:
+        - fieldName: center
+          orderByExpression: Int8OrderByExp
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: draft
+          orderByExpression: BoolOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: recordedBy
+          orderByExpression: Int8OrderByExp
+        - fieldName: type
+          orderByExpression: FormTypesOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: civilStatusCenter
+        - relationshipName: user
+  graphql:
+    expressionTypeName: FormSubmissionsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: FormSubmissions
+  objectType: FormSubmissions
+  source:
+    dataConnectorName: data
+    collection: form_submissions
+  filterExpressionType: FormSubmissionsBoolExp
+  aggregateExpression: FormSubmissionsAggExp
+  orderByExpression: FormSubmissionsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: formSubmissions
+      subscription:
+        rootField: formSubmissions
+    selectUniques:
+      - queryRootField: formSubmissionsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: formSubmissionsById
+    filterInputTypeName: FormSubmissionsFilterInput
+    aggregate:
+      queryRootField: formSubmissionsAggregate
+      subscription:
+        rootField: formSubmissionsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: FormSubmissions
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: civilStatusCenter
+  sourceType: FormSubmissions
+  target:
+    model:
+      name: CivilStatusCenters
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: center
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: user
+  sourceType: FormSubmissions
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: recordedBy
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: submissionValues
+  sourceType: FormSubmissions
+  target:
+    model:
+      name: SubmissionValues
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: SubmissionValuesAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: submission
+  graphql:
+    aggregateFieldName: submissionValuesAggregate
+

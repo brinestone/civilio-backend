@@ -2,12 +2,19 @@ kind: AuthConfig
 version: v3
 definition:
   mode:
-    webhook:
-      method: GET
-      url:
-        valueFromEnv: AUTH_WEBHOOK_URL
-      customHeadersConfig:
-        headers:
-          additional:
-            user-agent: "Hasura DDN"
-          forward: "*"
+    noAuth: 
+      role: admin
+      sessionVariables: 
+        X-Hasura-Allowed-Roles:
+          - admin
+          - employee
+          - field-agent
+    # webhook:
+    #   method: GET
+    #   url:
+    #     valueFromEnv: AUTH_WEBHOOK_URL
+    #   customHeadersConfig:
+    #     headers:
+    #       additional:
+    #         user-agent: "Hasura DDN"
+    #       forward: "*"

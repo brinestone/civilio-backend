@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeletePropertyOptionsByIdResponse
+  description: Responses from the 'delete_property_options_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[PropertyOptions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeletePropertyOptionsByIdResponse
+    inputTypeName: DeletePropertyOptionsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_property_options_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeletePropertyOptionsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeletePropertyOptionsById
+  outputType: DeletePropertyOptionsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: preCheck
+      type: PropertyOptionsBoolExp
+      description: Delete permission predicate over the 'property_options' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_property_options_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deletePropertyOptionsById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'property_options' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeletePropertyOptionsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

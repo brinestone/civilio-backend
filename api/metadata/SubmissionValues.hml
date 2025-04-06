@@ -1,0 +1,155 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: SubmissionValues
+  fields:
+    - name: field
+      type: Text!
+    - name: submission
+      type: Int8!
+    - name: value
+      type: Text
+  graphql:
+    typeName: SubmissionValues
+    inputTypeName: SubmissionValuesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: submission_values
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: SubmissionValues
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - field
+          - submission
+          - value
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: SubmissionValuesBoolExp
+  operand:
+    object:
+      type: SubmissionValues
+      comparableFields:
+        - fieldName: field
+          booleanExpressionType: TextBoolExp
+        - fieldName: submission
+          booleanExpressionType: Int8BoolExp
+        - fieldName: value
+          booleanExpressionType: TextBoolExp
+      comparableRelationships:
+        - relationshipName: formSubmission
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: SubmissionValuesBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: SubmissionValuesAggExp
+  operand:
+    object:
+      aggregatedType: SubmissionValues
+      aggregatableFields:
+        - fieldName: field
+          aggregateExpression: TextAggExp
+        - fieldName: submission
+          aggregateExpression: Int8AggExp
+        - fieldName: value
+          aggregateExpression: TextAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: SubmissionValuesAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: SubmissionValuesOrderByExp
+  operand:
+    object:
+      orderedType: SubmissionValues
+      orderableFields:
+        - fieldName: field
+          orderByExpression: TextOrderByExp
+        - fieldName: submission
+          orderByExpression: Int8OrderByExp
+        - fieldName: value
+          orderByExpression: TextOrderByExp
+      orderableRelationships:
+        - relationshipName: formSubmission
+  graphql:
+    expressionTypeName: SubmissionValuesOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: SubmissionValues
+  objectType: SubmissionValues
+  source:
+    dataConnectorName: data
+    collection: submission_values
+  filterExpressionType: SubmissionValuesBoolExp
+  aggregateExpression: SubmissionValuesAggExp
+  orderByExpression: SubmissionValuesOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: submissionValues
+      subscription:
+        rootField: submissionValues
+    selectUniques:
+      - queryRootField: submissionValuesBySubmissionValuesFieldSubmissionPk
+        uniqueIdentifier:
+          - field
+          - submission
+        subscription:
+          rootField: submissionValuesBySubmissionValuesFieldSubmissionPk
+    filterInputTypeName: SubmissionValuesFilterInput
+    aggregate:
+      queryRootField: submissionValuesAggregate
+      subscription:
+        rootField: submissionValuesAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: SubmissionValues
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: formSubmission
+  sourceType: SubmissionValues
+  target:
+    model:
+      name: FormSubmissions
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: submission
+      target:
+        modelField:
+          - fieldName: id
+

@@ -1,0 +1,457 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesCreatedAt
+  description: Update the 'created_at' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesCreatedAt
+    inputTypeName: UpdateColumnLocalitiesCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesDescription
+  description: Update the 'description' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Text
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesDescription
+    inputTypeName: UpdateColumnLocalitiesDescriptionInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_description
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesDescription
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesId
+  description: Update the 'id' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesId
+    inputTypeName: UpdateColumnLocalitiesIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesImages
+  description: Update the 'images' column in the 'localities' collection
+  fields:
+    - name: set
+      type: "[Text]"
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesImages
+    inputTypeName: UpdateColumnLocalitiesImagesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_images
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesImages
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesLocation
+  description: Update the 'location' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Geometry
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesLocation
+    inputTypeName: UpdateColumnLocalitiesLocationInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_location
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesLocation
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesName
+  description: Update the 'name' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesName
+    inputTypeName: UpdateColumnLocalitiesNameInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_name
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesName
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesParent
+  description: Update the 'parent' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesParent
+    inputTypeName: UpdateColumnLocalitiesParentInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_parent
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesParent
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesType
+  description: Update the 'type' column in the 'localities' collection
+  fields:
+    - name: set
+      type: LocalityType
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesType
+    inputTypeName: UpdateColumnLocalitiesTypeInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_type
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesType
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnLocalitiesUpdatedAt
+  description: Update the 'updated_at' column in the 'localities' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnLocalitiesUpdatedAt
+    inputTypeName: UpdateColumnLocalitiesUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_localities_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnLocalitiesUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateLocalitiesByIdUpdateColumns
+  description: Update the columns of the 'localities' collection
+  fields:
+    - name: createdAt
+      type: UpdateColumnLocalitiesCreatedAt
+      description: Update the 'created_at' column in the 'localities' collection.
+    - name: description
+      type: UpdateColumnLocalitiesDescription
+      description: Update the 'description' column in the 'localities' collection.
+    - name: id
+      type: UpdateColumnLocalitiesId
+      description: Update the 'id' column in the 'localities' collection.
+    - name: images
+      type: UpdateColumnLocalitiesImages
+      description: Update the 'images' column in the 'localities' collection.
+    - name: location
+      type: UpdateColumnLocalitiesLocation
+      description: Update the 'location' column in the 'localities' collection.
+    - name: name
+      type: UpdateColumnLocalitiesName
+      description: Update the 'name' column in the 'localities' collection.
+    - name: parent
+      type: UpdateColumnLocalitiesParent
+      description: Update the 'parent' column in the 'localities' collection.
+    - name: type
+      type: UpdateColumnLocalitiesType
+      description: Update the 'type' column in the 'localities' collection.
+    - name: updatedAt
+      type: UpdateColumnLocalitiesUpdatedAt
+      description: Update the 'updated_at' column in the 'localities' collection.
+  graphql:
+    typeName: UpdateLocalitiesByIdUpdateColumns
+    inputTypeName: UpdateLocalitiesByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_localities_by_id_update_columns
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        location:
+          column:
+            name: location
+        name:
+          column:
+            name: name
+        parent:
+          column:
+            name: parent
+        type:
+          column:
+            name: type
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateLocalitiesByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - images
+          - location
+          - name
+          - parent
+          - type
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateLocalitiesByIdResponse
+  description: Responses from the 'update_localities_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Localities!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateLocalitiesByIdResponse
+    inputTypeName: UpdateLocalitiesByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_localities_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateLocalitiesByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateLocalitiesById
+  outputType: UpdateLocalitiesByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: LocalitiesBoolExp
+      description: Update permission post-condition predicate over the 'localities'
+        collection
+    - name: preCheck
+      type: LocalitiesBoolExp
+      description: Update permission pre-condition predicate over the 'localities'
+        collection
+    - name: updateColumns
+      type: UpdateLocalitiesByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_localities_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateLocalitiesById
+    rootFieldKind: Mutation
+  description: Update any row on the 'localities' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateLocalitiesById
+  permissions:
+    - role: admin
+      allowExecution: true
+

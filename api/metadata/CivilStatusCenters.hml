@@ -1,0 +1,284 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: CivilStatusCenters
+  fields:
+    - name: addedBy
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: id
+      type: Int4!
+    - name: images
+      type: "[Text]"
+    - name: location
+      type: Geometry
+    - name: municipality
+      type: Int8
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: CivilStatusCenters
+    inputTypeName: CivilStatusCentersInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: civil_status_centers
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        location:
+          column:
+            name: location
+        municipality:
+          column:
+            name: municipality
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: CivilStatusCenters
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - id
+          - images
+          - location
+          - municipality
+          - name
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: CivilStatusCentersBoolExp
+  operand:
+    object:
+      type: CivilStatusCenters
+      comparableFields:
+        - fieldName: addedBy
+          booleanExpressionType: Int8BoolExp
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: location
+          booleanExpressionType: GeometryBoolExp
+        - fieldName: municipality
+          booleanExpressionType: Int8BoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: user
+        - relationshipName: locality
+        - relationshipName: formSubmissions
+        - relationshipName: inventories
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: CivilStatusCentersBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: CivilStatusCentersAggExp
+  operand:
+    object:
+      aggregatedType: CivilStatusCenters
+      aggregatableFields:
+        - fieldName: addedBy
+          aggregateExpression: Int8AggExp
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: location
+          aggregateExpression: GeometryAggExp
+        - fieldName: municipality
+          aggregateExpression: Int8AggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: CivilStatusCentersAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: CivilStatusCentersOrderByExp
+  operand:
+    object:
+      orderedType: CivilStatusCenters
+      orderableFields:
+        - fieldName: addedBy
+          orderByExpression: Int8OrderByExp
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: location
+          orderByExpression: GeometryOrderByExp
+        - fieldName: municipality
+          orderByExpression: Int8OrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: user
+        - relationshipName: locality
+  graphql:
+    expressionTypeName: CivilStatusCentersOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: CivilStatusCenters
+  objectType: CivilStatusCenters
+  source:
+    dataConnectorName: data
+    collection: civil_status_centers
+  filterExpressionType: CivilStatusCentersBoolExp
+  aggregateExpression: CivilStatusCentersAggExp
+  orderByExpression: CivilStatusCentersOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: civilStatusCenters
+      subscription:
+        rootField: civilStatusCenters
+    selectUniques:
+      - queryRootField: civilStatusCentersById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: civilStatusCentersById
+    filterInputTypeName: CivilStatusCentersFilterInput
+    aggregate:
+      queryRootField: civilStatusCentersAggregate
+      subscription:
+        rootField: civilStatusCentersAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: CivilStatusCenters
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: user
+  sourceType: CivilStatusCenters
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: addedBy
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: locality
+  sourceType: CivilStatusCenters
+  target:
+    model:
+      name: Localities
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: municipality
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: formSubmissions
+  sourceType: CivilStatusCenters
+  target:
+    model:
+      name: FormSubmissions
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: FormSubmissionsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: center
+  graphql:
+    aggregateFieldName: formSubmissionsAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventories
+  sourceType: CivilStatusCenters
+  target:
+    model:
+      name: Inventories
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoriesAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: center
+  graphql:
+    aggregateFieldName: inventoriesAggregate
+

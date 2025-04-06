@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteEquipmentFieldsByIdResponse
+  description: Responses from the 'delete_equipment_fields_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[EquipmentFields!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteEquipmentFieldsByIdResponse
+    inputTypeName: DeleteEquipmentFieldsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_equipment_fields_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteEquipmentFieldsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteEquipmentFieldsById
+  outputType: DeleteEquipmentFieldsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: preCheck
+      type: EquipmentFieldsBoolExp
+      description: Delete permission predicate over the 'equipment_fields' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_equipment_fields_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteEquipmentFieldsById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'equipment_fields' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteEquipmentFieldsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

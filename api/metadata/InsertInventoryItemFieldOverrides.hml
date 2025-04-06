@@ -1,0 +1,105 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertInventoryItemFieldOverridesObject
+  fields:
+    - name: field
+      type: Int8!
+    - name: inventoryItem
+      type: Int8!
+    - name: value
+      type: Text
+  graphql:
+    typeName: InsertInventoryItemFieldOverridesObject
+    inputTypeName: InsertInventoryItemFieldOverridesObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_inventory_item_field_overrides_object
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertInventoryItemFieldOverridesObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - field
+          - inventoryItem
+          - value
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertInventoryItemFieldOverridesResponse
+  description: Responses from the 'insert_inventory_item_field_overrides' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[InventoryItemFieldOverrides!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertInventoryItemFieldOverridesResponse
+    inputTypeName: InsertInventoryItemFieldOverridesResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_inventory_item_field_overrides_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertInventoryItemFieldOverridesResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertInventoryItemFieldOverrides
+  outputType: InsertInventoryItemFieldOverridesResponse!
+  arguments:
+    - name: objects
+      type: "[InsertInventoryItemFieldOverridesObject!]!"
+    - name: postCheck
+      type: InventoryItemFieldOverridesBoolExp
+      description: Insert permission predicate over the
+        'inventory_item_field_overrides' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_inventory_item_field_overrides
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertInventoryItemFieldOverrides
+    rootFieldKind: Mutation
+  description: Insert into the inventory_item_field_overrides table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertInventoryItemFieldOverrides
+  permissions:
+    - role: admin
+      allowExecution: true
+

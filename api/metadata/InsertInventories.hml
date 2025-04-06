@@ -1,0 +1,132 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertInventoriesObject
+  fields:
+    - name: center
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: createdBy
+      type: Int8
+    - name: id
+      type: Int4
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: InsertInventoriesObject
+    inputTypeName: InsertInventoriesObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_inventories_object
+      fieldMapping:
+        center:
+          column:
+            name: center
+        createdAt:
+          column:
+            name: created_at
+        createdBy:
+          column:
+            name: createdBy
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertInventoriesObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - center
+          - createdAt
+          - createdBy
+          - id
+          - name
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertInventoriesResponse
+  description: Responses from the 'insert_inventories' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Inventories!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertInventoriesResponse
+    inputTypeName: InsertInventoriesResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_inventories_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertInventoriesResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertInventories
+  outputType: InsertInventoriesResponse!
+  arguments:
+    - name: objects
+      type: "[InsertInventoriesObject!]!"
+    - name: postCheck
+      type: InventoriesBoolExp
+      description: Insert permission predicate over the 'inventories' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_inventories
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertInventories
+    rootFieldKind: Mutation
+  description: Insert into the inventories table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertInventories
+  permissions:
+    - role: admin
+      allowExecution: true
+

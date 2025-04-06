@@ -1,0 +1,214 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Properties
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: description
+      type: Text
+    - name: id
+      type: Int4!
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: Properties
+    inputTypeName: PropertiesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: properties
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Properties
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - name
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: PropertiesBoolExp
+  operand:
+    object:
+      type: Properties
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: description
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: propertyOptions
+        - relationshipName: propertyValues
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: PropertiesBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: PropertiesAggExp
+  operand:
+    object:
+      aggregatedType: Properties
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: description
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: PropertiesAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: PropertiesOrderByExp
+  operand:
+    object:
+      orderedType: Properties
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: description
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: PropertiesOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Properties
+  objectType: Properties
+  source:
+    dataConnectorName: data
+    collection: properties
+  filterExpressionType: PropertiesBoolExp
+  aggregateExpression: PropertiesAggExp
+  orderByExpression: PropertiesOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: properties
+      subscription:
+        rootField: properties
+    selectUniques:
+      - queryRootField: propertiesById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: propertiesById
+    filterInputTypeName: PropertiesFilterInput
+    aggregate:
+      queryRootField: propertiesAggregate
+      subscription:
+        rootField: propertiesAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Properties
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: propertyOptions
+  sourceType: Properties
+  target:
+    model:
+      name: PropertyOptions
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: PropertyOptionsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: property
+  graphql:
+    aggregateFieldName: propertyOptionsAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: propertyValues
+  sourceType: Properties
+  target:
+    model:
+      name: PropertyValues
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: PropertyValuesAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: property
+  graphql:
+    aggregateFieldName: propertyValuesAggregate
+

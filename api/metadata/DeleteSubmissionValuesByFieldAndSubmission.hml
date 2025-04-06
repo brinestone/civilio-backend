@@ -1,0 +1,77 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteSubmissionValuesByFieldAndSubmissionResponse
+  description: Responses from the
+    'delete_submission_values_by_field_and_submission' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[SubmissionValues!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteSubmissionValuesByFieldAndSubmissionResponse
+    inputTypeName: DeleteSubmissionValuesByFieldAndSubmissionResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_submission_values_by_field_and_submission_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteSubmissionValuesByFieldAndSubmissionResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteSubmissionValuesByFieldAndSubmission
+  outputType: DeleteSubmissionValuesByFieldAndSubmissionResponse!
+  arguments:
+    - name: keyField
+      type: Text!
+    - name: keySubmission
+      type: Int8!
+    - name: preCheck
+      type: SubmissionValuesBoolExp
+      description: Delete permission predicate over the 'submission_values' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_submission_values_by_field_and_submission
+    argumentMapping:
+      keyField: key_field
+      keySubmission: key_submission
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteSubmissionValuesByFieldAndSubmission
+    rootFieldKind: Mutation
+  description: Delete any row on the 'submission_values' collection using the
+    'field' and 'submission' keys
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteSubmissionValuesByFieldAndSubmission
+  permissions:
+    - role: admin
+      allowExecution: true
+

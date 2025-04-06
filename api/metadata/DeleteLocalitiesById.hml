@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteLocalitiesByIdResponse
+  description: Responses from the 'delete_localities_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Localities!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteLocalitiesByIdResponse
+    inputTypeName: DeleteLocalitiesByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_localities_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteLocalitiesByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteLocalitiesById
+  outputType: DeleteLocalitiesByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: preCheck
+      type: LocalitiesBoolExp
+      description: Delete permission predicate over the 'localities' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_localities_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteLocalitiesById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'localities' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteLocalitiesById
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,185 +1,67 @@
 {
-  "id": "d8d3d53e-fbdc-4b66-bed0-afaa073332a3",
-  "prevId": "8e502e48-c28e-471d-8fb6-8c51f3cc4a52",
+  "id": "8f28d19d-2e47-4ff0-8544-7dddf80988d5",
+  "prevId": "4a73f0c9-503b-48e6-86ca-cf8671d65648",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.account": {
-      "name": "account",
+    "public.accounts": {
+      "name": "accounts",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
-        },
-        "account_id": {
-          "name": "account_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "provider_id": {
-          "name": "provider_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "access_token": {
-          "name": "access_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "refresh_token": {
-          "name": "refresh_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "id_token": {
-          "name": "id_token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "access_token_expires_at": {
-          "name": "access_token_expires_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "refresh_token_expires_at": {
-          "name": "refresh_token_expires_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "scope": {
-          "name": "scope",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "password": {
-          "name": "password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "account_user_id_user_id_fk": {
-          "name": "account_user_id_user_id_fk",
-          "tableFrom": "account",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.administrative_units": {
-      "name": "administrative_units",
-      "schema": "",
-      "columns": {
-        "parent": {
-          "name": "parent",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         },
-        "type": {
-          "name": "type",
-          "type": "administrative_unit_types",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "name": {
-          "name": "name",
+        "username": {
+          "name": "username",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "description": {
-          "name": "description",
+        "password_hash": {
+          "name": "password_hash",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "location": {
-          "name": "location",
-          "type": "geometry(point)",
+        "owner": {
+          "name": "owner",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
-        "images": {
-          "name": "images",
-          "type": "text[]",
+        "should_change_password": {
+          "name": "should_change_password",
+          "type": "boolean",
           "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false,
+          "default": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "administrative_units_parent_administrative_units_id_fk": {
-          "name": "administrative_units_parent_administrative_units_id_fk",
-          "tableFrom": "administrative_units",
-          "tableTo": "administrative_units",
+        "accounts_owner_users_id_fk": {
+          "name": "accounts_owner_users_id_fk",
+          "tableFrom": "accounts",
+          "tableTo": "users",
           "columnsFrom": [
-            "parent"
+            "owner"
           ],
           "columnsTo": [
             "id"
@@ -189,61 +71,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.center_inventories": {
-      "name": "center_inventories",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "center": {
-          "name": "center",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+      "uniqueConstraints": {
+        "accounts_username_unique": {
+          "name": "accounts_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "center_inventories_center_civil_status_centers_id_fk": {
-          "name": "center_inventories_center_civil_status_centers_id_fk",
-          "tableFrom": "center_inventories",
-          "tableTo": "civil_status_centers",
-          "columnsFrom": [
-            "center"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -254,10 +90,23 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         },
         "name": {
           "name": "name",
@@ -273,9 +122,9 @@
         },
         "municipality": {
           "name": "municipality",
-          "type": "uuid",
+          "type": "bigint",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "location": {
           "name": "location",
@@ -283,29 +132,34 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
+        "addedBy": {
+          "name": "addedBy",
+          "type": "bigint",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "civil_status_centers_municipality_administrative_units_id_fk": {
-          "name": "civil_status_centers_municipality_administrative_units_id_fk",
+        "civil_status_centers_municipality_localities_id_fk": {
+          "name": "civil_status_centers_municipality_localities_id_fk",
           "tableFrom": "civil_status_centers",
-          "tableTo": "administrative_units",
+          "tableTo": "localities",
           "columnsFrom": [
             "municipality"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "civil_status_centers_addedBy_users_id_fk": {
+          "name": "civil_status_centers_addedBy_users_id_fk",
+          "tableFrom": "civil_status_centers",
+          "tableTo": "users",
+          "columnsFrom": [
+            "addedBy"
           ],
           "columnsTo": [
             "id"
@@ -326,10 +180,23 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         },
         "name": {
           "name": "name",
@@ -349,24 +216,461 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
+        "addedBy": {
+          "name": "addedBy",
+          "type": "bigint",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
+        "lower_threshold": {
+          "name": "lower_threshold",
+          "type": "real",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
+        },
+        "upper_threshold": {
+          "name": "upper_threshold",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "equipment_addedBy_users_id_fk": {
+          "name": "equipment_addedBy_users_id_fk",
+          "tableFrom": "equipment",
+          "tableTo": "users",
+          "columnsFrom": [
+            "addedBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "equipment_name_unique": {
+          "name": "equipment_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.equipment_fields": {
+      "name": "equipment_fields",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "equipment": {
+          "name": "equipment",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "group": {
+          "name": "group",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "equipment_fields_equipment_name_index": {
+          "name": "equipment_fields_equipment_name_index",
+          "columns": [
+            {
+              "expression": "equipment",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "equipment_fields_equipment_equipment_id_fk": {
+          "name": "equipment_fields_equipment_equipment_id_fk",
+          "tableFrom": "equipment_fields",
+          "tableTo": "equipment",
+          "columnsFrom": [
+            "equipment"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.equipment_units": {
+      "name": "equipment_units",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "equipment": {
+          "name": "equipment",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'default'"
+        },
+        "scaleFactor": {
+          "name": "scaleFactor",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "equipment_units_equipment_equipment_id_fk": {
+          "name": "equipment_units_equipment_equipment_id_fk",
+          "tableFrom": "equipment_units",
+          "tableTo": "equipment",
+          "columnsFrom": [
+            "equipment"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.form_submissions": {
+      "name": "form_submissions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "type": {
+          "name": "type",
+          "type": "form_types",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "center": {
+          "name": "center",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "recordedBy": {
+          "name": "recordedBy",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "draft": {
+          "name": "draft",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "form_submissions_center_civil_status_centers_id_fk": {
+          "name": "form_submissions_center_civil_status_centers_id_fk",
+          "tableFrom": "form_submissions",
+          "tableTo": "civil_status_centers",
+          "columnsFrom": [
+            "center"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "form_submissions_recordedBy_users_id_fk": {
+          "name": "form_submissions_recordedBy_users_id_fk",
+          "tableFrom": "form_submissions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "recordedBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inventories": {
+      "name": "inventories",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "center": {
+          "name": "center",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdBy": {
+          "name": "createdBy",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "inventories_name_center_index": {
+          "name": "inventories_name_center_index",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "center",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "inventories_center_civil_status_centers_id_fk": {
+          "name": "inventories_center_civil_status_centers_id_fk",
+          "tableFrom": "inventories",
+          "tableTo": "civil_status_centers",
+          "columnsFrom": [
+            "center"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inventories_createdBy_users_id_fk": {
+          "name": "inventories_createdBy_users_id_fk",
+          "tableFrom": "inventories",
+          "tableTo": "users",
+          "columnsFrom": [
+            "createdBy"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inventory_item_field_overrides": {
+      "name": "inventory_item_field_overrides",
+      "schema": "",
+      "columns": {
+        "inventoryItem": {
+          "name": "inventoryItem",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "field": {
+          "name": "field",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "inventory_item_field_overrides_inventoryItem_inventory_items_id_fk": {
+          "name": "inventory_item_field_overrides_inventoryItem_inventory_items_id_fk",
+          "tableFrom": "inventory_item_field_overrides",
+          "tableTo": "inventory_items",
+          "columnsFrom": [
+            "inventoryItem"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inventory_item_field_overrides_field_equipment_fields_id_fk": {
+          "name": "inventory_item_field_overrides_field_equipment_fields_id_fk",
+          "tableFrom": "inventory_item_field_overrides",
+          "tableTo": "equipment_fields",
+          "columnsFrom": [
+            "field"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "inventory_item_field_overrides_inventoryItem_field_pk": {
+          "name": "inventory_item_field_overrides_inventoryItem_field_pk",
+          "columns": [
+            "inventoryItem",
+            "field"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -378,101 +682,56 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "equipment": {
-          "name": "equipment",
-          "type": "uuid",
-          "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "addedBy": {
+          "name": "addedBy",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
         },
         "inventory": {
           "name": "inventory",
-          "type": "uuid",
+          "type": "bigint",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "startingQuantity": {
-          "name": "startingQuantity",
+        "starting_quantity": {
+          "name": "starting_quantity",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
           "default": 0
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "minThreshold": {
-          "name": "minThreshold",
-          "type": "real",
+        "equipment": {
+          "name": "equipment",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
-        },
-        "maxThreshold": {
-          "name": "maxThreshold",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "addedBy": {
-          "name": "addedBy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "lastUpdatedBy": {
-          "name": "lastUpdatedBy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "inventory_items_equipment_equipment_id_fk": {
-          "name": "inventory_items_equipment_equipment_id_fk",
+        "inventory_items_addedBy_users_id_fk": {
+          "name": "inventory_items_addedBy_users_id_fk",
           "tableFrom": "inventory_items",
-          "tableTo": "equipment",
-          "columnsFrom": [
-            "equipment"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "inventory_items_inventory_center_inventories_id_fk": {
-          "name": "inventory_items_inventory_center_inventories_id_fk",
-          "tableFrom": "inventory_items",
-          "tableTo": "center_inventories",
-          "columnsFrom": [
-            "inventory"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "inventory_items_addedBy_user_id_fk": {
-          "name": "inventory_items_addedBy_user_id_fk",
-          "tableFrom": "inventory_items",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "addedBy"
           ],
@@ -482,12 +741,25 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "inventory_items_lastUpdatedBy_user_id_fk": {
-          "name": "inventory_items_lastUpdatedBy_user_id_fk",
+        "inventory_items_inventory_inventories_id_fk": {
+          "name": "inventory_items_inventory_inventories_id_fk",
           "tableFrom": "inventory_items",
-          "tableTo": "user",
+          "tableTo": "inventories",
           "columnsFrom": [
-            "lastUpdatedBy"
+            "inventory"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inventory_items_equipment_equipment_id_fk": {
+          "name": "inventory_items_equipment_equipment_id_fk",
+          "tableFrom": "inventory_items",
+          "tableTo": "equipment",
+          "columnsFrom": [
+            "equipment"
           ],
           "columnsTo": [
             "id"
@@ -508,16 +780,23 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "item": {
-          "name": "item",
-          "type": "uuid",
-          "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         },
         "quantity": {
           "name": "quantity",
@@ -525,36 +804,53 @@
           "primaryKey": false,
           "notNull": true
         },
-        "outMovement": {
-          "name": "outMovement",
+        "unit": {
+          "name": "unit",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "item": {
+          "name": "item",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_inbound": {
+          "name": "is_inbound",
           "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "recordedBy": {
-          "name": "recordedBy",
-          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
+        "tags": {
+          "name": "tags",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false,
+          "default": "'{}'"
+        },
+        "recordedBy": {
+          "name": "recordedBy",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
+        "inventory_movements_unit_equipment_units_id_fk": {
+          "name": "inventory_movements_unit_equipment_units_id_fk",
+          "tableFrom": "inventory_movements",
+          "tableTo": "equipment_units",
+          "columnsFrom": [
+            "unit"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "inventory_movements_item_inventory_items_id_fk": {
           "name": "inventory_movements_item_inventory_items_id_fk",
           "tableFrom": "inventory_movements",
@@ -568,10 +864,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "inventory_movements_recordedBy_user_id_fk": {
-          "name": "inventory_movements_recordedBy_user_id_fk",
+        "inventory_movements_recordedBy_users_id_fk": {
+          "name": "inventory_movements_recordedBy_users_id_fk",
           "tableFrom": "inventory_movements",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "recordedBy"
           ],
@@ -588,271 +884,42 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.jwks": {
-      "name": "jwks",
+    "public.localities": {
+      "name": "localities",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "publicKey": {
-          "name": "publicKey",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "privateKey": {
-          "name": "privateKey",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.session": {
-      "name": "session",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "token": {
-          "name": "token",
-          "type": "text",
-          "primaryKey": false,
           "notNull": true
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "ip_address": {
-          "name": "ip_address",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_agent": {
-          "name": "user_agent",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "impersonatedBy": {
-          "name": "impersonatedBy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "session_impersonatedBy_user_id_fk": {
-          "name": "session_impersonatedBy_user_id_fk",
-          "tableFrom": "session",
-          "tableTo": "user",
-          "columnsFrom": [
-            "impersonatedBy"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "session_user_id_user_id_fk": {
-          "name": "session_user_id_user_id_fk",
-          "tableFrom": "session",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "session_token_unique": {
-          "name": "session_token_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.user": {
-      "name": "user",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "username": {
-          "name": "username",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "displayUsername": {
-          "name": "displayUsername",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "email_verified": {
-          "name": "email_verified",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "image": {
-          "name": "image",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "role": {
-          "name": "role",
-          "type": "user_roles",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'admin'"
-        },
-        "banned": {
-          "name": "banned",
-          "type": "boolean",
           "primaryKey": false,
           "notNull": false,
-          "default": false
+          "default": "now()"
         },
-        "banReason": {
-          "name": "banReason",
-          "type": "text",
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "location": {
+          "name": "location",
+          "type": "geometry(point)",
           "primaryKey": false,
           "notNull": false
         },
-        "banExpires": {
-          "name": "banExpires",
-          "type": "integer",
+        "type": {
+          "name": "type",
+          "type": "locality_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "user_username_unique": {
-          "name": "user_username_unique",
-          "nullsNotDistinct": true,
-          "columns": [
-            "username"
-          ]
-        },
-        "user_email_unique": {
-          "name": "user_email_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.variables": {
-      "name": "variables",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "code": {
-          "name": "code",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
         },
         "name": {
           "name": "name",
@@ -866,76 +933,76 @@
           "primaryKey": false,
           "notNull": false
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
+        "images": {
+          "name": "images",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "timestamp",
+        "parent": {
+          "name": "parent",
+          "type": "bigint",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "variables_code_unique": {
-          "name": "variables_code_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "code"
-          ]
+      "foreignKeys": {
+        "localities_parent_localities_id_fk": {
+          "name": "localities_parent_localities_id_fk",
+          "tableFrom": "localities",
+          "tableTo": "localities",
+          "columnsFrom": [
+            "parent"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.verification": {
-      "name": "verification",
+    "public.properties": {
+      "name": "properties",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true
-        },
-        "identifier": {
-          "name": "identifier",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "value": {
-          "name": "value",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "expires_at": {
-          "name": "expires_at",
-          "type": "timestamp",
-          "primaryKey": false,
           "notNull": true
         },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
           "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -945,16 +1012,448 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.property_options": {
+      "name": "property_options",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "property": {
+          "name": "property",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "group": {
+          "name": "group",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "property_options_property_code_index": {
+          "name": "property_options_property_code_index",
+          "columns": [
+            {
+              "expression": "property",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "property_options_property_properties_id_fk": {
+          "name": "property_options_property_properties_id_fk",
+          "tableFrom": "property_options",
+          "tableTo": "properties",
+          "columnsFrom": [
+            "property"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.property_values": {
+      "name": "property_values",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "table_name": {
+          "name": "table_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "property": {
+          "name": "property",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "property_values_property_properties_id_fk": {
+          "name": "property_values_property_properties_id_fk",
+          "tableFrom": "property_values",
+          "tableTo": "properties",
+          "columnsFrom": [
+            "property"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "property_values_value_property_options_id_fk": {
+          "name": "property_values_value_property_options_id_fk",
+          "tableFrom": "property_values",
+          "tableTo": "property_options",
+          "columnsFrom": [
+            "value"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.submission_values": {
+      "name": "submission_values",
+      "schema": "",
+      "columns": {
+        "field": {
+          "name": "field",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "submission": {
+          "name": "submission",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "submission_values_submission_form_submissions_id_fk": {
+          "name": "submission_values_submission_form_submissions_id_fk",
+          "tableFrom": "submission_values",
+          "tableTo": "form_submissions",
+          "columnsFrom": [
+            "submission"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "submission_values_field_submission_pk": {
+          "name": "submission_values_field_submission_pk",
+          "columns": [
+            "field",
+            "submission"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_sessions": {
+      "name": "user_sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "ip": {
+          "name": "ip",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user": {
+          "name": "user",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "account": {
+          "name": "account",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_sessions_user_users_id_fk": {
+          "name": "user_sessions_user_users_id_fk",
+          "tableFrom": "user_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_sessions_account_accounts_id_fk": {
+          "name": "user_sessions_account_accounts_id_fk",
+          "tableFrom": "user_sessions",
+          "tableTo": "accounts",
+          "columnsFrom": [
+            "account"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "niu": {
+          "name": "niu",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cni": {
+          "name": "cni",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "avatar": {
+          "name": "avatar",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "given_names": {
+          "name": "given_names",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "user_roles",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'employee'"
+        },
+        "gender": {
+          "name": "gender",
+          "type": "genders",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "access_revoked": {
+          "name": "access_revoked",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "users_niu_cni_index": {
+          "name": "users_niu_cni_index",
+          "columns": [
+            {
+              "expression": "niu",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "cni",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
-    "public.administrative_unit_types": {
-      "name": "administrative_unit_types",
+    "public.form_types": {
+      "name": "form_types",
       "schema": "public",
       "values": [
+        "cec",
+        "fosa",
+        "chefferie"
+      ]
+    },
+    "public.genders": {
+      "name": "genders",
+      "schema": "public",
+      "values": [
+        "male",
+        "female"
+      ]
+    },
+    "public.locality_type": {
+      "name": "locality_type",
+      "schema": "public",
+      "values": [
+        "municipality",
         "region",
-        "subdivision",
-        "municipality"
+        "subdivision"
       ]
     },
     "public.user_roles": {
@@ -962,7 +1461,8 @@
       "schema": "public",
       "values": [
         "admin",
-        "user"
+        "employee",
+        "field_agent"
       ]
     }
   },

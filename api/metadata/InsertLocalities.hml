@@ -1,0 +1,150 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertLocalitiesObject
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: description
+      type: Text
+    - name: id
+      type: Int4
+    - name: images
+      type: "[Text]"
+    - name: location
+      type: Geometry
+    - name: name
+      type: Text!
+    - name: parent
+      type: Int8
+    - name: type
+      type: LocalityType
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: InsertLocalitiesObject
+    inputTypeName: InsertLocalitiesObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_localities_object
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        location:
+          column:
+            name: location
+        name:
+          column:
+            name: name
+        parent:
+          column:
+            name: parent
+        type:
+          column:
+            name: type
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertLocalitiesObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - description
+          - id
+          - images
+          - location
+          - name
+          - parent
+          - type
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertLocalitiesResponse
+  description: Responses from the 'insert_localities' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Localities!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertLocalitiesResponse
+    inputTypeName: InsertLocalitiesResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_localities_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertLocalitiesResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertLocalities
+  outputType: InsertLocalitiesResponse!
+  arguments:
+    - name: objects
+      type: "[InsertLocalitiesObject!]!"
+    - name: postCheck
+      type: LocalitiesBoolExp
+      description: Insert permission predicate over the 'localities' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_localities
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertLocalities
+    rootFieldKind: Mutation
+  description: Insert into the localities table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertLocalities
+  permissions:
+    - role: admin
+      allowExecution: true
+

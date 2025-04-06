@@ -1,0 +1,104 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertSubmissionValuesObject
+  fields:
+    - name: field
+      type: Text!
+    - name: submission
+      type: Int8!
+    - name: value
+      type: Text
+  graphql:
+    typeName: InsertSubmissionValuesObject
+    inputTypeName: InsertSubmissionValuesObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_submission_values_object
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertSubmissionValuesObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - field
+          - submission
+          - value
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertSubmissionValuesResponse
+  description: Responses from the 'insert_submission_values' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[SubmissionValues!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertSubmissionValuesResponse
+    inputTypeName: InsertSubmissionValuesResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_submission_values_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertSubmissionValuesResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertSubmissionValues
+  outputType: InsertSubmissionValuesResponse!
+  arguments:
+    - name: objects
+      type: "[InsertSubmissionValuesObject!]!"
+    - name: postCheck
+      type: SubmissionValuesBoolExp
+      description: Insert permission predicate over the 'submission_values' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_submission_values
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertSubmissionValues
+    rootFieldKind: Mutation
+  description: Insert into the submission_values table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertSubmissionValues
+  permissions:
+    - role: admin
+      allowExecution: true
+

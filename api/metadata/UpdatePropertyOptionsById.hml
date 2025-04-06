@@ -1,0 +1,285 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnPropertyOptionsCode
+  description: Update the 'code' column in the 'property_options' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnPropertyOptionsCode
+    inputTypeName: UpdateColumnPropertyOptionsCodeInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_property_options_code
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnPropertyOptionsCode
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnPropertyOptionsGroup
+  description: Update the 'group' column in the 'property_options' collection
+  fields:
+    - name: set
+      type: Text
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnPropertyOptionsGroup
+    inputTypeName: UpdateColumnPropertyOptionsGroupInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_property_options_group
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnPropertyOptionsGroup
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnPropertyOptionsId
+  description: Update the 'id' column in the 'property_options' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnPropertyOptionsId
+    inputTypeName: UpdateColumnPropertyOptionsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_property_options_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnPropertyOptionsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnPropertyOptionsLabel
+  description: Update the 'label' column in the 'property_options' collection
+  fields:
+    - name: set
+      type: Text
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnPropertyOptionsLabel
+    inputTypeName: UpdateColumnPropertyOptionsLabelInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_property_options_label
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnPropertyOptionsLabel
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnPropertyOptionsProperty
+  description: Update the 'property' column in the 'property_options' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnPropertyOptionsProperty
+    inputTypeName: UpdateColumnPropertyOptionsPropertyInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_property_options_property
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnPropertyOptionsProperty
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdatePropertyOptionsByIdUpdateColumns
+  description: Update the columns of the 'property_options' collection
+  fields:
+    - name: code
+      type: UpdateColumnPropertyOptionsCode
+      description: Update the 'code' column in the 'property_options' collection.
+    - name: group
+      type: UpdateColumnPropertyOptionsGroup
+      description: Update the 'group' column in the 'property_options' collection.
+    - name: id
+      type: UpdateColumnPropertyOptionsId
+      description: Update the 'id' column in the 'property_options' collection.
+    - name: label
+      type: UpdateColumnPropertyOptionsLabel
+      description: Update the 'label' column in the 'property_options' collection.
+    - name: property
+      type: UpdateColumnPropertyOptionsProperty
+      description: Update the 'property' column in the 'property_options' collection.
+  graphql:
+    typeName: UpdatePropertyOptionsByIdUpdateColumns
+    inputTypeName: UpdatePropertyOptionsByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_property_options_by_id_update_columns
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdatePropertyOptionsByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - code
+          - group
+          - id
+          - label
+          - property
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdatePropertyOptionsByIdResponse
+  description: Responses from the 'update_property_options_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[PropertyOptions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdatePropertyOptionsByIdResponse
+    inputTypeName: UpdatePropertyOptionsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_property_options_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdatePropertyOptionsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdatePropertyOptionsById
+  outputType: UpdatePropertyOptionsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: PropertyOptionsBoolExp
+      description: Update permission post-condition predicate over the
+        'property_options' collection
+    - name: preCheck
+      type: PropertyOptionsBoolExp
+      description: Update permission pre-condition predicate over the
+        'property_options' collection
+    - name: updateColumns
+      type: UpdatePropertyOptionsByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_property_options_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updatePropertyOptionsById
+    rootFieldKind: Mutation
+  description: Update any row on the 'property_options' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdatePropertyOptionsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

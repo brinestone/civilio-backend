@@ -6,7 +6,6 @@ services:
       context: engine
       dockerfile: Dockerfile.engine
       pull: true
-    depends_on: null
     environment:
       AUTHN_CONFIG_PATH: /md/auth_config.json
       ENABLE_CORS: "true"

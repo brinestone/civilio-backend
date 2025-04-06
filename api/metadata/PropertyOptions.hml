@@ -1,0 +1,195 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: PropertyOptions
+  fields:
+    - name: code
+      type: Text!
+    - name: group
+      type: Text
+    - name: id
+      type: Int4!
+    - name: label
+      type: Text
+    - name: property
+      type: Int8
+  graphql:
+    typeName: PropertyOptions
+    inputTypeName: PropertyOptionsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: property_options
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: PropertyOptions
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - code
+          - group
+          - id
+          - label
+          - property
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: PropertyOptionsBoolExp
+  operand:
+    object:
+      type: PropertyOptions
+      comparableFields:
+        - fieldName: code
+          booleanExpressionType: TextBoolExp
+        - fieldName: group
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: label
+          booleanExpressionType: TextBoolExp
+        - fieldName: property
+          booleanExpressionType: Int8BoolExp
+      comparableRelationships:
+        - relationshipName: propertyByProperty
+        - relationshipName: propertyValues
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: PropertyOptionsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: PropertyOptionsAggExp
+  operand:
+    object:
+      aggregatedType: PropertyOptions
+      aggregatableFields:
+        - fieldName: code
+          aggregateExpression: TextAggExp
+        - fieldName: group
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: label
+          aggregateExpression: TextAggExp
+        - fieldName: property
+          aggregateExpression: Int8AggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: PropertyOptionsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: PropertyOptionsOrderByExp
+  operand:
+    object:
+      orderedType: PropertyOptions
+      orderableFields:
+        - fieldName: code
+          orderByExpression: TextOrderByExp
+        - fieldName: group
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: label
+          orderByExpression: TextOrderByExp
+        - fieldName: property
+          orderByExpression: Int8OrderByExp
+      orderableRelationships:
+        - relationshipName: propertyByProperty
+  graphql:
+    expressionTypeName: PropertyOptionsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: PropertyOptions
+  objectType: PropertyOptions
+  source:
+    dataConnectorName: data
+    collection: property_options
+  filterExpressionType: PropertyOptionsBoolExp
+  aggregateExpression: PropertyOptionsAggExp
+  orderByExpression: PropertyOptionsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: propertyOptions
+      subscription:
+        rootField: propertyOptions
+    selectUniques:
+      - queryRootField: propertyOptionsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: propertyOptionsById
+    filterInputTypeName: PropertyOptionsFilterInput
+    aggregate:
+      queryRootField: propertyOptionsAggregate
+      subscription:
+        rootField: propertyOptionsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: PropertyOptions
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: propertyByProperty
+  sourceType: PropertyOptions
+  target:
+    model:
+      name: Properties
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: property
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: propertyValues
+  sourceType: PropertyOptions
+  target:
+    model:
+      name: PropertyValues
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: PropertyValuesAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: value
+  graphql:
+    aggregateFieldName: propertyValuesAggregate
+

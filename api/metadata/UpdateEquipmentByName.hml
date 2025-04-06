@@ -1,0 +1,168 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateEquipmentByNameUpdateColumns
+  description: Update the columns of the 'equipment' collection
+  fields:
+    - name: addedBy
+      type: UpdateColumnEquipmentAddedBy
+      description: Update the 'addedBy' column in the 'equipment' collection.
+    - name: createdAt
+      type: UpdateColumnEquipmentCreatedAt
+      description: Update the 'created_at' column in the 'equipment' collection.
+    - name: description
+      type: UpdateColumnEquipmentDescription
+      description: Update the 'description' column in the 'equipment' collection.
+    - name: id
+      type: UpdateColumnEquipmentId
+      description: Update the 'id' column in the 'equipment' collection.
+    - name: images
+      type: UpdateColumnEquipmentImages
+      description: Update the 'images' column in the 'equipment' collection.
+    - name: lowerThreshold
+      type: UpdateColumnEquipmentLowerThreshold
+      description: Update the 'lower_threshold' column in the 'equipment' collection.
+    - name: name
+      type: UpdateColumnEquipmentName
+      description: Update the 'name' column in the 'equipment' collection.
+    - name: updatedAt
+      type: UpdateColumnEquipmentUpdatedAt
+      description: Update the 'updated_at' column in the 'equipment' collection.
+    - name: upperThreshold
+      type: UpdateColumnEquipmentUpperThreshold
+      description: Update the 'upper_threshold' column in the 'equipment' collection.
+  graphql:
+    typeName: UpdateEquipmentByNameUpdateColumns
+    inputTypeName: UpdateEquipmentByNameUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_equipment_by_name_update_columns
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        lowerThreshold:
+          column:
+            name: lower_threshold
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+        upperThreshold:
+          column:
+            name: upper_threshold
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateEquipmentByNameUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - description
+          - id
+          - images
+          - lowerThreshold
+          - name
+          - updatedAt
+          - upperThreshold
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateEquipmentByNameResponse
+  description: Responses from the 'update_equipment_by_name' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Equipment!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateEquipmentByNameResponse
+    inputTypeName: UpdateEquipmentByNameResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_equipment_by_name_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateEquipmentByNameResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateEquipmentByName
+  outputType: UpdateEquipmentByNameResponse!
+  arguments:
+    - name: keyName
+      type: Text!
+    - name: postCheck
+      type: EquipmentBoolExp
+      description: Update permission post-condition predicate over the 'equipment'
+        collection
+    - name: preCheck
+      type: EquipmentBoolExp
+      description: Update permission pre-condition predicate over the 'equipment' collection
+    - name: updateColumns
+      type: UpdateEquipmentByNameUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_equipment_by_name
+    argumentMapping:
+      keyName: key_name
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateEquipmentByName
+    rootFieldKind: Mutation
+  description: Update any row on the 'equipment' collection using the 'name' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateEquipmentByName
+  permissions:
+    - role: admin
+      allowExecution: true
+

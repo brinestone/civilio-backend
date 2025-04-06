@@ -1,0 +1,110 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertPropertyOptionsObject
+  fields:
+    - name: code
+      type: Text!
+    - name: group
+      type: Text
+    - name: id
+      type: Int4
+    - name: label
+      type: Text
+    - name: property
+      type: Int8
+  graphql:
+    typeName: InsertPropertyOptionsObject
+    inputTypeName: InsertPropertyOptionsObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_property_options_object
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertPropertyOptionsObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - code
+          - group
+          - id
+          - label
+          - property
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertPropertyOptionsResponse
+  description: Responses from the 'insert_property_options' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[PropertyOptions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertPropertyOptionsResponse
+    inputTypeName: InsertPropertyOptionsResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_property_options_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertPropertyOptionsResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertPropertyOptions
+  outputType: InsertPropertyOptionsResponse!
+  arguments:
+    - name: objects
+      type: "[InsertPropertyOptionsObject!]!"
+    - name: postCheck
+      type: PropertyOptionsBoolExp
+      description: Insert permission predicate over the 'property_options' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_property_options
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertPropertyOptions
+    rootFieldKind: Mutation
+  description: Insert into the property_options table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertPropertyOptions
+  permissions:
+    - role: admin
+      allowExecution: true
+

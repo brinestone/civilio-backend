@@ -1,0 +1,379 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsCenter
+  description: Update the 'center' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsCenter
+    inputTypeName: UpdateColumnFormSubmissionsCenterInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_center
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsCenter
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsCreatedAt
+  description: Update the 'created_at' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsCreatedAt
+    inputTypeName: UpdateColumnFormSubmissionsCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsDraft
+  description: Update the 'draft' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: Bool
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsDraft
+    inputTypeName: UpdateColumnFormSubmissionsDraftInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_draft
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsDraft
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsId
+  description: Update the 'id' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsId
+    inputTypeName: UpdateColumnFormSubmissionsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsRecordedBy
+  description: Update the 'recordedBy' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsRecordedBy
+    inputTypeName: UpdateColumnFormSubmissionsRecordedByInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_recordedBy
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsRecordedBy
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsType
+  description: Update the 'type' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: FormTypes!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsType
+    inputTypeName: UpdateColumnFormSubmissionsTypeInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_type
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsType
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnFormSubmissionsUpdatedAt
+  description: Update the 'updated_at' column in the 'form_submissions' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnFormSubmissionsUpdatedAt
+    inputTypeName: UpdateColumnFormSubmissionsUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_form_submissions_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnFormSubmissionsUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateFormSubmissionsByIdUpdateColumns
+  description: Update the columns of the 'form_submissions' collection
+  fields:
+    - name: center
+      type: UpdateColumnFormSubmissionsCenter
+      description: Update the 'center' column in the 'form_submissions' collection.
+    - name: createdAt
+      type: UpdateColumnFormSubmissionsCreatedAt
+      description: Update the 'created_at' column in the 'form_submissions' collection.
+    - name: draft
+      type: UpdateColumnFormSubmissionsDraft
+      description: Update the 'draft' column in the 'form_submissions' collection.
+    - name: id
+      type: UpdateColumnFormSubmissionsId
+      description: Update the 'id' column in the 'form_submissions' collection.
+    - name: recordedBy
+      type: UpdateColumnFormSubmissionsRecordedBy
+      description: Update the 'recordedBy' column in the 'form_submissions' collection.
+    - name: type
+      type: UpdateColumnFormSubmissionsType
+      description: Update the 'type' column in the 'form_submissions' collection.
+    - name: updatedAt
+      type: UpdateColumnFormSubmissionsUpdatedAt
+      description: Update the 'updated_at' column in the 'form_submissions' collection.
+  graphql:
+    typeName: UpdateFormSubmissionsByIdUpdateColumns
+    inputTypeName: UpdateFormSubmissionsByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_form_submissions_by_id_update_columns
+      fieldMapping:
+        center:
+          column:
+            name: center
+        createdAt:
+          column:
+            name: created_at
+        draft:
+          column:
+            name: draft
+        id:
+          column:
+            name: id
+        recordedBy:
+          column:
+            name: recordedBy
+        type:
+          column:
+            name: type
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateFormSubmissionsByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - center
+          - createdAt
+          - draft
+          - id
+          - recordedBy
+          - type
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateFormSubmissionsByIdResponse
+  description: Responses from the 'update_form_submissions_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[FormSubmissions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateFormSubmissionsByIdResponse
+    inputTypeName: UpdateFormSubmissionsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_form_submissions_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateFormSubmissionsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateFormSubmissionsById
+  outputType: UpdateFormSubmissionsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: FormSubmissionsBoolExp
+      description: Update permission post-condition predicate over the
+        'form_submissions' collection
+    - name: preCheck
+      type: FormSubmissionsBoolExp
+      description: Update permission pre-condition predicate over the
+        'form_submissions' collection
+    - name: updateColumns
+      type: UpdateFormSubmissionsByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_form_submissions_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateFormSubmissionsById
+    rootFieldKind: Mutation
+  description: Update any row on the 'form_submissions' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateFormSubmissionsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

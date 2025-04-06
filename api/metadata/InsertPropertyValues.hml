@@ -1,0 +1,132 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertPropertyValuesObject
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: id
+      type: Int4
+    - name: property
+      type: Int8
+    - name: tableName
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+    - name: value
+      type: Int8
+  graphql:
+    typeName: InsertPropertyValuesObject
+    inputTypeName: InsertPropertyValuesObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_property_values_object
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        property:
+          column:
+            name: property
+        tableName:
+          column:
+            name: table_name
+        updatedAt:
+          column:
+            name: updated_at
+        value:
+          column:
+            name: value
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertPropertyValuesObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - id
+          - property
+          - tableName
+          - updatedAt
+          - value
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertPropertyValuesResponse
+  description: Responses from the 'insert_property_values' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[PropertyValues!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertPropertyValuesResponse
+    inputTypeName: InsertPropertyValuesResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_property_values_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertPropertyValuesResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertPropertyValues
+  outputType: InsertPropertyValuesResponse!
+  arguments:
+    - name: objects
+      type: "[InsertPropertyValuesObject!]!"
+    - name: postCheck
+      type: PropertyValuesBoolExp
+      description: Insert permission predicate over the 'property_values' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_property_values
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertPropertyValues
+    rootFieldKind: Mutation
+  description: Insert into the property_values table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertPropertyValues
+  permissions:
+    - role: admin
+      allowExecution: true
+

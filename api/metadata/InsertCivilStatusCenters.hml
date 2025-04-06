@@ -1,0 +1,144 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertCivilStatusCentersObject
+  fields:
+    - name: addedBy
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: id
+      type: Int4
+    - name: images
+      type: "[Text]"
+    - name: location
+      type: Geometry
+    - name: municipality
+      type: Int8
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: InsertCivilStatusCentersObject
+    inputTypeName: InsertCivilStatusCentersObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_civil_status_centers_object
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        location:
+          column:
+            name: location
+        municipality:
+          column:
+            name: municipality
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertCivilStatusCentersObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - id
+          - images
+          - location
+          - municipality
+          - name
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertCivilStatusCentersResponse
+  description: Responses from the 'insert_civil_status_centers' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[CivilStatusCenters!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertCivilStatusCentersResponse
+    inputTypeName: InsertCivilStatusCentersResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_civil_status_centers_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertCivilStatusCentersResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertCivilStatusCenters
+  outputType: InsertCivilStatusCentersResponse!
+  arguments:
+    - name: objects
+      type: "[InsertCivilStatusCentersObject!]!"
+    - name: postCheck
+      type: CivilStatusCentersBoolExp
+      description: Insert permission predicate over the 'civil_status_centers' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_civil_status_centers
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertCivilStatusCenters
+    rootFieldKind: Mutation
+  description: Insert into the civil_status_centers table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertCivilStatusCenters
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,304 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Equipment
+  fields:
+    - name: addedBy
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: description
+      type: Text
+    - name: id
+      type: Int4!
+    - name: images
+      type: "[Text]"
+    - name: lowerThreshold
+      type: Float4!
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+    - name: upperThreshold
+      type: Float4
+  graphql:
+    typeName: Equipment
+    inputTypeName: EquipmentInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: equipment
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        lowerThreshold:
+          column:
+            name: lower_threshold
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+        upperThreshold:
+          column:
+            name: upper_threshold
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Equipment
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - description
+          - id
+          - images
+          - lowerThreshold
+          - name
+          - updatedAt
+          - upperThreshold
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: EquipmentBoolExp
+  operand:
+    object:
+      type: Equipment
+      comparableFields:
+        - fieldName: addedBy
+          booleanExpressionType: Int8BoolExp
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: description
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: lowerThreshold
+          booleanExpressionType: Float4BoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: upperThreshold
+          booleanExpressionType: Float4BoolExp
+      comparableRelationships:
+        - relationshipName: user
+        - relationshipName: equipmentFields
+        - relationshipName: equipmentUnits
+        - relationshipName: inventoryItems
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: EquipmentBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: EquipmentAggExp
+  operand:
+    object:
+      aggregatedType: Equipment
+      aggregatableFields:
+        - fieldName: addedBy
+          aggregateExpression: Int8AggExp
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: description
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: lowerThreshold
+          aggregateExpression: Float4AggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: upperThreshold
+          aggregateExpression: Float4AggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: EquipmentAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: EquipmentOrderByExp
+  operand:
+    object:
+      orderedType: Equipment
+      orderableFields:
+        - fieldName: addedBy
+          orderByExpression: Int8OrderByExp
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: description
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: lowerThreshold
+          orderByExpression: Float4OrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: upperThreshold
+          orderByExpression: Float4OrderByExp
+      orderableRelationships:
+        - relationshipName: user
+  graphql:
+    expressionTypeName: EquipmentOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Equipment
+  objectType: Equipment
+  source:
+    dataConnectorName: data
+    collection: equipment
+  filterExpressionType: EquipmentBoolExp
+  aggregateExpression: EquipmentAggExp
+  orderByExpression: EquipmentOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: equipment
+      subscription:
+        rootField: equipment
+    selectUniques:
+      - queryRootField: equipmentByName
+        uniqueIdentifier:
+          - name
+        subscription:
+          rootField: equipmentByName
+      - queryRootField: equipmentById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: equipmentById
+    filterInputTypeName: EquipmentFilterInput
+    aggregate:
+      queryRootField: equipmentAggregate
+      subscription:
+        rootField: equipmentAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Equipment
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: user
+  sourceType: Equipment
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: addedBy
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: equipmentFields
+  sourceType: Equipment
+  target:
+    model:
+      name: EquipmentFields
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: EquipmentFieldsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: equipment
+  graphql:
+    aggregateFieldName: equipmentFieldsAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: equipmentUnits
+  sourceType: Equipment
+  target:
+    model:
+      name: EquipmentUnits
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: EquipmentUnitsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: equipment
+  graphql:
+    aggregateFieldName: equipmentUnitsAggregate
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItems
+  sourceType: Equipment
+  target:
+    model:
+      name: InventoryItems
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryItemsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: equipment
+  graphql:
+    aggregateFieldName: inventoryItemsAggregate
+

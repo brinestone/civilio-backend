@@ -1,0 +1,380 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsAddedBy
+  description: Update the 'addedBy' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsAddedBy
+    inputTypeName: UpdateColumnInventoryItemsAddedByInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_addedBy
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsAddedBy
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsCreatedAt
+  description: Update the 'created_at' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsCreatedAt
+    inputTypeName: UpdateColumnInventoryItemsCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsEquipment
+  description: Update the 'equipment' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsEquipment
+    inputTypeName: UpdateColumnInventoryItemsEquipmentInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_equipment
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsEquipment
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsId
+  description: Update the 'id' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsId
+    inputTypeName: UpdateColumnInventoryItemsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsInventory
+  description: Update the 'inventory' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsInventory
+    inputTypeName: UpdateColumnInventoryItemsInventoryInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_inventory
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsInventory
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsStartingQuantity
+  description: Update the 'starting_quantity' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Float4
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsStartingQuantity
+    inputTypeName: UpdateColumnInventoryItemsStartingQuantityInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_starting_quantity
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsStartingQuantity
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnInventoryItemsUpdatedAt
+  description: Update the 'updated_at' column in the 'inventory_items' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnInventoryItemsUpdatedAt
+    inputTypeName: UpdateColumnInventoryItemsUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_inventory_items_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnInventoryItemsUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateInventoryItemsByIdUpdateColumns
+  description: Update the columns of the 'inventory_items' collection
+  fields:
+    - name: addedBy
+      type: UpdateColumnInventoryItemsAddedBy
+      description: Update the 'addedBy' column in the 'inventory_items' collection.
+    - name: createdAt
+      type: UpdateColumnInventoryItemsCreatedAt
+      description: Update the 'created_at' column in the 'inventory_items' collection.
+    - name: equipment
+      type: UpdateColumnInventoryItemsEquipment
+      description: Update the 'equipment' column in the 'inventory_items' collection.
+    - name: id
+      type: UpdateColumnInventoryItemsId
+      description: Update the 'id' column in the 'inventory_items' collection.
+    - name: inventory
+      type: UpdateColumnInventoryItemsInventory
+      description: Update the 'inventory' column in the 'inventory_items' collection.
+    - name: startingQuantity
+      type: UpdateColumnInventoryItemsStartingQuantity
+      description: Update the 'starting_quantity' column in the 'inventory_items'
+        collection.
+    - name: updatedAt
+      type: UpdateColumnInventoryItemsUpdatedAt
+      description: Update the 'updated_at' column in the 'inventory_items' collection.
+  graphql:
+    typeName: UpdateInventoryItemsByIdUpdateColumns
+    inputTypeName: UpdateInventoryItemsByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_inventory_items_by_id_update_columns
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        equipment:
+          column:
+            name: equipment
+        id:
+          column:
+            name: id
+        inventory:
+          column:
+            name: inventory
+        startingQuantity:
+          column:
+            name: starting_quantity
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateInventoryItemsByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - equipment
+          - id
+          - inventory
+          - startingQuantity
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateInventoryItemsByIdResponse
+  description: Responses from the 'update_inventory_items_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[InventoryItems!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateInventoryItemsByIdResponse
+    inputTypeName: UpdateInventoryItemsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_inventory_items_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateInventoryItemsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateInventoryItemsById
+  outputType: UpdateInventoryItemsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: InventoryItemsBoolExp
+      description: Update permission post-condition predicate over the
+        'inventory_items' collection
+    - name: preCheck
+      type: InventoryItemsBoolExp
+      description: Update permission pre-condition predicate over the
+        'inventory_items' collection
+    - name: updateColumns
+      type: UpdateInventoryItemsByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_inventory_items_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateInventoryItemsById
+    rootFieldKind: Mutation
+  description: Update any row on the 'inventory_items' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateInventoryItemsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,456 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentAddedBy
+  description: Update the 'addedBy' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentAddedBy
+    inputTypeName: UpdateColumnEquipmentAddedByInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_addedBy
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentAddedBy
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentCreatedAt
+  description: Update the 'created_at' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentCreatedAt
+    inputTypeName: UpdateColumnEquipmentCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentDescription
+  description: Update the 'description' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Text
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentDescription
+    inputTypeName: UpdateColumnEquipmentDescriptionInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_description
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentDescription
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentId
+  description: Update the 'id' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentId
+    inputTypeName: UpdateColumnEquipmentIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentImages
+  description: Update the 'images' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: "[Text]"
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentImages
+    inputTypeName: UpdateColumnEquipmentImagesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_images
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentImages
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentLowerThreshold
+  description: Update the 'lower_threshold' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Float4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentLowerThreshold
+    inputTypeName: UpdateColumnEquipmentLowerThresholdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_lower_threshold
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentLowerThreshold
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentName
+  description: Update the 'name' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentName
+    inputTypeName: UpdateColumnEquipmentNameInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_name
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentName
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUpdatedAt
+  description: Update the 'updated_at' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUpdatedAt
+    inputTypeName: UpdateColumnEquipmentUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUpperThreshold
+  description: Update the 'upper_threshold' column in the 'equipment' collection
+  fields:
+    - name: set
+      type: Float4
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUpperThreshold
+    inputTypeName: UpdateColumnEquipmentUpperThresholdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_upper_threshold
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUpperThreshold
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateEquipmentByIdUpdateColumns
+  description: Update the columns of the 'equipment' collection
+  fields:
+    - name: addedBy
+      type: UpdateColumnEquipmentAddedBy
+      description: Update the 'addedBy' column in the 'equipment' collection.
+    - name: createdAt
+      type: UpdateColumnEquipmentCreatedAt
+      description: Update the 'created_at' column in the 'equipment' collection.
+    - name: description
+      type: UpdateColumnEquipmentDescription
+      description: Update the 'description' column in the 'equipment' collection.
+    - name: id
+      type: UpdateColumnEquipmentId
+      description: Update the 'id' column in the 'equipment' collection.
+    - name: images
+      type: UpdateColumnEquipmentImages
+      description: Update the 'images' column in the 'equipment' collection.
+    - name: lowerThreshold
+      type: UpdateColumnEquipmentLowerThreshold
+      description: Update the 'lower_threshold' column in the 'equipment' collection.
+    - name: name
+      type: UpdateColumnEquipmentName
+      description: Update the 'name' column in the 'equipment' collection.
+    - name: updatedAt
+      type: UpdateColumnEquipmentUpdatedAt
+      description: Update the 'updated_at' column in the 'equipment' collection.
+    - name: upperThreshold
+      type: UpdateColumnEquipmentUpperThreshold
+      description: Update the 'upper_threshold' column in the 'equipment' collection.
+  graphql:
+    typeName: UpdateEquipmentByIdUpdateColumns
+    inputTypeName: UpdateEquipmentByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_equipment_by_id_update_columns
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        lowerThreshold:
+          column:
+            name: lower_threshold
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+        upperThreshold:
+          column:
+            name: upper_threshold
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateEquipmentByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - description
+          - id
+          - images
+          - lowerThreshold
+          - name
+          - updatedAt
+          - upperThreshold
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateEquipmentByIdResponse
+  description: Responses from the 'update_equipment_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Equipment!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateEquipmentByIdResponse
+    inputTypeName: UpdateEquipmentByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_equipment_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateEquipmentByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateEquipmentById
+  outputType: UpdateEquipmentByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: EquipmentBoolExp
+      description: Update permission post-condition predicate over the 'equipment'
+        collection
+    - name: preCheck
+      type: EquipmentBoolExp
+      description: Update permission pre-condition predicate over the 'equipment' collection
+    - name: updateColumns
+      type: UpdateEquipmentByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_equipment_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateEquipmentById
+    rootFieldKind: Mutation
+  description: Update any row on the 'equipment' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateEquipmentById
+  permissions:
+    - role: admin
+      allowExecution: true
+

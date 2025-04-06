@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteEquipmentByNameResponse
+  description: Responses from the 'delete_equipment_by_name' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Equipment!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteEquipmentByNameResponse
+    inputTypeName: DeleteEquipmentByNameResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_equipment_by_name_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteEquipmentByNameResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteEquipmentByName
+  outputType: DeleteEquipmentByNameResponse!
+  arguments:
+    - name: keyName
+      type: Text!
+    - name: preCheck
+      type: EquipmentBoolExp
+      description: Delete permission predicate over the 'equipment' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_equipment_by_name
+    argumentMapping:
+      keyName: key_name
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteEquipmentByName
+    rootFieldKind: Mutation
+  description: Delete any row on the 'equipment' collection using the 'name' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteEquipmentByName
+  permissions:
+    - role: admin
+      allowExecution: true
+

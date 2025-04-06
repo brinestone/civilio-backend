@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeletePropertiesByIdResponse
+  description: Responses from the 'delete_properties_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Properties!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeletePropertiesByIdResponse
+    inputTypeName: DeletePropertiesByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_properties_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeletePropertiesByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeletePropertiesById
+  outputType: DeletePropertiesByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: preCheck
+      type: PropertiesBoolExp
+      description: Delete permission predicate over the 'properties' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_properties_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deletePropertiesById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'properties' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeletePropertiesById
+  permissions:
+    - role: admin
+      allowExecution: true
+

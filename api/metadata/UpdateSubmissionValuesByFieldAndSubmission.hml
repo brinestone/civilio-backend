@@ -1,0 +1,218 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnSubmissionValuesField
+  description: Update the 'field' column in the 'submission_values' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnSubmissionValuesField
+    inputTypeName: UpdateColumnSubmissionValuesFieldInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_submission_values_field
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnSubmissionValuesField
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnSubmissionValuesSubmission
+  description: Update the 'submission' column in the 'submission_values' collection
+  fields:
+    - name: set
+      type: Int8!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnSubmissionValuesSubmission
+    inputTypeName: UpdateColumnSubmissionValuesSubmissionInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_submission_values_submission
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnSubmissionValuesSubmission
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnSubmissionValuesValue
+  description: Update the 'value' column in the 'submission_values' collection
+  fields:
+    - name: set
+      type: Text
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnSubmissionValuesValue
+    inputTypeName: UpdateColumnSubmissionValuesValueInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_submission_values_value
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnSubmissionValuesValue
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateSubmissionValuesByFieldAndSubmissionUpdateColumns
+  description: Update the columns of the 'submission_values' collection
+  fields:
+    - name: field
+      type: UpdateColumnSubmissionValuesField
+      description: Update the 'field' column in the 'submission_values' collection.
+    - name: submission
+      type: UpdateColumnSubmissionValuesSubmission
+      description: Update the 'submission' column in the 'submission_values' collection.
+    - name: value
+      type: UpdateColumnSubmissionValuesValue
+      description: Update the 'value' column in the 'submission_values' collection.
+  graphql:
+    typeName: UpdateSubmissionValuesByFieldAndSubmissionUpdateColumns
+    inputTypeName: UpdateSubmissionValuesByFieldAndSubmissionUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_submission_values_by_field_and_submission_update_columns
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateSubmissionValuesByFieldAndSubmissionUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - field
+          - submission
+          - value
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateSubmissionValuesByFieldAndSubmissionResponse
+  description: Responses from the
+    'update_submission_values_by_field_and_submission' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[SubmissionValues!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateSubmissionValuesByFieldAndSubmissionResponse
+    inputTypeName: UpdateSubmissionValuesByFieldAndSubmissionResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_submission_values_by_field_and_submission_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateSubmissionValuesByFieldAndSubmissionResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateSubmissionValuesByFieldAndSubmission
+  outputType: UpdateSubmissionValuesByFieldAndSubmissionResponse!
+  arguments:
+    - name: keyField
+      type: Text!
+    - name: keySubmission
+      type: Int8!
+    - name: postCheck
+      type: SubmissionValuesBoolExp
+      description: Update permission post-condition predicate over the
+        'submission_values' collection
+    - name: preCheck
+      type: SubmissionValuesBoolExp
+      description: Update permission pre-condition predicate over the
+        'submission_values' collection
+    - name: updateColumns
+      type: UpdateSubmissionValuesByFieldAndSubmissionUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_submission_values_by_field_and_submission
+    argumentMapping:
+      keyField: key_field
+      keySubmission: key_submission
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateSubmissionValuesByFieldAndSubmission
+    rootFieldKind: Mutation
+  description: Update any row on the 'submission_values' collection using the
+    'field' and 'submission' keys
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateSubmissionValuesByFieldAndSubmission
+  permissions:
+    - role: admin
+      allowExecution: true
+

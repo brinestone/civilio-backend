@@ -1,0 +1,150 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertEquipmentObject
+  fields:
+    - name: addedBy
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: description
+      type: Text
+    - name: id
+      type: Int4
+    - name: images
+      type: "[Text]"
+    - name: lowerThreshold
+      type: Float4!
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+    - name: upperThreshold
+      type: Float4
+  graphql:
+    typeName: InsertEquipmentObject
+    inputTypeName: InsertEquipmentObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_equipment_object
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        description:
+          column:
+            name: description
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        lowerThreshold:
+          column:
+            name: lower_threshold
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+        upperThreshold:
+          column:
+            name: upper_threshold
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertEquipmentObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - description
+          - id
+          - images
+          - lowerThreshold
+          - name
+          - updatedAt
+          - upperThreshold
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertEquipmentResponse
+  description: Responses from the 'insert_equipment' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Equipment!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertEquipmentResponse
+    inputTypeName: InsertEquipmentResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_equipment_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertEquipmentResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertEquipment
+  outputType: InsertEquipmentResponse!
+  arguments:
+    - name: objects
+      type: "[InsertEquipmentObject!]!"
+    - name: postCheck
+      type: EquipmentBoolExp
+      description: Insert permission predicate over the 'equipment' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_equipment
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertEquipment
+    rootFieldKind: Mutation
+  description: Insert into the equipment table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertEquipment
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,175 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InventoryItemFieldOverrides
+  fields:
+    - name: field
+      type: Int8!
+    - name: inventoryItem
+      type: Int8!
+    - name: value
+      type: Text
+  graphql:
+    typeName: InventoryItemFieldOverrides
+    inputTypeName: InventoryItemFieldOverridesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: inventory_item_field_overrides
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InventoryItemFieldOverrides
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - field
+          - inventoryItem
+          - value
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: InventoryItemFieldOverridesBoolExp
+  operand:
+    object:
+      type: InventoryItemFieldOverrides
+      comparableFields:
+        - fieldName: field
+          booleanExpressionType: Int8BoolExp
+        - fieldName: inventoryItem
+          booleanExpressionType: Int8BoolExp
+        - fieldName: value
+          booleanExpressionType: TextBoolExp
+      comparableRelationships:
+        - relationshipName: equipmentField
+        - relationshipName: inventoryItemByInventoryItem
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: InventoryItemFieldOverridesBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: InventoryItemFieldOverridesAggExp
+  operand:
+    object:
+      aggregatedType: InventoryItemFieldOverrides
+      aggregatableFields:
+        - fieldName: field
+          aggregateExpression: Int8AggExp
+        - fieldName: inventoryItem
+          aggregateExpression: Int8AggExp
+        - fieldName: value
+          aggregateExpression: TextAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: InventoryItemFieldOverridesAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: InventoryItemFieldOverridesOrderByExp
+  operand:
+    object:
+      orderedType: InventoryItemFieldOverrides
+      orderableFields:
+        - fieldName: field
+          orderByExpression: Int8OrderByExp
+        - fieldName: inventoryItem
+          orderByExpression: Int8OrderByExp
+        - fieldName: value
+          orderByExpression: TextOrderByExp
+      orderableRelationships:
+        - relationshipName: equipmentField
+        - relationshipName: inventoryItemByInventoryItem
+  graphql:
+    expressionTypeName: InventoryItemFieldOverridesOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: InventoryItemFieldOverrides
+  objectType: InventoryItemFieldOverrides
+  source:
+    dataConnectorName: data
+    collection: inventory_item_field_overrides
+  filterExpressionType: InventoryItemFieldOverridesBoolExp
+  aggregateExpression: InventoryItemFieldOverridesAggExp
+  orderByExpression: InventoryItemFieldOverridesOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: inventoryItemFieldOverrides
+      subscription:
+        rootField: inventoryItemFieldOverrides
+    selectUniques:
+      - queryRootField: inventoryItemFieldOverridesByInventoryItemFieldOverridesInventoryItemFieldPk
+        uniqueIdentifier:
+          - field
+          - inventoryItem
+        subscription:
+          rootField: inventoryItemFieldOverridesByInventoryItemFieldOverridesInventoryItemFieldPk
+    filterInputTypeName: InventoryItemFieldOverridesFilterInput
+    aggregate:
+      queryRootField: inventoryItemFieldOverridesAggregate
+      subscription:
+        rootField: inventoryItemFieldOverridesAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: InventoryItemFieldOverrides
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: equipmentField
+  sourceType: InventoryItemFieldOverrides
+  target:
+    model:
+      name: EquipmentFields
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: field
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItemByInventoryItem
+  sourceType: InventoryItemFieldOverrides
+  target:
+    model:
+      name: InventoryItems
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: inventoryItem
+      target:
+        modelField:
+          - fieldName: id
+

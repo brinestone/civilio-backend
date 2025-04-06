@@ -1,0 +1,419 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersAddedBy
+  description: Update the 'addedBy' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersAddedBy
+    inputTypeName: UpdateColumnCivilStatusCentersAddedByInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_addedBy
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersAddedBy
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersCreatedAt
+  description: Update the 'created_at' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersCreatedAt
+    inputTypeName: UpdateColumnCivilStatusCentersCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersId
+  description: Update the 'id' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersId
+    inputTypeName: UpdateColumnCivilStatusCentersIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersImages
+  description: Update the 'images' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: "[Text]"
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersImages
+    inputTypeName: UpdateColumnCivilStatusCentersImagesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_images
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersImages
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersLocation
+  description: Update the 'location' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Geometry
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersLocation
+    inputTypeName: UpdateColumnCivilStatusCentersLocationInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_location
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersLocation
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersMunicipality
+  description: Update the 'municipality' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersMunicipality
+    inputTypeName: UpdateColumnCivilStatusCentersMunicipalityInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_municipality
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersMunicipality
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersName
+  description: Update the 'name' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersName
+    inputTypeName: UpdateColumnCivilStatusCentersNameInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_name
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersName
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnCivilStatusCentersUpdatedAt
+  description: Update the 'updated_at' column in the 'civil_status_centers' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnCivilStatusCentersUpdatedAt
+    inputTypeName: UpdateColumnCivilStatusCentersUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_civil_status_centers_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnCivilStatusCentersUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateCivilStatusCentersByIdUpdateColumns
+  description: Update the columns of the 'civil_status_centers' collection
+  fields:
+    - name: addedBy
+      type: UpdateColumnCivilStatusCentersAddedBy
+      description: Update the 'addedBy' column in the 'civil_status_centers' collection.
+    - name: createdAt
+      type: UpdateColumnCivilStatusCentersCreatedAt
+      description: Update the 'created_at' column in the 'civil_status_centers' collection.
+    - name: id
+      type: UpdateColumnCivilStatusCentersId
+      description: Update the 'id' column in the 'civil_status_centers' collection.
+    - name: images
+      type: UpdateColumnCivilStatusCentersImages
+      description: Update the 'images' column in the 'civil_status_centers' collection.
+    - name: location
+      type: UpdateColumnCivilStatusCentersLocation
+      description: Update the 'location' column in the 'civil_status_centers' collection.
+    - name: municipality
+      type: UpdateColumnCivilStatusCentersMunicipality
+      description: Update the 'municipality' column in the 'civil_status_centers'
+        collection.
+    - name: name
+      type: UpdateColumnCivilStatusCentersName
+      description: Update the 'name' column in the 'civil_status_centers' collection.
+    - name: updatedAt
+      type: UpdateColumnCivilStatusCentersUpdatedAt
+      description: Update the 'updated_at' column in the 'civil_status_centers' collection.
+  graphql:
+    typeName: UpdateCivilStatusCentersByIdUpdateColumns
+    inputTypeName: UpdateCivilStatusCentersByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_civil_status_centers_by_id_update_columns
+      fieldMapping:
+        addedBy:
+          column:
+            name: addedBy
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        images:
+          column:
+            name: images
+        location:
+          column:
+            name: location
+        municipality:
+          column:
+            name: municipality
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateCivilStatusCentersByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - addedBy
+          - createdAt
+          - id
+          - images
+          - location
+          - municipality
+          - name
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateCivilStatusCentersByIdResponse
+  description: Responses from the 'update_civil_status_centers_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[CivilStatusCenters!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateCivilStatusCentersByIdResponse
+    inputTypeName: UpdateCivilStatusCentersByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_civil_status_centers_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateCivilStatusCentersByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateCivilStatusCentersById
+  outputType: UpdateCivilStatusCentersByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: CivilStatusCentersBoolExp
+      description: Update permission post-condition predicate over the
+        'civil_status_centers' collection
+    - name: preCheck
+      type: CivilStatusCentersBoolExp
+      description: Update permission pre-condition predicate over the
+        'civil_status_centers' collection
+    - name: updateColumns
+      type: UpdateCivilStatusCentersByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_civil_status_centers_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateCivilStatusCentersById
+    rootFieldKind: Mutation
+  description: Update any row on the 'civil_status_centers' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateCivilStatusCentersById
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,138 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertFormSubmissionsObject
+  fields:
+    - name: center
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: draft
+      type: Bool
+    - name: id
+      type: Int4
+    - name: recordedBy
+      type: Int8
+    - name: type
+      type: FormTypes!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: InsertFormSubmissionsObject
+    inputTypeName: InsertFormSubmissionsObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_form_submissions_object
+      fieldMapping:
+        center:
+          column:
+            name: center
+        createdAt:
+          column:
+            name: created_at
+        draft:
+          column:
+            name: draft
+        id:
+          column:
+            name: id
+        recordedBy:
+          column:
+            name: recordedBy
+        type:
+          column:
+            name: type
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertFormSubmissionsObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - center
+          - createdAt
+          - draft
+          - id
+          - recordedBy
+          - type
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertFormSubmissionsResponse
+  description: Responses from the 'insert_form_submissions' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[FormSubmissions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertFormSubmissionsResponse
+    inputTypeName: InsertFormSubmissionsResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_form_submissions_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertFormSubmissionsResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertFormSubmissions
+  outputType: InsertFormSubmissionsResponse!
+  arguments:
+    - name: objects
+      type: "[InsertFormSubmissionsObject!]!"
+    - name: postCheck
+      type: FormSubmissionsBoolExp
+      description: Insert permission predicate over the 'form_submissions' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_form_submissions
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertFormSubmissions
+    rootFieldKind: Mutation
+  description: Insert into the form_submissions table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertFormSubmissions
+  permissions:
+    - role: admin
+      allowExecution: true
+

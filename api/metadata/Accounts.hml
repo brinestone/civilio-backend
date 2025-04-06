@@ -1,0 +1,197 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Accounts
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: id
+      type: Int4!
+    - name: owner
+      type: Int8
+    # - name: passwordHash
+    #   type: Text!
+    - name: shouldChangePassword
+      type: Bool
+    - name: updatedAt
+      type: Timestamp
+    - name: username
+      type: Text!
+  graphql:
+    typeName: Accounts
+    inputTypeName: AccountsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: accounts
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        owner:
+          column:
+            name: owner
+        # passwordHash:
+        #   column:
+        #     name: password_hash
+        shouldChangePassword:
+          column:
+            name: should_change_password
+        updatedAt:
+          column:
+            name: updated_at
+        username:
+          column:
+            name: username
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Accounts
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - id
+          - owner
+          # - passwordHash
+          - shouldChangePassword
+          - updatedAt
+          - username
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: AccountsBoolExp
+  operand:
+    object:
+      type: Accounts
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: owner
+          booleanExpressionType: Int8BoolExp
+        # - fieldName: passwordHash
+        #   booleanExpressionType: TextBoolExp
+        - fieldName: shouldChangePassword
+          booleanExpressionType: BoolBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: username
+          booleanExpressionType: TextBoolExp
+      comparableRelationships: []
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: AccountsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: AccountsAggExp
+  operand:
+    object:
+      aggregatedType: Accounts
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: owner
+          aggregateExpression: Int8AggExp
+        # - fieldName: passwordHash
+          # aggregateExpression: TextAggExp
+        - fieldName: shouldChangePassword
+          aggregateExpression: BoolAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: username
+          aggregateExpression: TextAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: AccountsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: AccountsOrderByExp
+  operand:
+    object:
+      orderedType: Accounts
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: owner
+          orderByExpression: Int8OrderByExp
+        # - fieldName: passwordHash
+          # orderByExpression: TextOrderByExp
+        - fieldName: shouldChangePassword
+          orderByExpression: BoolOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: username
+          orderByExpression: TextOrderByExp
+      orderableRelationships: []
+  graphql:
+    expressionTypeName: AccountsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Accounts
+  objectType: Accounts
+  source:
+    dataConnectorName: data
+    collection: accounts
+  filterExpressionType: AccountsBoolExp
+  aggregateExpression: AccountsAggExp
+  orderByExpression: AccountsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: accounts
+      subscription:
+        rootField: accounts
+    selectUniques:
+      - queryRootField: accountsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: accountsById
+      - queryRootField: accountsByUsername
+        uniqueIdentifier:
+          - username
+        subscription:
+          rootField: accountsByUsername
+    filterInputTypeName: AccountsFilterInput
+    aggregate:
+      queryRootField: accountsAggregate
+      subscription:
+        rootField: accountsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Accounts
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+

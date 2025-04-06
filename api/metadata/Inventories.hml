@@ -1,0 +1,243 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: Inventories
+  fields:
+    - name: center
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: createdBy
+      type: Int8
+    - name: id
+      type: Int4!
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: Inventories
+    inputTypeName: InventoriesInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: inventories
+      fieldMapping:
+        center:
+          column:
+            name: center
+        createdAt:
+          column:
+            name: created_at
+        createdBy:
+          column:
+            name: createdBy
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: Inventories
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - center
+          - createdAt
+          - createdBy
+          - id
+          - name
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: InventoriesBoolExp
+  operand:
+    object:
+      type: Inventories
+      comparableFields:
+        - fieldName: center
+          booleanExpressionType: Int8BoolExp
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: createdBy
+          booleanExpressionType: Int8BoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: civilStatusCenter
+        - relationshipName: user
+        - relationshipName: inventoryItems
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: InventoriesBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: InventoriesAggExp
+  operand:
+    object:
+      aggregatedType: Inventories
+      aggregatableFields:
+        - fieldName: center
+          aggregateExpression: Int8AggExp
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: createdBy
+          aggregateExpression: Int8AggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: InventoriesAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: InventoriesOrderByExp
+  operand:
+    object:
+      orderedType: Inventories
+      orderableFields:
+        - fieldName: center
+          orderByExpression: Int8OrderByExp
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: createdBy
+          orderByExpression: Int8OrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: civilStatusCenter
+        - relationshipName: user
+  graphql:
+    expressionTypeName: InventoriesOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: Inventories
+  objectType: Inventories
+  source:
+    dataConnectorName: data
+    collection: inventories
+  filterExpressionType: InventoriesBoolExp
+  aggregateExpression: InventoriesAggExp
+  orderByExpression: InventoriesOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: inventories
+      subscription:
+        rootField: inventories
+    selectUniques:
+      - queryRootField: inventoriesById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: inventoriesById
+    filterInputTypeName: InventoriesFilterInput
+    aggregate:
+      queryRootField: inventoriesAggregate
+      subscription:
+        rootField: inventoriesAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: Inventories
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: civilStatusCenter
+  sourceType: Inventories
+  target:
+    model:
+      name: CivilStatusCenters
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: center
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: user
+  sourceType: Inventories
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: createdBy
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItems
+  sourceType: Inventories
+  target:
+    model:
+      name: InventoryItems
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryItemsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: inventory
+  graphql:
+    aggregateFieldName: inventoryItemsAggregate
+

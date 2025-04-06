@@ -1,0 +1,138 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertEquipmentFieldsObject
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: equipment
+      type: Int8
+    - name: group
+      type: Text
+    - name: id
+      type: Int4
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+    - name: value
+      type: Text
+  graphql:
+    typeName: InsertEquipmentFieldsObject
+    inputTypeName: InsertEquipmentFieldsObjectInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_equipment_fields_object
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        equipment:
+          column:
+            name: equipment
+        group:
+          column:
+            name: group
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+        value:
+          column:
+            name: value
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertEquipmentFieldsObject
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - equipment
+          - group
+          - id
+          - name
+          - updatedAt
+          - value
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: InsertEquipmentFieldsResponse
+  description: Responses from the 'insert_equipment_fields' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[EquipmentFields!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: InsertEquipmentFieldsResponse
+    inputTypeName: InsertEquipmentFieldsResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: insert_equipment_fields_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: InsertEquipmentFieldsResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: InsertEquipmentFields
+  outputType: InsertEquipmentFieldsResponse!
+  arguments:
+    - name: objects
+      type: "[InsertEquipmentFieldsObject!]!"
+    - name: postCheck
+      type: EquipmentFieldsBoolExp
+      description: Insert permission predicate over the 'equipment_fields' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: insert_equipment_fields
+    argumentMapping:
+      objects: objects
+      postCheck: post_check
+  graphql:
+    rootFieldName: insertEquipmentFields
+    rootFieldKind: Mutation
+  description: Insert into the equipment_fields table
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: InsertEquipmentFields
+  permissions:
+    - role: admin
+      allowExecution: true
+

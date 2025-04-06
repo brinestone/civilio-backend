@@ -1,7 +1,7 @@
-*administrative_units*
-*center_inventories*
+*localities*
 *civil_status_centers*
+*submission*
+*propert*
+*user*
+*inventor*
 *equipment*
-*inventory_items*
-*inventory_movements*
-*variables*

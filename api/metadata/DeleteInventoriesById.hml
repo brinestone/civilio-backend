@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteInventoriesByIdResponse
+  description: Responses from the 'delete_inventories_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Inventories!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteInventoriesByIdResponse
+    inputTypeName: DeleteInventoriesByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_inventories_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteInventoriesByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteInventoriesById
+  outputType: DeleteInventoriesByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: preCheck
+      type: InventoriesBoolExp
+      description: Delete permission predicate over the 'inventories' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_inventories_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteInventoriesById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'inventories' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteInventoriesById
+  permissions:
+    - role: admin
+      allowExecution: true
+

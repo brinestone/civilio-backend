@@ -1,0 +1,223 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: EquipmentUnits
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: equipment
+      type: Int8
+    - name: id
+      type: Int4!
+    - name: name
+      type: Text!
+    - name: scaleFactor
+      type: Float4!
+    - name: updatedAt
+      type: Timestamp
+  graphql:
+    typeName: EquipmentUnits
+    inputTypeName: EquipmentUnitsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: equipment_units
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        equipment:
+          column:
+            name: equipment
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        scaleFactor:
+          column:
+            name: scaleFactor
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: EquipmentUnits
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - equipment
+          - id
+          - name
+          - scaleFactor
+          - updatedAt
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: EquipmentUnitsBoolExp
+  operand:
+    object:
+      type: EquipmentUnits
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: equipment
+          booleanExpressionType: Int8BoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: scaleFactor
+          booleanExpressionType: Float4BoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+      comparableRelationships:
+        - relationshipName: equipmentByEquipment
+        - relationshipName: inventoryMovements
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: EquipmentUnitsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: EquipmentUnitsAggExp
+  operand:
+    object:
+      aggregatedType: EquipmentUnits
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: equipment
+          aggregateExpression: Int8AggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: scaleFactor
+          aggregateExpression: Float4AggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: EquipmentUnitsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: EquipmentUnitsOrderByExp
+  operand:
+    object:
+      orderedType: EquipmentUnits
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: equipment
+          orderByExpression: Int8OrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: scaleFactor
+          orderByExpression: Float4OrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+      orderableRelationships:
+        - relationshipName: equipmentByEquipment
+  graphql:
+    expressionTypeName: EquipmentUnitsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: EquipmentUnits
+  objectType: EquipmentUnits
+  source:
+    dataConnectorName: data
+    collection: equipment_units
+  filterExpressionType: EquipmentUnitsBoolExp
+  aggregateExpression: EquipmentUnitsAggExp
+  orderByExpression: EquipmentUnitsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: equipmentUnits
+      subscription:
+        rootField: equipmentUnits
+    selectUniques:
+      - queryRootField: equipmentUnitsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: equipmentUnitsById
+    filterInputTypeName: EquipmentUnitsFilterInput
+    aggregate:
+      queryRootField: equipmentUnitsAggregate
+      subscription:
+        rootField: equipmentUnitsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: EquipmentUnits
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: equipmentByEquipment
+  sourceType: EquipmentUnits
+  target:
+    model:
+      name: Equipment
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: equipment
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryMovements
+  sourceType: EquipmentUnits
+  target:
+    model:
+      name: InventoryMovements
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryMovementsAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: unit
+  graphql:
+    aggregateFieldName: inventoryMovementsAggregate
+

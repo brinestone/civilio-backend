@@ -1,0 +1,377 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsCreatedAt
+  description: Update the 'created_at' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsCreatedAt
+    inputTypeName: UpdateColumnAccountsCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsId
+  description: Update the 'id' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsId
+    inputTypeName: UpdateColumnAccountsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsOwner
+  description: Update the 'owner' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsOwner
+    inputTypeName: UpdateColumnAccountsOwnerInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_owner
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsOwner
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsPasswordHash
+  description: Update the 'password_hash' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsPasswordHash
+    inputTypeName: UpdateColumnAccountsPasswordHashInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_password_hash
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsPasswordHash
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsShouldChangePassword
+  description: Update the 'should_change_password' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Bool
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsShouldChangePassword
+    inputTypeName: UpdateColumnAccountsShouldChangePasswordInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_should_change_password
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsShouldChangePassword
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsUpdatedAt
+  description: Update the 'updated_at' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsUpdatedAt
+    inputTypeName: UpdateColumnAccountsUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnAccountsUsername
+  description: Update the 'username' column in the 'accounts' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnAccountsUsername
+    inputTypeName: UpdateColumnAccountsUsernameInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_accounts_username
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnAccountsUsername
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateAccountsByUsernameUpdateColumns
+  description: Update the columns of the 'accounts' collection
+  fields:
+    - name: createdAt
+      type: UpdateColumnAccountsCreatedAt
+      description: Update the 'created_at' column in the 'accounts' collection.
+    - name: id
+      type: UpdateColumnAccountsId
+      description: Update the 'id' column in the 'accounts' collection.
+    - name: owner
+      type: UpdateColumnAccountsOwner
+      description: Update the 'owner' column in the 'accounts' collection.
+    - name: passwordHash
+      type: UpdateColumnAccountsPasswordHash
+      description: Update the 'password_hash' column in the 'accounts' collection.
+    - name: shouldChangePassword
+      type: UpdateColumnAccountsShouldChangePassword
+      description: Update the 'should_change_password' column in the 'accounts' collection.
+    - name: updatedAt
+      type: UpdateColumnAccountsUpdatedAt
+      description: Update the 'updated_at' column in the 'accounts' collection.
+    - name: username
+      type: UpdateColumnAccountsUsername
+      description: Update the 'username' column in the 'accounts' collection.
+  graphql:
+    typeName: UpdateAccountsByUsernameUpdateColumns
+    inputTypeName: UpdateAccountsByUsernameUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_accounts_by_username_update_columns
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        owner:
+          column:
+            name: owner
+        passwordHash:
+          column:
+            name: password_hash
+        shouldChangePassword:
+          column:
+            name: should_change_password
+        updatedAt:
+          column:
+            name: updated_at
+        username:
+          column:
+            name: username
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateAccountsByUsernameUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - id
+          - owner
+          - passwordHash
+          - shouldChangePassword
+          - updatedAt
+          - username
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateAccountsByUsernameResponse
+  description: Responses from the 'update_accounts_by_username' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[Accounts!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateAccountsByUsernameResponse
+    inputTypeName: UpdateAccountsByUsernameResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_accounts_by_username_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateAccountsByUsernameResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateAccountsByUsername
+  outputType: UpdateAccountsByUsernameResponse!
+  arguments:
+    - name: keyUsername
+      type: Text!
+    - name: postCheck
+      type: AccountsBoolExp
+      description: Update permission post-condition predicate over the 'accounts' collection
+    - name: preCheck
+      type: AccountsBoolExp
+      description: Update permission pre-condition predicate over the 'accounts' collection
+    - name: updateColumns
+      type: UpdateAccountsByUsernameUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_accounts_by_username
+    argumentMapping:
+      keyUsername: key_username
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateAccountsByUsername
+    rootFieldKind: Mutation
+  description: Update any row on the 'accounts' collection using the 'username' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateAccountsByUsername
+  permissions:
+    - role: admin
+      allowExecution: true
+

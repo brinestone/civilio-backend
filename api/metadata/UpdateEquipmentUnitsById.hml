@@ -1,0 +1,340 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUnitsCreatedAt
+  description: Update the 'created_at' column in the 'equipment_units' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUnitsCreatedAt
+    inputTypeName: UpdateColumnEquipmentUnitsCreatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_units_created_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUnitsCreatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUnitsEquipment
+  description: Update the 'equipment' column in the 'equipment_units' collection
+  fields:
+    - name: set
+      type: Int8
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUnitsEquipment
+    inputTypeName: UpdateColumnEquipmentUnitsEquipmentInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_units_equipment
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUnitsEquipment
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUnitsId
+  description: Update the 'id' column in the 'equipment_units' collection
+  fields:
+    - name: set
+      type: Int4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUnitsId
+    inputTypeName: UpdateColumnEquipmentUnitsIdInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_units_id
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUnitsId
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUnitsName
+  description: Update the 'name' column in the 'equipment_units' collection
+  fields:
+    - name: set
+      type: Text!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUnitsName
+    inputTypeName: UpdateColumnEquipmentUnitsNameInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_units_name
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUnitsName
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUnitsScaleFactor
+  description: Update the 'scaleFactor' column in the 'equipment_units' collection
+  fields:
+    - name: set
+      type: Float4!
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUnitsScaleFactor
+    inputTypeName: UpdateColumnEquipmentUnitsScaleFactorInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_units_scaleFactor
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUnitsScaleFactor
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateColumnEquipmentUnitsUpdatedAt
+  description: Update the 'updated_at' column in the 'equipment_units' collection
+  fields:
+    - name: set
+      type: Timestamp
+      description: Set the column to this value
+  graphql:
+    typeName: UpdateColumnEquipmentUnitsUpdatedAt
+    inputTypeName: UpdateColumnEquipmentUnitsUpdatedAtInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_column_equipment_units_updated_at
+      fieldMapping:
+        set:
+          column:
+            name: _set
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateColumnEquipmentUnitsUpdatedAt
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - set
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateEquipmentUnitsByIdUpdateColumns
+  description: Update the columns of the 'equipment_units' collection
+  fields:
+    - name: createdAt
+      type: UpdateColumnEquipmentUnitsCreatedAt
+      description: Update the 'created_at' column in the 'equipment_units' collection.
+    - name: equipment
+      type: UpdateColumnEquipmentUnitsEquipment
+      description: Update the 'equipment' column in the 'equipment_units' collection.
+    - name: id
+      type: UpdateColumnEquipmentUnitsId
+      description: Update the 'id' column in the 'equipment_units' collection.
+    - name: name
+      type: UpdateColumnEquipmentUnitsName
+      description: Update the 'name' column in the 'equipment_units' collection.
+    - name: scaleFactor
+      type: UpdateColumnEquipmentUnitsScaleFactor
+      description: Update the 'scaleFactor' column in the 'equipment_units' collection.
+    - name: updatedAt
+      type: UpdateColumnEquipmentUnitsUpdatedAt
+      description: Update the 'updated_at' column in the 'equipment_units' collection.
+  graphql:
+    typeName: UpdateEquipmentUnitsByIdUpdateColumns
+    inputTypeName: UpdateEquipmentUnitsByIdUpdateColumnsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_equipment_units_by_id_update_columns
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        equipment:
+          column:
+            name: equipment
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        scaleFactor:
+          column:
+            name: scaleFactor
+        updatedAt:
+          column:
+            name: updated_at
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateEquipmentUnitsByIdUpdateColumns
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - equipment
+          - id
+          - name
+          - scaleFactor
+          - updatedAt
+
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UpdateEquipmentUnitsByIdResponse
+  description: Responses from the 'update_equipment_units_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[EquipmentUnits!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: UpdateEquipmentUnitsByIdResponse
+    inputTypeName: UpdateEquipmentUnitsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: update_equipment_units_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UpdateEquipmentUnitsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: UpdateEquipmentUnitsById
+  outputType: UpdateEquipmentUnitsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: postCheck
+      type: EquipmentUnitsBoolExp
+      description: Update permission post-condition predicate over the
+        'equipment_units' collection
+    - name: preCheck
+      type: EquipmentUnitsBoolExp
+      description: Update permission pre-condition predicate over the
+        'equipment_units' collection
+    - name: updateColumns
+      type: UpdateEquipmentUnitsByIdUpdateColumns!
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: update_equipment_units_by_id
+    argumentMapping:
+      keyId: key_id
+      postCheck: post_check
+      preCheck: pre_check
+      updateColumns: update_columns
+  graphql:
+    rootFieldName: updateEquipmentUnitsById
+    rootFieldKind: Mutation
+  description: Update any row on the 'equipment_units' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: UpdateEquipmentUnitsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

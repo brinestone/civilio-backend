@@ -1,0 +1,235 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: EquipmentFields
+  fields:
+    - name: createdAt
+      type: Timestamp
+    - name: equipment
+      type: Int8
+    - name: group
+      type: Text
+    - name: id
+      type: Int4!
+    - name: name
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+    - name: value
+      type: Text
+  graphql:
+    typeName: EquipmentFields
+    inputTypeName: EquipmentFieldsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: equipment_fields
+      fieldMapping:
+        createdAt:
+          column:
+            name: created_at
+        equipment:
+          column:
+            name: equipment
+        group:
+          column:
+            name: group
+        id:
+          column:
+            name: id
+        name:
+          column:
+            name: name
+        updatedAt:
+          column:
+            name: updated_at
+        value:
+          column:
+            name: value
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: EquipmentFields
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - createdAt
+          - equipment
+          - group
+          - id
+          - name
+          - updatedAt
+          - value
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: EquipmentFieldsBoolExp
+  operand:
+    object:
+      type: EquipmentFields
+      comparableFields:
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: equipment
+          booleanExpressionType: Int8BoolExp
+        - fieldName: group
+          booleanExpressionType: TextBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: name
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: value
+          booleanExpressionType: TextBoolExp
+      comparableRelationships:
+        - relationshipName: equipmentByEquipment
+        - relationshipName: inventoryItemFieldOverrides
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: EquipmentFieldsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: EquipmentFieldsAggExp
+  operand:
+    object:
+      aggregatedType: EquipmentFields
+      aggregatableFields:
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: equipment
+          aggregateExpression: Int8AggExp
+        - fieldName: group
+          aggregateExpression: TextAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: name
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: value
+          aggregateExpression: TextAggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: EquipmentFieldsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: EquipmentFieldsOrderByExp
+  operand:
+    object:
+      orderedType: EquipmentFields
+      orderableFields:
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: equipment
+          orderByExpression: Int8OrderByExp
+        - fieldName: group
+          orderByExpression: TextOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: name
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: value
+          orderByExpression: TextOrderByExp
+      orderableRelationships:
+        - relationshipName: equipmentByEquipment
+  graphql:
+    expressionTypeName: EquipmentFieldsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: EquipmentFields
+  objectType: EquipmentFields
+  source:
+    dataConnectorName: data
+    collection: equipment_fields
+  filterExpressionType: EquipmentFieldsBoolExp
+  aggregateExpression: EquipmentFieldsAggExp
+  orderByExpression: EquipmentFieldsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: equipmentFields
+      subscription:
+        rootField: equipmentFields
+    selectUniques:
+      - queryRootField: equipmentFieldsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: equipmentFieldsById
+    filterInputTypeName: EquipmentFieldsFilterInput
+    aggregate:
+      queryRootField: equipmentFieldsAggregate
+      subscription:
+        rootField: equipmentFieldsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: EquipmentFields
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: equipmentByEquipment
+  sourceType: EquipmentFields
+  target:
+    model:
+      name: Equipment
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: equipment
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: inventoryItemFieldOverrides
+  sourceType: EquipmentFields
+  target:
+    model:
+      name: InventoryItemFieldOverrides
+      relationshipType: Array
+      aggregate:
+        aggregateExpression: InventoryItemFieldOverridesAggExp
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: id
+      target:
+        modelField:
+          - fieldName: field
+  graphql:
+    aggregateFieldName: inventoryItemFieldOverridesAggregate
+

@@ -1,0 +1,78 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteInventoryItemFieldOverridesByFieldAndInventoryItemResponse
+  description: Responses from the
+    'delete_inventory_item_field_overrides_by_field_and_inventoryItem' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[InventoryItemFieldOverrides!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteInventoryItemFieldOverridesByFieldAndInventoryItemResponse
+    inputTypeName: DeleteInventoryItemFieldOverridesByFieldAndInventoryItemResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_inventory_item_field_overrides_by_field_and_inventoryItem_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteInventoryItemFieldOverridesByFieldAndInventoryItemResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteInventoryItemFieldOverridesByFieldAndInventoryItem
+  outputType: DeleteInventoryItemFieldOverridesByFieldAndInventoryItemResponse!
+  arguments:
+    - name: keyField
+      type: Int8!
+    - name: keyInventoryItem
+      type: Int8!
+    - name: preCheck
+      type: InventoryItemFieldOverridesBoolExp
+      description: Delete permission predicate over the
+        'inventory_item_field_overrides' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_inventory_item_field_overrides_by_field_and_inventoryItem
+    argumentMapping:
+      keyField: key_field
+      keyInventoryItem: key_inventoryItem
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteInventoryItemFieldOverridesByFieldAndInventoryItem
+    rootFieldKind: Mutation
+  description: Delete any row on the 'inventory_item_field_overrides' collection
+    using the 'field' and 'inventoryItem' keys
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteInventoryItemFieldOverridesByFieldAndInventoryItem
+  permissions:
+    - role: admin
+      allowExecution: true
+

@@ -1,0 +1,72 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: DeleteFormSubmissionsByIdResponse
+  description: Responses from the 'delete_form_submissions_by_id' procedure
+  fields:
+    - name: affectedRows
+      type: Int4!
+      description: The number of rows affected by the mutation
+    - name: returning
+      type: "[FormSubmissions!]!"
+      description: Data from rows affected by the mutation
+  graphql:
+    typeName: DeleteFormSubmissionsByIdResponse
+    inputTypeName: DeleteFormSubmissionsByIdResponseInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: delete_form_submissions_by_id_response
+      fieldMapping:
+        affectedRows:
+          column:
+            name: affected_rows
+        returning:
+          column:
+            name: returning
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: DeleteFormSubmissionsByIdResponse
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - affectedRows
+          - returning
+
+---
+kind: Command
+version: v1
+definition:
+  name: DeleteFormSubmissionsById
+  outputType: DeleteFormSubmissionsByIdResponse!
+  arguments:
+    - name: keyId
+      type: Int4!
+    - name: preCheck
+      type: FormSubmissionsBoolExp
+      description: Delete permission predicate over the 'form_submissions' collection
+  source:
+    dataConnectorName: data
+    dataConnectorCommand:
+      procedure: delete_form_submissions_by_id
+    argumentMapping:
+      keyId: key_id
+      preCheck: pre_check
+  graphql:
+    rootFieldName: deleteFormSubmissionsById
+    rootFieldKind: Mutation
+  description: Delete any row on the 'form_submissions' collection using the 'id' key
+
+---
+kind: CommandPermissions
+version: v1
+definition:
+  commandName: DeleteFormSubmissionsById
+  permissions:
+    - role: admin
+      allowExecution: true
+

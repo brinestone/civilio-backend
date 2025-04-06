@@ -1,0 +1,220 @@
+---
+kind: ObjectType
+version: v1
+definition:
+  name: UserSessions
+  fields:
+    - name: account
+      type: Int8
+    - name: createdAt
+      type: Timestamp
+    - name: id
+      type: Int4!
+    - name: ip
+      type: Text!
+    - name: updatedAt
+      type: Timestamp
+    - name: user
+      type: Int8
+  graphql:
+    typeName: UserSessions
+    inputTypeName: UserSessionsInput
+  dataConnectorTypeMapping:
+    - dataConnectorName: data
+      dataConnectorObjectType: user_sessions
+      fieldMapping:
+        account:
+          column:
+            name: account
+        createdAt:
+          column:
+            name: created_at
+        id:
+          column:
+            name: id
+        ip:
+          column:
+            name: ip
+        updatedAt:
+          column:
+            name: updated_at
+        user:
+          column:
+            name: user
+
+---
+kind: TypePermissions
+version: v1
+definition:
+  typeName: UserSessions
+  permissions:
+    - role: admin
+      output:
+        allowedFields:
+          - account
+          - createdAt
+          - id
+          - ip
+          - updatedAt
+          - user
+
+---
+kind: BooleanExpressionType
+version: v1
+definition:
+  name: UserSessionsBoolExp
+  operand:
+    object:
+      type: UserSessions
+      comparableFields:
+        - fieldName: account
+          booleanExpressionType: Int8BoolExp
+        - fieldName: createdAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: id
+          booleanExpressionType: Int4BoolExp
+        - fieldName: ip
+          booleanExpressionType: TextBoolExp
+        - fieldName: updatedAt
+          booleanExpressionType: TimestampBoolExp
+        - fieldName: user
+          booleanExpressionType: Int8BoolExp
+      comparableRelationships:
+        - relationshipName: accountByAccount
+        - relationshipName: userByUser
+  logicalOperators:
+    enable: true
+  isNull:
+    enable: true
+  graphql:
+    typeName: UserSessionsBoolExp
+
+---
+kind: AggregateExpression
+version: v1
+definition:
+  name: UserSessionsAggExp
+  operand:
+    object:
+      aggregatedType: UserSessions
+      aggregatableFields:
+        - fieldName: account
+          aggregateExpression: Int8AggExp
+        - fieldName: createdAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: id
+          aggregateExpression: Int4AggExp
+        - fieldName: ip
+          aggregateExpression: TextAggExp
+        - fieldName: updatedAt
+          aggregateExpression: TimestampAggExp
+        - fieldName: user
+          aggregateExpression: Int8AggExp
+  count:
+    enable: true
+  graphql:
+    selectTypeName: UserSessionsAggExp
+
+---
+kind: OrderByExpression
+version: v1
+definition:
+  name: UserSessionsOrderByExp
+  operand:
+    object:
+      orderedType: UserSessions
+      orderableFields:
+        - fieldName: account
+          orderByExpression: Int8OrderByExp
+        - fieldName: createdAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: id
+          orderByExpression: Int4OrderByExp
+        - fieldName: ip
+          orderByExpression: TextOrderByExp
+        - fieldName: updatedAt
+          orderByExpression: TimestampOrderByExp
+        - fieldName: user
+          orderByExpression: Int8OrderByExp
+      orderableRelationships:
+        - relationshipName: accountByAccount
+        - relationshipName: userByUser
+  graphql:
+    expressionTypeName: UserSessionsOrderByExp
+
+---
+kind: Model
+version: v2
+definition:
+  name: UserSessions
+  objectType: UserSessions
+  source:
+    dataConnectorName: data
+    collection: user_sessions
+  filterExpressionType: UserSessionsBoolExp
+  aggregateExpression: UserSessionsAggExp
+  orderByExpression: UserSessionsOrderByExp
+  graphql:
+    selectMany:
+      queryRootField: userSessions
+      subscription:
+        rootField: userSessions
+    selectUniques:
+      - queryRootField: userSessionsById
+        uniqueIdentifier:
+          - id
+        subscription:
+          rootField: userSessionsById
+    filterInputTypeName: UserSessionsFilterInput
+    aggregate:
+      queryRootField: userSessionsAggregate
+      subscription:
+        rootField: userSessionsAggregate
+
+---
+kind: ModelPermissions
+version: v1
+definition:
+  modelName: UserSessions
+  permissions:
+    - role: admin
+      select:
+        filter: null
+        allowSubscriptions: true
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: accountByAccount
+  sourceType: UserSessions
+  target:
+    model:
+      name: Accounts
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: account
+      target:
+        modelField:
+          - fieldName: id
+
+---
+kind: Relationship
+version: v1
+definition:
+  name: userByUser
+  sourceType: UserSessions
+  target:
+    model:
+      name: Users
+      relationshipType: Object
+  mapping:
+    - source:
+        fieldPath:
+          - fieldName: user
+      target:
+        modelField:
+          - fieldName: id
+
