@@ -1,0 +1,89 @@
+services:
+  db:
+    build:
+      dockerfile: db.Dockerfile
+      context: .
+      args:
+        backup_file: ./CARTOBM_backup.sql
+        db_init_script: ./db_init.sh
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: knowage
+      POSTGRES_PASSWORD: knowage
+      POSTGRES_DB: knowage
+      BACKUP_FILENAME: data_backup.sql
+      POSTGRES_HOST_AUTH_METHOD: trust
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  storage:
+    image: minio/minio
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+  cache:
+    image: mysql:8.0.41-debian
+    restart: always
+    environment:
+      MYSQL_USER: knowage
+      MYSQL_PASSWORD: knowage
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: knowage
+    networks:
+      - knowage_net
+  knowage:
+    image: knowagelabs/knowage-server-docker:8.2-SNAPSHOT
+    restart: always
+    networks:
+      - knowage_net
+    depends_on:
+      - cache
+      - db
+    environment:
+      DB_USER: knowage
+      DB_PASS: knowage
+      DB_ROOT_PASS: mysql
+      DB_HOST: cache
+      DB_PORT: 3306
+      DB_DB: knowage
+      PASSWORD_ENCRYPTION_SECRET: J7A9aXjkZ8CgsGcW3e5dgXBEupRjQAOr7sX4Cqm6lformeZggl3avcASl6R27Jz7
+      HMAC_KEY: 8uKyLEWdwugtdisCLXYfOBBfqQXllu6PzQZwS8e5pKmhAStCxK0j3jmullSI57It
+      SENSIBLE_DATA_ENCRYPTION_SECRET: rtH1xRfiaC5Gy3syjUmZJclOz5ybryQJht4ER4EQYQcEtmShUcUhfKTA0Pi33fHq
+      # DB_TYPE: 'POSTGRES'
+      CACHE_DB_HOST: cache
+      CACHE_DB_PORT: 3306
+      CACHE_DB_DB: knowage
+      CACHE_DB_USER: knowage
+      CACHE_DB_PASS: knowage
+      # CACHE_DB_TYPE: 'POSTGRES'
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/postgresql
+      o: bind
+  minio_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/storage
+      o: bind
+  knowage_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/knowage
+      o: bind
+
+networks:
+  knowage_net:
+    driver: bridge

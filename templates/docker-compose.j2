@@ -1,0 +1,156 @@
+services:
+  gateway:
+    image: nginx:1.25.2
+    restart: always
+    ports:
+      - "{{ nginx_http_port }}:80"
+      - "{{ nginx_https_port }}:443"
+    volumes:
+      - nginx_conf_file:/etc/nginx/nginx.conf
+      - nginx_conf:/etc/nginx/conf.d
+      - nginx_certs:/etc/ssl/certs
+    depends_on:
+      - knowage
+    networks:
+      - frontend
+  db:
+    build:
+      dockerfile: db.Dockerfile
+      context: .
+      args:
+        backup_file: {{ backup_file }}
+        db_init_script: {{ db_init_file }}
+    restart: always
+    ports:
+      - "{{ db_port }}:5432"
+    environment:
+      POSTGRES_USER: /run/secrets/db_user
+      POSTGRES_PASSWORD: /run/secrets/db_pass
+      POSTGRES_DB: {{ db_name }}
+      BACKUP_FILENAME: data_backup.sql
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "{{ db_name }}"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  storage:
+    image: minio/minio
+    restart: always
+    networks:
+      - frontend
+    ports:
+      - "{{ storage_api_port }}:9000"
+      - "{{ storage_console_port }}:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_BROWSER_REDIRECT_URL: {{ storage_browser_redirect_url }}
+  cache:
+    image: mysql:8.0.41-debian
+    restart: always
+    networks:
+      - knowage_net
+    environment:
+      MYSQL_USER: /run/secrets/cache_user
+      MYSQL_PASSWORD: /run/secrets/cache_pass
+      MYSQL_ROOT_PASSWORD: /run/secrets/cache_root_pass
+      MYSQL_DATABASE: knowage
+    volumes:
+      - cache_data:/var/lib/mysql
+    expose:
+      - 3306
+    secrets:
+      - cache
+  knowage:
+    networks:
+      - knowage_net
+      - frontend
+    image: knowagelabs/knowage-server-docker:8.2-SNAPSHOT
+    restart: always
+    depends_on:
+      - cache
+      - db
+    environment:
+      DB_USER: /run/secrets/cache_user
+      DB_PASS: /run/secrets/cache_pass
+      DB_ROOT_PASS: /run/secrets/cache_root_pass
+      DB_HOST: cache
+      DB_PORT: 3306
+      DB_DB: knowage
+      PASSWORD_ENCRYPTION_SECRET: /run/secrets/password_encryption_secret
+      HMAC_KEY: /run/secrets/hmac_key
+      SENSIBLE_DATA_ENCRYPTION_SECRET: /run/secrets/sensible_data_encryption_secret
+      # DB_TYPE: 'POSTGRES'
+      CACHE_DB_HOST: cache
+      CACHE_DB_PORT: 3306
+      CACHE_DB_DB: knowage
+      CACHE_DB_USER: /run/secrets/cache_user
+      CACHE_DB_PASS: /run/secrets/cache_pass
+      # CACHE_DB_TYPE: 'POSTGRES'
+    ports:
+      - "{{ knowage_port }}:8080"
+    secrets:
+      - knowage
+      - cache
+
+volumes:
+  nginx_conf_file:
+    driver: local
+    driver_opts:
+      type: none
+      device: {{ nginx_conf_file_path }}
+      o: bind
+  nginx_certs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/certs
+      o: bind
+  nginx_conf:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/nginx
+      o: bind
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/postgresql
+      o: bind
+  minio_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/storage
+      o: bind
+  knowage_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/knowage
+      o: bind
+  cache_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /mnt/knowage/data/cache
+      o: bind
+
+networks:
+  knowage_net:
+    driver: bridge
+  frontend:
+    driver: bridge
+
+secrets:
+  db:
+    file: {{ db_secrets_path }}
+  cache:
+    file: {{ cache_secrets_path }}
+  knowage:
+    file: {{ knowage_secrets_path }}
