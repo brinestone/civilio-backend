@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@parcel/watcher@2.5.1'
+  - esbuild
+  - esbuild@0.25.12
+  - puppeteer

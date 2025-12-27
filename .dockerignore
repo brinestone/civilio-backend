@@ -1,0 +1,5 @@
+.nitro
+logs
+node_modules
+README.md
+drizzle.config.ts

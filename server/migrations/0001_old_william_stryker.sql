@@ -1,0 +1,1 @@
+ALTER TABLE `tracked_changes` ADD `role` varchar(20);
