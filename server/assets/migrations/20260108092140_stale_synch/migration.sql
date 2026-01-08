@@ -1,0 +1,3 @@
+ALTER TABLE "civilio"."choice_groups" ADD CONSTRAINT "choice_groups_form_parent_key_choice_groups_form_key_fkey" FOREIGN KEY ("form","parent_key") REFERENCES "civilio"."choice_groups"("form","key") ON DELETE SET NULL ON UPDATE CASCADE;--> statement-breakpoint
+ALTER TABLE "civilio"."choice_groups" ADD CONSTRAINT "choice_groups_kzJ4YesQPWTn_fkey" FOREIGN KEY ("parent_key","form","parent_value") REFERENCES "civilio"."choice_values"("key","form","value") ON DELETE RESTRICT ON UPDATE CASCADE;--> statement-breakpoint
+ALTER TABLE "civilio"."choice_values" ADD CONSTRAINT "choice_values_key_form_choice_groups_key_form_fkey" FOREIGN KEY ("key","form") REFERENCES "civilio"."choice_groups"("key","form") ON DELETE CASCADE ON UPDATE CASCADE;

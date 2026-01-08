@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."choices2" RENAME TO "choice_groups";

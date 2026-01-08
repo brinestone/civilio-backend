@@ -1,26 +1,37 @@
-import { drizzle } from "drizzle-orm/mysql2";
-import { createPool, Pool } from 'mysql2/promise';
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from 'pg';
 import * as schema from './db/schema';
 
 let pool: Pool;
 
-export function initDb() {
-  pool = createPool({
-    uri: useRuntimeConfig().databaseUrl,
+export async function initPool(connectionString: string) {
+  pool = new Pool({
+    connectionString
   });
+  const client = await pool.connect();
+  try {
+    const res = await client.query(`SELECT NOW() as now`);
+    Logger.debug(`Database is reachable. Time is ${res.rows[0].now}`);
+  } finally {
+    client.release();
+  }
+}
+
+export async function closePool() {
+  pool.end();
 }
 
 export function provideDb() {
-  return drizzle(pool,
-    {
-      schema,
-      mode: 'default',
-      logger: {
-        logQuery: (query, params) => {
-          Logger.verbose(`query: ${query} ${(params && params.length > 0) ? `-- ${JSON.stringify(params)}` : ''}`);
-        }
+  return drizzle({
+    client: pool,
+    logger: {
+      logQuery: (query, params) => {
+        Logger.verbose(`query: ${query} ${(params && params.length > 0) ? `-- ${JSON.stringify(params)}` : ''}`);
       }
-    })
+    },
+    relations: schema.relations,
+    schema
+  })
 }
 
 export type Database = ReturnType<typeof provideDb>;

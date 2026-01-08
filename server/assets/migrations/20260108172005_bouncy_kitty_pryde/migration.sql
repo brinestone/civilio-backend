@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."choice_groups" ALTER COLUMN "key" SET DEFAULT gen_random_uuid();

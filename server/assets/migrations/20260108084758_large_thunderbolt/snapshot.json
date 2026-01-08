@@ -1,0 +1,1851 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "28510e95-2fd0-447d-8ee7-1db978d7c0e9",
+  "prevIds": [
+    "192d3739-ebc3-44e8-8bdc-11a8b2ea19b3"
+  ],
+  "ddl": [
+    {
+      "values": [
+        "INSERT",
+        "DELETE",
+        "UPDATE",
+        "REVERT"
+      ],
+      "name": "change_op",
+      "entityType": "enums",
+      "schema": "revisions"
+    },
+    {
+      "values": [
+        "pending",
+        "synced",
+        "failed"
+      ],
+      "name": "sync_status",
+      "entityType": "enums",
+      "schema": "revisions"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "ledger",
+      "entityType": "tables",
+      "schema": "revisions"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "choice_groups",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "choice_values",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "choices",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "deltas",
+      "entityType": "tables",
+      "schema": "revisions"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "form_field_mappings",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "forms",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "form_fields",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "form_sections",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hash",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "ledger"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "ledger"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "timestamp",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "ledger"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "submission_index",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "ledger"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "notes",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "ledger"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_value",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "fallbackLabel",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "value",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "i18n_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "label",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_value",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "group",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "i18n_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "version",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "hash",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "submission_index",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "index",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "table_name",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "changed_at",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "delta_data",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "changed_by",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "change_op",
+      "typeSchema": "revisions",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "op",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "sync_status",
+      "typeSchema": "revisions",
+      "notNull": false,
+      "dimensions": 0,
+      "default": "'pending'",
+      "generated": null,
+      "identity": null,
+      "name": "sync_status",
+      "entityType": "columns",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "field",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "i18n_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "db_column",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "db_table",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "db_column_type",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "md5\n\t\t\t\t(\"civilio\".\"form_field_mappings\".\"field\")",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "alias_hash",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "icon",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "label",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "created_by",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form_name",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "readonly",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "t_translated",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "d_translated",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "section_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "12",
+      "generated": null,
+      "identity": null,
+      "name": "span",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "relevance",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "relevance",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "hash",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "submission_index",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "ledger_hash_form_submission_index_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "ledger"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "parent_key",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "parent_value",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "choices2_parent_key_parent_value_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "key",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "choices2_key_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "hash",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_hash_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "submission_index",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_submission_index_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "index",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_index_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_form_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "changed_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_changed_at_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "parent",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"parent\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_parent_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "parent",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "hash",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_parent_hash_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "submission_index",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "changed_at",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "deltas_submission_index_form_changed_at_index",
+      "entityType": "indexes",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "forms_name_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "label",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "forms_label_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "description",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"description\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "forms_description_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form_name",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_fields_form_name_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "title",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_fields_title_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "description",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"description\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_fields_description_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "t_translated",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"description\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_fields_t_translated_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "d_translated",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"description\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_fields_d_translated_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "section_key",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_fields_sectionKey_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "title",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_sections_title_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "key",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_sections_key_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "key",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_sections_key_form_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form",
+        "parent_key"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "choice_groups",
+      "columnsTo": [
+        "form",
+        "key"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "name": "choices2_form_parent_key_choices2_form_key_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "parent_key",
+        "form",
+        "parent_value"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "choice_values",
+      "columnsTo": [
+        "key",
+        "form",
+        "value"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "name": "choices2_VNnysIMXqAEj_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "key",
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "choice_groups",
+      "columnsTo": [
+        "key",
+        "form"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "choice_values_key_form_choices2_key_form_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form_name"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "forms",
+      "columnsTo": [
+        "name"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_fields_form_name_forms_name_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "section_key",
+        "form_name"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_sections",
+      "columnsTo": [
+        "key",
+        "form"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_fields_section_key_form_name_form_sections_key_form_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_fields"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "forms",
+      "columnsTo": [
+        "name"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_sections_form_forms_name_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "columns": [
+        "form",
+        "key"
+      ],
+      "nameExplicit": false,
+      "name": "choices2_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "choice_groups"
+    },
+    {
+      "columns": [
+        "key",
+        "form",
+        "value"
+      ],
+      "nameExplicit": false,
+      "name": "choice_values_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "choice_values"
+    },
+    {
+      "columns": [
+        "name",
+        "group",
+        "version"
+      ],
+      "nameExplicit": true,
+      "name": "choices_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "choices"
+    },
+    {
+      "columns": [
+        "hash",
+        "submission_index",
+        "index",
+        "form",
+        "table_name"
+      ],
+      "nameExplicit": false,
+      "name": "deltas_pkey",
+      "entityType": "pks",
+      "schema": "revisions",
+      "table": "deltas"
+    },
+    {
+      "columns": [
+        "field",
+        "form"
+      ],
+      "nameExplicit": true,
+      "name": "field_db_column_db_table_form_pk",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "form_field_mappings"
+    },
+    {
+      "columns": [
+        "name"
+      ],
+      "nameExplicit": false,
+      "name": "forms_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "forms"
+    },
+    {
+      "columns": [
+        "key",
+        "form"
+      ],
+      "nameExplicit": false,
+      "name": "form_sections_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "form_sections"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "form_fields_pkey",
+      "schema": "civilio",
+      "table": "form_fields",
+      "entityType": "pks"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "324",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "chefferie_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "186",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "chefferie_personnel_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "475016321",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "csc_id_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "445",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "csc_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "774",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "csc_personnel_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "543",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "csc_pieces_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1463",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "csc_statistics_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "2344",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "csc_villages_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "484119070",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "fosa_id_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "971",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "fosa_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "incrementBy": "1",
+      "minValue": "1",
+      "maxValue": "9223372036854775807",
+      "startWith": "1261",
+      "cacheSize": 1,
+      "cycle": false,
+      "name": "fosa_personnel_index_seq",
+      "entityType": "sequences",
+      "schema": "civilio"
+    },
+    {
+      "definition": "SELECT c.column_name,\n                   c.data_type,\n                   c.table_name,\n                   CAST(c.table_schema as text) as form\n            FROM information_schema.columns c\n        ",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "vw_db_columns",
+      "entityType": "views",
+      "schema": "civilio"
+    },
+    {
+      "definition": "\n  SELECT UPPER(info.facility_name) AS facility_name,\n         info.index,\n         info.form,\n         UPPER(info.location)      AS location,\n         info.gps_coordinates,\n         validated                 AS approved,\n         extra_info,\n         created_at\n  FROM (SELECT c._index                                    as index,\n               'csc'::TEXT                                 as form,\n               c.q2_4_officename                           as facility_name,\n               CONCAT_WS(' - ', mu_ch.label, mu_div.label) as location,\n               c.q2_12_gps_coordinates                     as gps_coordinates,\n               COALESCE(c._validation_status = 'validation_status_approved',\n                        false)                             as validated,\n               jsonb_build_object(\n                   'milieu', mil.label,\n                   'is_functional', COALESCE(c.q2_10_fonctionnel = '1', false),\n                   'degree', deg_o.label,\n                   'is_chiefdom', COALESCE(c.q2_1a_chefferie = '1', false),\n                   'size', COALESCE(c_size.label, c.q2_06_taille_commune),\n                   'village_count', COALESCE(v_counts.village_count, 0),\n                   'employee_count', COALESCE(em_counts.employee_count, 1),\n                   'equipment',\n                   (\n                     COALESCE(c.q6_01_computers::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q6_02_serveurs::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q6_03_printers::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q6_4_scanners::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q6_5_onduleur::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q6_6_climatiseur::DOUBLE PRECISION::INTEGER,\n                              0) +\n                     COALESCE(c.q6_7_ventilateur::DOUBLE PRECISION::INTEGER,\n                              0) +\n                     COALESCE(c.q6_9_tablea_bureau::DOUBLE PRECISION::INTEGER,\n                              0) +\n                     COALESCE(c.q6_10_chaise::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q6_12_car::DOUBLE PRECISION::INTEGER, 0) +\n                     COALESCE(c.q9_13_moto::DOUBLE PRECISION::INTEGER, 0)\n                     ),\n                   'has_internet', COALESCE(\n                       c.q4_12_batiment_connecte::DOUBLE PRECISION::INTEGER = 1,\n                       false),\n                   'has_power', COALESCE(\n                       c.q4_02_reseau_electrique::DOUBLE PRECISION::INTEGER =\n                       1 OR\n                       c.q4_5_autre_source::DOUBLE PRECISION::INTEGER = 1,\n                       false),\n                   'has_water',\n                   COALESCE(c.q4_7alimentation_eau::TEXT NOT IN ('1'), false)\n               )                                           as extra_info,\n               c.q0_06_date_creation                       AS created_at\n        FROM csc.data c\n               LEFT JOIN (SELECT _parent_index, COUNT(*) AS employee_count\n                          FROM csc.data_personnel\n                          GROUP BY _parent_index) em_counts\n                         ON em_counts._parent_index = c._index\n               LEFT JOIN (SELECT _parent_index, COUNT(*) AS village_count\n                          FROM csc.data_villages\n                          GROUP BY _parent_index) v_counts\n                         ON v_counts._parent_index = c._index\n               LEFT JOIN civilio.choices c_size\n                         ON c_size.\"group\" = 'pq1hw83' AND\n                            c_size.version = 'csc' AND\n                            c_size.name = c.q2_06_taille_commune\n               LEFT JOIN civilio.choices mil\n                         ON mil.\"group\" = 'vb2qk85' AND mil.version = 'csc' AND\n                            mil.name = c.milieu::TEXT\n               LEFT JOIN civilio.choices deg_o\n                         ON deg_o.\"group\" = 'sl95o71' AND\n                            deg_o.version = 'csc' AND deg_o.name = c.degr::TEXT\n               LEFT JOIN civilio.choices mu_div\n                         ON mu_div.\"group\" = 'division' AND\n                            mu_div.name = c.q2_01_division::TEXT AND\n                            mu_div.version = 'csc'\n               LEFT JOIN civilio.choices mu_ch\n                         ON mu_ch.\"group\" = 'commune' AND\n                            mu_ch.name = c.q2_02_municipality::TEXT AND\n                            mu_ch.version = 'csc' AND\n                            mu_ch.parent = c.q2_01_division::TEXT\n        UNION\n        SELECT c._index,\n               'fosa'::TEXT                                as form,\n               c.q1_12_officename                          as facility_name,\n               CONCAT_WS(' - ', mu_ch.label, mu_div.label) as location,\n               c.q1_13_gps_coordinates                     as gps_coordinates,\n               COALESCE(c._validation_status = 'validation_status_approved',\n                        false)                             as validated,\n               jsonb_build_object(\n                   'milieu', ml.label,\n                   'health_area', mha.label,\n                   'health_district', mda.label,\n                   'category',\n                   COALESCE(NULLIF(TRIM(BOTH ' ' FROM c.autre_cat_gorie), ''),\n                            c_cat.label),\n                   'status', c_status.label,\n                   'employee_count', COALESCE(em_counts.employee_count, 1),\n                   'has_internet', COALESCE(\n                       c.q7_08_broadband_conn_available::DOUBLE PRECISION::INTEGER =\n                       1, false),\n                   'has_power', COALESCE(\n                       c.q7_01_facility_conn_power_grid::DOUBLE PRECISION::INTEGER =\n                       1,\n                       c.q7_04_any_source_of_backup::DOUBLE PRECISION::INTEGER =\n                       1,\n                       false),\n                   'has_water', COALESCE(\n                       c.q6_09aalimentation_eau::DOUBLE PRECISION::INTEGER = 1,\n                       false),\n                   'equipment', (\n                     COALESCE(c.q9_02_computers, 0) +\n                     COALESCE(c.q9_03_printers, 0) +\n                     COALESCE(c.q9_04_tablets, 0) +\n                     COALESCE(c.q9_10_car, 0) +\n                     COALESCE(c.q9_11_mopeds, 0)\n                     ),\n                   'stats_l_5', jsonb_build_object('births',\n                                                   COALESCE(group_ce1sz98_ligne_colonne, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_1_colonne, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_2_colonne, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_3_colonne, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_4_colonne, 0),\n                                                   'deaths',\n                                                   COALESCE(group_ce1sz98_ligne_colonne_1, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_1_colonne_1, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_2_colonne_1, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_3_colonne_1, 0) +\n                                                   COALESCE(group_ce1sz98_ligne_4_colonne_1, 0)\n                                )\n               )                                           AS extra_info,\n               c.q0_06_date_creation                       AS created_at\n        FROM fosa.data c\n               LEFT JOIN (SELECT _parent_index, COUNT(*) AS employee_count\n                          FROM fosa.data_personnel\n                          GROUP BY _parent_index) em_counts\n                         ON em_counts._parent_index = c._index\n               LEFT JOIN civilio.choices c_status\n                         ON c_status.\"group\" = 'qy7we33' AND\n                            c_status.name = c.statut_de_la_fosa::TEXT AND\n                            c_status.version = 'fosa'\n               LEFT JOIN civilio.choices c_cat\n                         ON c_cat.\"group\" = 'pa9ii12' AND\n                            c_cat.name = c.q1_07_type_healt_facility::TEXT AND\n                            c_cat.version = 'fosa'\n               LEFT JOIN civilio.choices mda\n                         ON mda.\"group\" = 'district' AND\n                            mda.name = c.ds_rattachement::TEXT AND\n                            mda.version = 'fosa'\n               LEFT JOIN civilio.choices mha ON mha.\"group\" = 'airesante' AND\n                                                mha.name =\n                                                c.as_rattachement::TEXT AND\n                                                mha.version = 'fosa' AND\n                                                mha.parent = c.ds_rattachement::TEXT\n               LEFT JOIN civilio.choices ml\n                         ON ml.\"group\" = 'vb2qk85' AND\n                            ml.name = c.milieu::TEXT AND ml.version = 'fosa'\n               LEFT JOIN civilio.choices mu_div\n                         ON mu_div.\"group\" = 'division' AND\n                            mu_div.name = c.q1_02_division::TEXT AND\n                            mu_div.version = 'fosa'\n               LEFT JOIN civilio.choices mu_ch\n                         ON mu_ch.\"group\" = 'commune' AND\n                            mu_ch.name = c.q1_03_municipality::TEXT AND\n                            mu_ch.version = 'fosa' AND\n                            mu_ch.parent = c.q1_02_division::TEXT\n        UNION\n        SELECT c._index,\n               'chefferie'::TEXT                           as form,\n               c.q1_12_officename                          as facility_name,\n               CONCAT_WS(' - ', mu_ch.label, mu_div.label) as location,\n               c.q1_13_gps_coordinates                     as gps_coordinates,\n               COALESCE(c._validation_status = 'validation_status_approved',\n                        false)                             as validated,\n               jsonb_build_object(\n                   'degree', c_deg.label,\n                   'equipment', (COALESCE(c.q9_02_computers, 0) +\n                                 COALESCE(c.q9_03_printers, 0) +\n                                 COALESCE(c.q9_04_tablets, 0) +\n                                 COALESCE(c.q9_10_car, 0) +\n                                 COALESCE(c.q9_11_mopeds, 0)),\n                   'has_internet', COALESCE(\n                       c.q4_02_broadband_conn_available::DOUBLE PRECISION::INTEGER =\n                       1, false),\n                   'has_water', COALESCE(\n                       c.q6_09aalimentation_eau::DOUBLE PRECISION::INTEGER = 1,\n                       false),\n                   'has_power',\n                   COALESCE(c.q4_04_electricite::DOUBLE PRECISION::INTEGER = 1,\n                            false),\n                   'employee_count', employee_count\n               )                                           AS extra_info,\n               c.q0_06_date_creation                       AS created_at\n        FROM chefferie.data c\n               LEFT JOIN (SELECT _parent_index, COUNT(*) AS employee_count\n                          FROM chefferie.data_personnel\n                          GROUP BY _parent_index) em_counts\n                         ON em_counts._parent_index = c._index\n               LEFT JOIN civilio.choices c_deg\n                         ON c_deg.\"group\" = 'vb2qk85' AND\n                            c_deg.name = c.degre::TEXT AND\n                            c_deg.version = 'chefferie'\n               LEFT JOIN civilio.choices mu_div\n                         ON mu_div.\"group\" = 'division' AND\n                            mu_div.name = c.q1_02_division::TEXT AND\n                            mu_div.version = 'chefferie'\n               LEFT JOIN civilio.choices mu_ch\n                         ON mu_ch.\"group\" = 'commune' AND\n                            mu_ch.name = c.q1_03_municipality::TEXT AND\n                            mu_ch.version = 'chefferie' AND\n                            mu_ch.parent = c.q1_02_division::TEXT) AS info\n",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "vw_facilities",
+      "entityType": "views",
+      "schema": "civilio"
+    },
+    {
+      "definition": "\n          SELECT _id,\n                 _index,\n                 _validation_status,\n                 validation_code,\n                 facility_name,\n                 _submission_time,\n                 form,\n                 next,\n                 prev,\n                 lower(COALESCE(_validation_status, ''::text)) =\n                 'validation_status_approved'::text AS is_valid,\n                 current_version,\n                 last_modified_at,\n                 last_modified_by\n          FROM ((SELECT df._id::double precision::integer                       AS _id,\n                        df._index,\n                        df._validation_status::text                             AS _validation_status,\n                        df.code_de_validation::text                             AS validation_code,\n                        df.q2_4_officename::text                                AS facility_name,\n                        df._submission_time::date                               AS _submission_time,\n                        (SELECT 'csc'::TEXT AS form_types)                      AS form,\n                        lead(df._index) OVER (ORDER BY df._index)               AS next,\n                        lag(df._index) OVER (ORDER BY df._index)                AS prev,\n                        COALESCE(rd.hash, df._version_)                         AS current_version,\n                        COALESCE(MAX(rd.changed_at),\n                                 df._submission_time::TIMESTAMP WITH TIME ZONE) AS last_modified_at,\n                        COALESCE(rd.changed_by, df._submitted_by)               AS last_modified_by\n                 FROM csc.data df\n                        LEFT JOIN revisions.deltas rd ON rd.hash = df._version_\n                   AND rd.form = 'csc'::TEXT\n                   AND rd.submission_index = df._index\n                 GROUP BY df._id, df._index, rd.hash, rd.changed_by,\n                          df._validation_status, df.q2_4_officename,\n                          df.code_de_validation, df._submission_time,\n                          df._version_,\n                          df._submitted_by)\n                UNION\n                (SELECT df._id::double precision::integer                       AS _id,\n                        df._index,\n                        df._validation_status::text                             AS _validation_status,\n                        df.q14_02_validation_code::text                         AS validation_code,\n                        df.q1_12_officename::text                               AS facility_name,\n                        df._submission_time,\n                        (SELECT 'fosa'::TEXT AS form_types)                     AS form,\n                        lead(df._index) OVER (ORDER BY df._index)               AS next,\n                        lag(df._index) OVER (ORDER BY df._index)                AS prev,\n                        COALESCE(rd.hash, df._version_)                         AS current_version,\n                        COALESCE(MAX(rd.changed_at),\n                                 df._submission_time::TIMESTAMP WITH TIME ZONE) AS last_modified_at,\n                        COALESCE(rd.changed_by, df._submitted_by)               AS last_modified_by\n                 FROM fosa.data df\n                        LEFT JOIN revisions.deltas rd ON rd.hash = df._version_\n                   AND rd.form = 'fosa'::TEXT\n                   AND rd.submission_index = df._index\n                 GROUP BY df._id, df._index, rd.hash, rd.changed_by,\n                          df.q1_12_officename, df._validation_status,\n                          df.q14_02_validation_code, df._submission_time,\n                          df._version_, df._submitted_by)\n                UNION\n                SELECT df._id::double precision::integer                       AS _id,\n                       df._index,\n                       df._validation_status::text                             AS _validation_status,\n                       df.q14_02_validation_code::text                         AS validation_code,\n                       df.q1_12_officename::text                               AS facility_name,\n                       df._submission_time,\n                       (SELECT 'chefferie'::TEXT AS form_types)                AS form,\n                       lead(df._index) OVER (ORDER BY df._index)               AS next,\n                       lag(df._index) OVER (ORDER BY df._index)                AS prev,\n                       COALESCE(rd.hash, df._version_)                         AS current_version,\n                       COALESCE(MAX(rd.changed_at),\n                                df._submission_time::TIMESTAMP WITH TIME ZONE) AS last_modified_at,\n                       COALESCE(rd.changed_by, df._submitted_by)               AS last_modified_by\n                FROM chefferie.data df\n                       LEFT JOIN revisions.deltas rd ON rd.hash = df._version_\n                  AND rd.form = 'chefferie'::TEXT\n                  AND rd.submission_index = df._index\n                GROUP BY df._id, df._index, rd.hash, rd.changed_by,\n                         df._validation_status, df.q1_12_officename,\n                         df.q14_02_validation_code, df._submission_time,\n                         df._version_, df._submitted_by) result\n          ORDER BY last_modified_at DESC\n        ",
+      "with": null,
+      "withNoData": null,
+      "using": null,
+      "tablespace": null,
+      "materialized": false,
+      "name": "vw_submissions",
+      "entityType": "views",
+      "schema": "civilio"
+    }
+  ],
+  "renames": [
+    "civilio.choices2->civilio.choice_groups"
+  ]
+}

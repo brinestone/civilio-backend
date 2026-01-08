@@ -11,6 +11,6 @@ COPY ./.output/server ./server
 COPY ./server/migrations ./server/migrations
 
 EXPOSE 3000/tcp
-EXPOSE 5544/udp
+EXPOSE 5534/udp
 
 CMD ["node", "server/index.mjs"]
