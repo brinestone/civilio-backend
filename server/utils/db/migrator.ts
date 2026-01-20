@@ -150,7 +150,7 @@ export async function runMigrations(table: string, db: DBType) {
         for (const statement of statements) {
           try {
             await tx.transaction(async sp => {
-              sp.execute(sql.raw(statement));
+              await sp.execute(sql.raw(statement));
             })
           } catch (e) {
             const err = e as DrizzleError;

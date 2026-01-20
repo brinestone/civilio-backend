@@ -1,1 +1,0 @@
-ALTER TABLE "civilio"."choices2" ADD CONSTRAINT "choices2_sHhh07RaQicj_fkey" FOREIGN KEY ("form","parent_key","parent_value") REFERENCES "civilio"."choice_values"("form","key","value") ON DELETE SET NULL ON UPDATE CASCADE;

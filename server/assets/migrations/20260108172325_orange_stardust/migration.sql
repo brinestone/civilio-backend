@@ -1,2 +1,0 @@
-ALTER TABLE "civilio"."choice_groups" ADD COLUMN "createdAt" timestamp DEFAULT now() NOT NULL;--> statement-breakpoint
-ALTER TABLE "civilio"."choice_groups" ADD COLUMN "updatedAt" timestamp DEFAULT now() NOT NULL;

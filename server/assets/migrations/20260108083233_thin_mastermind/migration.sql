@@ -1,1 +1,0 @@
-ALTER TABLE "civilio"."choices" ADD COLUMN "title" text DEFAULT '' NOT NULL;

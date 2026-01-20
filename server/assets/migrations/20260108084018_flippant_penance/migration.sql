@@ -1,2 +1,0 @@
-ALTER TABLE "civilio"."choices2" DROP CONSTRAINT "choices2_sHhh07RaQicj_fkey";--> statement-breakpoint
-ALTER TABLE "civilio"."choices2" ADD CONSTRAINT "choices2_VNnysIMXqAEj_fkey" FOREIGN KEY ("parent_key","form","parent_value") REFERENCES "civilio"."choice_values"("key","form","value") ON DELETE SET NULL ON UPDATE CASCADE;

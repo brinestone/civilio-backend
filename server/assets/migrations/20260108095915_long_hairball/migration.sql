@@ -1,1 +1,0 @@
-ALTER TABLE "civilio"."choice_values" RENAME COLUMN "fallbackLabel" TO "fallback_label";
