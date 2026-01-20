@@ -1,4 +1,9 @@
-export default defineEventHandler(event => {
+defineRouteMeta({
+  openAPI: {
+    tags: ['Internal']
+  }
+})
+export default defineCachedEventHandler(event => {
   // handleCors(event, {
   //   origin: '*',
   //   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE',],

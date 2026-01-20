@@ -1,5 +1,5 @@
 import { prettifyError, z } from "zod";
-import { optionGroupKeyAvailable } from "../../../../utils/options";
+import { optionGroupKeyAvailable } from "../../../utils/options";
 
 defineRouteMeta({
   openAPI: {
@@ -12,7 +12,7 @@ defineRouteMeta({
         name: 'form',
         summary: 'Form ID',
         required: true,
-        example: 'csc'
+        example: 'fosa'
       },
       {
         in: 'query',
