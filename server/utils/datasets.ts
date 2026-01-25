@@ -4,8 +4,8 @@ import _ from 'lodash';
 export async function deleteGroup(groupId: string) {
 	const db = provideDb();
 	Logger.info(`Deleting dataset group`, { groupId });
-	const { rowCount } = await db.transaction(tx => tx.delete(choiceGroups)
-		.where(eq(choiceGroups.id, groupId))
+	const { rowCount } = await db.transaction(tx => tx.delete(datasets)
+		.where(eq(datasets.id, groupId))
 	);
 	Logger.info(`Dataset group deleted`, { affectedRows: rowCount });
 }
@@ -13,10 +13,10 @@ export async function deleteGroup(groupId: string) {
 export async function deleteOption(groupId: string, optionId: string) {
 	const db = provideDb();
 	await db.transaction(async tx => {
-		await tx.delete(choiceValues)
+		await tx.delete(datasetItems)
 			.where(and(
-				eq(choiceValues.id, optionId),
-				eq(choiceValues.groupId, groupId)
+				eq(datasetItems.id, optionId),
+				eq(datasetItems.dataset, groupId)
 			));
 	});
 }
@@ -28,19 +28,19 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 			await tx.transaction(async ttx => {
 				let groupId: string;
 				if (group.isNew) {
-					const [result] = await ttx.insert(choiceGroups)
+					const [result] = await ttx.insert(datasets)
 						.values({
 							title: group.data.title,
 							description: group.data.description || null,
 							key: group.data.key,
 							parentId: group.data.parentId,
 						}).returning({
-							id: choiceGroups.id
+							id: datasets.id
 						});
 					groupId = result.id;
 
 					for (const option of group.data.options) {
-						await ttx.insert(choiceValues)
+						await ttx.insert(datasetItems)
 							.values({
 								groupId,
 								label: option.label,
@@ -52,17 +52,17 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 					}
 				} else {
 					const change = _.omit(group.data, ['id', 'options']);
-					await ttx.update(choiceGroups)
+					await ttx.update(datasets)
 						.set(change)
 						.where(
-							eq(choiceGroups.id, group.data.id)
+							eq(datasets.id, group.data.id)
 						).returning({
-							id: choiceGroups.id
+							id: datasets.id
 						});
 					groupId = group.data.id;
 					for (const option of group.data.options) {
 						if (option.isNew) {
-							await ttx.insert(choiceValues)
+							await ttx.insert(datasetItems)
 								.values({
 									groupId,
 									label: option.label,
@@ -72,7 +72,7 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 									parentValue: option.parentValue || null
 								});
 						} else {
-							await ttx.update(choiceValues)
+							await ttx.update(datasetItems)
 								.set({
 									value: option.value,
 									label: option.label,
@@ -80,8 +80,8 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 									i18nKey: option.i18nKey,
 									parentValue: option.parentValue || null
 								}).where(and(
-									eq(choiceValues.groupId, groupId),
-									eq(choiceValues.id, option.id)
+									eq(datasetItems.dataset, groupId),
+									eq(datasetItems.id, option.id)
 								))
 						}
 					}
@@ -109,7 +109,7 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 	})
 }
 
-export async function optionGroupKeyAvailable(form: string, key: string) {
+export async function datasetGroupKeyAvailable(form: string, key: string) {
 	const db = provideDb();
 	const count = await db.$count(choices, and(
 		eq(choices.group, key),
@@ -118,10 +118,10 @@ export async function optionGroupKeyAvailable(form: string, key: string) {
 	return count == 0;
 }
 
-export async function findAllFormOptions() {
+export async function findAllDatasets() {
 	const db = provideDb();
 
-	return await db.query.choiceGroups.findMany({
+	return await db.query.datasets.findMany({
 		orderBy: {
 			title: 'asc',
 			createdAt: 'desc',
@@ -135,7 +135,7 @@ export async function findAllFormOptions() {
 					key: true
 				}
 			},
-			options: {
+			items: {
 				orderBy: {
 					ordinal: 'asc'
 				}

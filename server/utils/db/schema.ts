@@ -631,7 +631,7 @@ export const formVersions = civilio.table('form_versions', {
 	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
 	parentId: uuid(),
-	isCurrent: boolean('is_current').default(true),
+	isCurrent: boolean('is_current').notNull().default(true),
 }, t => [
 	foreignKey({
 		columns: [t.parentId],
@@ -768,6 +768,14 @@ export const relations = defineRelations({
 		versions: r.many.formVersions({
 			from: r.formDefinitions.slug,
 			to: r.formVersions.form
+		}),
+		currentVersion: r.one.formVersions({
+			from: r.formDefinitions.slug,
+			to: r.formVersions.form,
+			optional: true,
+			where: {
+				isCurrent: true
+			}
 		})
 	},
 	formVersions: {

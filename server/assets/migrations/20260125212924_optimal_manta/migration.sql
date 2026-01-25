@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."form_versions" ALTER COLUMN "is_current" SET NOT NULL;

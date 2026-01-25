@@ -1,5 +1,37 @@
 import { z } from "zod";
 
+export const FormFieldTypeSchema = z.enum([
+	'text',
+	'multiline',
+	'date',
+	'date-time',
+	'email',
+	'url',
+	'geo-point',
+	'single-select',
+	'multi-select',
+	'file',
+	'number',
+	'phone',
+	'boolean',
+]);
+
+export const ToggleApprovalStatusRequestSchema = z.object({
+	index: z.coerce.number(),
+	form: z.string().nonempty()
+})
+
+export const DeleteSubmissionRequestSchema = z.object({
+	form: z.string().nonempty(),
+	index: z.coerce.number()
+})
+
+export const VersionExistsRequestSchema = z.object({
+	form: z.string(),
+	index: z.coerce.number(),
+	version: z.string().nonempty()
+});
+
 export const OptionItemSchema = z.object({
 	i18nKey: z.string().nullable(),
 	id: z.uuid(),
@@ -54,25 +86,31 @@ export const FormOptionsUpsertRequestSchema = z.discriminatedUnion('isNew', [
 ]).array();
 export type FormOptionsUpsertRequest = z.infer<typeof FormOptionsUpsertRequestSchema>;
 
-export const FindFormOptionsResponseSchema = z.object({
+export const FindAllDatasetsResponseSchema = z.object({
 	groups: z.object({
-		description: z.string().nullable(),
+		description: z.string().nullish(),
 		title: z.string(),
 		id: z.uuid(),
 		key: z.string(),
-		parentId: z.uuid().nullable(),
-		options: z.object({
+		parentId: z.uuid().nullish(),
+		createdAt: z.date().transform(d => d.toISOString()).pipe(z.iso.date()),
+		updatedAt: z.date().transform(d => d.toISOString()).pipe(z.iso.date()),
+		items: z.object({
 			id: z.uuid(),
 			label: z.string(),
-			parentValue: z.string().nullable(),
+			parentValue: z.string().nullish(),
 			ordinal: z.int(),
 			value: z.string(),
-			i18nKey: z.string().nullable(),
+			i18nKey: z.string().nullish(),
 		}).array(),
 		parent: z.object({
 			title: z.string(),
-			description: z.string().nullable(),
+			description: z.string().nullish(),
 			key: z.string()
-		}).nullable()
+		}).nullish()
 	}).array()
-})
+});
+
+export type SubmissionVersionExistsRequest = z.infer<typeof VersionExistsRequestSchema>;
+export type DeleteSubmissionRequest = z.input<typeof DeleteSubmissionRequestSchema>;
+export type ToggleApprovalStatusRequest = z.input<typeof ToggleApprovalStatusRequestSchema>;
