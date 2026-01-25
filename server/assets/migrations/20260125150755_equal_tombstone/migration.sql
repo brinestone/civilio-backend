@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."form_sections" DROP CONSTRAINT "form_sections_form_version_form_versions_id_fkey", ADD CONSTRAINT "form_sections_form_version_form_versions_id_fkey" FOREIGN KEY ("form_version") REFERENCES "civilio"."form_versions"("id") ON DELETE CASCADE;

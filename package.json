@@ -7,7 +7,7 @@
         "build": "nitro build",
         "dev": "nitro dev",
         "preview": "node .output/server/index.mjs",
-        "migrate.local": "pnpm drizzle-kit generate && pnpm drizzle-kit migrate",
+        "migrate.local": "pnpm drizzle-kit generate",
         "script:custom": "pnpm drizzle-kit generate --custom",
         "release": "standard-version",
         "drop.local": "pnpm drizzle-kit drop",

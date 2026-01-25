@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."dataset_items" RENAME COLUMN "group_id" TO "dataset_id";

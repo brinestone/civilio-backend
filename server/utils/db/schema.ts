@@ -1,5 +1,7 @@
 import { defineRelations, isNotNull, SQL, sql } from "drizzle-orm";
 import {
+	bigint,
+	bigserial,
 	boolean,
 	date,
 	foreignKey,
@@ -13,6 +15,7 @@ import {
 	uniqueIndex,
 	uuid
 } from "drizzle-orm/pg-core";
+import { FormFieldTypeSchema } from "../dto";
 
 export const civilio = pgSchema("civilio").existing();
 export const revision = pgSchema("revisions").existing();
@@ -123,16 +126,15 @@ export const fosaPersonnelIndexSeqInCivilio = civilio.sequence(
 	},
 );
 
-export const choiceGroups = civilio.table('choice_groups', {
+export const datasets = civilio.table('datasets', {
 	title: text().notNull(),
 	id: uuid().defaultRandom().primaryKey(),
 	parentId: uuid('parent_id'),
-	// parentValue: text('parent_value'),
 	description: text(),
 	key: text().notNull(),
 	createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 	updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull().$onUpdate(() => new Date())
-}, (t): any => [
+}, (t) => [
 	index().on(t.parentId).where(isNotNull(t.parentId)),
 	uniqueIndex().on(t.key),
 	foreignKey({
@@ -141,26 +143,26 @@ export const choiceGroups = civilio.table('choice_groups', {
 	}).onUpdate('cascade').onDelete('set null'),
 ]);
 
-export const choiceValues = civilio.table('choice_items', {
+export const datasetItems = civilio.table('dataset_items', {
 	id: uuid().defaultRandom(),
 	label: text().notNull(),
 	value: text().notNull(),
 	parentValue: text('parent_value'),
 	i18nKey: text('i18n_key'),
-	groupId: uuid('group_id').notNull(),
+	dataset: uuid('dataset_id').notNull(),
 	ordinal: integer(),
 	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, t => [
 	index().on(t.parentValue).where(isNotNull(t.parentValue)),
 	uniqueIndex().on(t.id),
-	uniqueIndex().on(t.groupId, t.value),
+	uniqueIndex().on(t.dataset, t.value),
 	primaryKey({
-		columns: [t.groupId, t.id]
+		columns: [t.dataset, t.id]
 	}),
 	foreignKey({
-		columns: [t.groupId],
-		foreignColumns: [choiceGroups.id]
+		columns: [t.dataset],
+		foreignColumns: [datasets.id]
 	}).onDelete('cascade').onUpdate('cascade')
 ]);
 
@@ -328,6 +330,7 @@ export const vwDbColumns = civilio
 
 export const changeOp = revision.enum('change_op', ['INSERT', 'DELETE', 'UPDATE', 'REVERT']);
 export const versionSyncStatus = revision.enum('sync_status', ['pending', 'synced', 'failed']);
+export const formFieldType = civilio.enum('form_field_type', FormFieldTypeSchema.enum);
 export const deltaChanges = revision.table("deltas", {
 	hash: text().notNull(),
 	submissionIndex: integer("submission_index").notNull(),
@@ -607,101 +610,194 @@ export const vwFacilities = civilio.view("vw_facilities", {
 `);
 
 export const formDefinitions = civilio.table('form_definitions', {
-	name: text().notNull(),
-	icon: text(),
+	slug: text().notNull(),
+	logo: text(),
 	label: text().notNull(),
 	description: text(),
 	createdBy: text('created_by'),
 	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date())
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, t => [
-	uniqueIndex().on(t.name),
+	uniqueIndex().on(t.slug),
 	index().on(t.label),
 	index().on(t.description).where(isNotNull(t.description)),
-	primaryKey({ columns: [t.name] })
+	primaryKey({ columns: [t.slug] })
+]);
+
+export const formVersions = civilio.table('form_versions', {
+	id: uuid().notNull().primaryKey().defaultRandom(),
+	label: text().notNull(),
+	form: text().notNull(),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+	parentId: uuid(),
+	isCurrent: boolean('is_current').default(true),
+}, t => [
+	foreignKey({
+		columns: [t.parentId],
+		foreignColumns: [t.id]
+	}).onDelete('set null')
+		.onUpdate('cascade'),
+	foreignKey({
+		columns: [t.form],
+		foreignColumns: [formDefinitions.slug]
+	}).onDelete('cascade')
+		.onUpdate('cascade')
 ]);
 
 export const formSections = civilio.table('form_sections', {
 	key: text().notNull(),
-	form: text().notNull().references(() => formDefinitions.name, {
-		onDelete: 'cascade',
-		onUpdate: 'cascade'
-	}),
 	title: text().notNull(),
 	relevance: jsonb(),
 	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+	formVersion: uuid('form_version').notNull()
 }, t => [
 	index().on(t.title),
 	index().on(t.key),
-	uniqueIndex().on(t.key, t.form),
 	primaryKey({
-		columns: [t.key, t.form]
+		columns: [t.key, t.formVersion]
+	}),
+	foreignKey({
+		columns: [t.formVersion],
+		foreignColumns: [formVersions.id]
+	}).onDelete('cascade')
+]);
+export const formFields = civilio.table('form_fields', {
+	fieldId: uuid('field_id').notNull().defaultRandom(),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+	readonly: boolean().default(false),
+	title: text().notNull(),
+	description: text(),
+	sectionKey: text('section_key'),
+	span: integer().default(12),
+	relevance: jsonb(),
+	formVersion: uuid('form_version').notNull(),
+	fieldType: formFieldType('field_type').notNull(),
+}, t => [
+	index().on(t.formVersion),
+	index().on(t.title),
+	index().on(t.description).where(isNotNull(t.description)),
+	index().on(t.sectionKey).where(isNotNull(t.sectionKey)),
+	foreignKey({
+		columns: [t.sectionKey, t.formVersion],
+		foreignColumns: [formSections.key, formSections.formVersion]
+	}).onDelete('cascade').onUpdate('cascade'),
+	primaryKey({
+		columns: [t.fieldId, t.formVersion]
 	})
 ]);
 
-export const formFields = civilio.table('form_fields', {
-	id: uuid().notNull().primaryKey().defaultRandom(),
-	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
-	form: text('form_name').notNull().references(() => formDefinitions.name, {
-		onDelete: 'cascade',
-		onUpdate: 'cascade'
-	}),
-	readonly: boolean().default(false),
-	title: text().notNull(),
-	titleTranslated: text('t_translated'),
-	description: text(),
-	descriptionTranslated: text('d_translated'),
-	sectionKey: text('section_key').notNull(),
-	span: integer().default(12),
-	relevance: jsonb()
+export const facilityMetaFields = civilio.table('facility_meta_fields', {
+	fieldId: uuid('field_id').notNull(),
+	metaLabel: text('meta_label').notNull(),
+	metaDescription: text('meta_description'),
+	formVersion: uuid('form_version').notNull()
 }, t => [
-	index().on(t.form),
-	index().on(t.title),
-	index().on(t.description).where(isNotNull(t.description)),
-	index().on(t.titleTranslated).where(isNotNull(t.description)),
-	index().on(t.descriptionTranslated).where(isNotNull(t.description)),
-	index().on(t.sectionKey),
+	primaryKey({ columns: [t.fieldId, t.formVersion] }),
 	foreignKey({
-		columns: [t.sectionKey, t.form],
-		foreignColumns: [formSections.key, formSections.form]
-	}).onDelete('cascade').onUpdate('cascade')
+		columns: [t.fieldId, t.formVersion],
+		foreignColumns: [formFields.fieldId, t.formVersion]
+	})
+]);
+
+export const formSubmissions = civilio.table('form_submissions', {
+	index: bigserial('_index', { mode: 'number' }).notNull(),
+	approved: boolean().default(false),
+	approvedAt: timestamp('approved_at', { withTimezone: true }),
+	validationCode: text('validation_code'),
+	recordedAt: timestamp('recorded_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+	formVersion: uuid().notNull()
+}, t => [
+	foreignKey({
+		columns: [t.formVersion],
+		foreignColumns: [formVersions.id]
+	}).onDelete('cascade').onUpdate('cascade'),
+	primaryKey({ columns: [t.index, t.formVersion] })
+]);
+
+export const submissionResponses = civilio.table('submission_responses', {
+	submissionIndex: bigint('submission_index', { mode: 'number' }).notNull(),
+	fieldId: uuid('field_id').notNull(),
+	formVersion: uuid('form_version').notNull(),
+	responseId: uuid('response_id').notNull(),
+	value: text(),
+}, t => [
+	primaryKey({
+		columns: [t.submissionIndex, t.fieldId, t.formVersion, t.responseId],
+	}),
+	foreignKey({
+		columns: [t.submissionIndex, t.formVersion],
+		foreignColumns: [formSubmissions.index, formSubmissions.formVersion],
+	}).onDelete('cascade').onUpdate('cascade'),
+	foreignKey({
+		columns: [t.fieldId, t.formVersion],
+		foreignColumns: [formFields.fieldId, formFields.formVersion]
+	}).onDelete('cascade').onUpdate('cascade'),
 ]);
 
 export const relations = defineRelations({
 	formDefinitions,
+	formVersions,
 	formFields,
 	formSections,
-	choices,
-	choiceGroups,
-	choiceValues
+	datasets,
+	datasetItems
 }, r => ({
-	choiceGroups: {
-		options: r.many.choiceValues({
-			from: r.choiceGroups.id,
-			to: r.choiceValues.groupId,
+	datasets: {
+		items: r.many.datasetItems({
+			from: r.datasets.id,
+			to: r.datasetItems.dataset
 		}),
-		parent: r.one.choiceGroups({
+		parent: r.one.datasets({
 			optional: true,
-			from: r.choiceGroups.parentId,
-			to: r.choiceGroups.id
+			from: r.datasets.parentId,
+			to: r.datasets.id
+		})
+	},
+	datasetItems: {
+		parentDataset: r.one.datasets({
+			from: r.datasetItems.dataset,
+			to: r.datasets.id,
+			optional: true,
 		})
 	},
 	formDefinitions: {
+		versions: r.many.formVersions({
+			from: r.formDefinitions.slug,
+			to: r.formVersions.form
+		})
+	},
+	formVersions: {
+		formDefinition: r.one.formDefinitions({
+			from: r.formVersions.form,
+			to: r.formDefinitions.slug,
+		}),
 		fields: r.many.formFields({
-			from: r.formDefinitions.name,
-			to: r.formFields.form
+			from: r.formVersions.id,
+			to: r.formFields.formVersion,
+			where: {
+				sectionKey: {
+					isNull: true
+				}
+			}
 		}),
 		sections: r.many.formSections({
-			from: r.formDefinitions.name,
-			to: r.formSections.form
+			from: r.formVersions.id,
+			to: r.formSections.formVersion
+		}),
+		parent: r.one.formVersions({
+			from: r.formVersions.parentId,
+			to: r.formVersions.id,
+			optional: true
 		})
 	},
 	formSections: {
 		fields: r.many.formFields({
-			from: r.formSections.key,
-			to: r.formFields.sectionKey
-		})
-	}
+			from: [r.formSections.key, r.formSections.formVersion],
+			to: [r.formFields.sectionKey, r.formFields.formVersion],
+		}),
+	},
 }));
