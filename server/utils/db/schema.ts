@@ -709,7 +709,7 @@ export const formSubmissions = civilio.table('form_submissions', {
 	validationCode: text('validation_code'),
 	recordedAt: timestamp('recorded_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
-	formVersion: uuid().notNull()
+	formVersion: uuid('form_version').notNull()
 }, t => [
 	foreignKey({
 		columns: [t.formVersion],
@@ -718,24 +718,36 @@ export const formSubmissions = civilio.table('form_submissions', {
 	primaryKey({ columns: [t.index, t.formVersion] })
 ]);
 
+export const submissionVersions = civilio.table('submission_versions', {
+	id: uuid().notNull().primaryKey().defaultRandom(),
+	index: bigint('submission_index', { mode: 'number' }).notNull(),
+	formVersion: uuid('form_version').notNull(),
+	recordedAt: timestamp('recorded_at', { mode: 'date', withTimezone: true }).notNull().defaultNow()
+}, t => [
+	foreignKey({
+		columns: [t.index, t.formVersion],
+		foreignColumns: [formSubmissions.index, formSubmissions.formVersion]
+	}).onDelete('cascade').onUpdate('cascade')
+]);
+
 export const submissionResponses = civilio.table('submission_responses', {
 	submissionIndex: bigint('submission_index', { mode: 'number' }).notNull(),
 	fieldId: uuid('field_id').notNull(),
 	formVersion: uuid('form_version').notNull(),
-	responseId: uuid('response_id').notNull(),
+	responseVersionId: uuid('response_id').notNull(),
 	value: text(),
 }, t => [
 	primaryKey({
-		columns: [t.submissionIndex, t.fieldId, t.formVersion, t.responseId],
+		columns: [t.submissionIndex, t.fieldId, t.formVersion, t.responseVersionId],
 	}),
-	foreignKey({
-		columns: [t.submissionIndex, t.formVersion],
-		foreignColumns: [formSubmissions.index, formSubmissions.formVersion],
-	}).onDelete('cascade').onUpdate('cascade'),
 	foreignKey({
 		columns: [t.fieldId, t.formVersion],
 		foreignColumns: [formFields.fieldId, formFields.formVersion]
 	}).onDelete('cascade').onUpdate('cascade'),
+	foreignKey({
+		columns: [t.responseVersionId],
+		foreignColumns: [submissionVersions.id]
+	}).onDelete('cascade')
 ]);
 
 export const relations = defineRelations({
@@ -743,9 +755,17 @@ export const relations = defineRelations({
 	formVersions,
 	formFields,
 	formSections,
+	formSubmissions,
+	submissionResponses,
 	datasets,
 	datasetItems
 }, r => ({
+	formSubmissions: {
+		responses: r.many.submissionResponses({
+			from: [r.formSubmissions.index, r.formSubmissions.formVersion],
+			to: [r.submissionResponses.submissionIndex, r.submissionResponses.formVersion]
+		})
+	},
 	datasets: {
 		items: r.many.datasetItems({
 			from: r.datasets.id,
