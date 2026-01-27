@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+export type Connection = ReturnType<typeof provideDb>;
+export type Transaction = Parameters<Parameters<Connection['transaction']>[0]>[0];
+
 export const FieldKeySchema = z.string();
 export const RelevanceChainOperatorSchema = z.enum([
   'and', 'or'

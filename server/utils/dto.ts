@@ -18,18 +18,16 @@ export const FormFieldTypeSchema = z.enum([
 
 export const ToggleApprovalStatusRequestSchema = z.object({
 	index: z.coerce.number(),
-	form: z.string().nonempty()
+	form: z.string().nonempty(),
+	formVersion: z.uuid().optional(),
+	submissionVersion: z.uuid().optional()
 })
 
 export const DeleteSubmissionRequestSchema = z.object({
-	form: z.string().nonempty(),
-	index: z.coerce.number()
-})
-
-export const VersionExistsRequestSchema = z.object({
-	form: z.string(),
 	index: z.coerce.number(),
-	version: z.string().nonempty()
+	form: z.string().nonempty(),
+	formVersion: z.string().optional(),
+	submissionVersion: z.string().optional()
 });
 
 export const OptionItemSchema = z.object({
@@ -111,6 +109,6 @@ export const FindAllDatasetsResponseSchema = z.object({
 	}).array()
 });
 
-export type SubmissionVersionExistsRequest = z.infer<typeof VersionExistsRequestSchema>;
-export type DeleteSubmissionRequest = z.input<typeof DeleteSubmissionRequestSchema>;
-export type ToggleApprovalStatusRequest = z.input<typeof ToggleApprovalStatusRequestSchema>;
+export type DeleteSubmissionRequest = z.output<typeof DeleteSubmissionRequestSchema>;
+export type ToggleApprovalStatusRequestInput = z.input<typeof ToggleApprovalStatusRequestSchema>;
+export type ToggleApprovalStatusRequest = z.output<typeof ToggleApprovalStatusRequestSchema>;

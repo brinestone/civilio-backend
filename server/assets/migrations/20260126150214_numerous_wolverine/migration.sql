@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."submission_versions" ADD CONSTRAINT "submission_versions_form_version_form_versions_id_fkey" FOREIGN KEY ("form_version") REFERENCES "civilio"."form_versions"("id");

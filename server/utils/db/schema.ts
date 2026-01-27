@@ -630,7 +630,7 @@ export const formVersions = civilio.table('form_versions', {
 	form: text().notNull(),
 	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
-	parentId: uuid(),
+	parentId: uuid('parent_id'),
 	isCurrent: boolean('is_current').notNull().default(true),
 }, t => [
 	foreignKey({
@@ -642,7 +642,10 @@ export const formVersions = civilio.table('form_versions', {
 		columns: [t.form],
 		foreignColumns: [formDefinitions.slug]
 	}).onDelete('cascade')
-		.onUpdate('cascade')
+		.onUpdate('cascade'),
+	index().on(t.label),
+	index().on(t.form),
+	index().on(t.parentId).where(isNotNull(t.parentId))
 ]);
 
 export const formSections = civilio.table('form_sections', {
@@ -704,8 +707,6 @@ export const facilityMetaFields = civilio.table('facility_meta_fields', {
 
 export const formSubmissions = civilio.table('form_submissions', {
 	index: bigserial('_index', { mode: 'number' }).notNull(),
-	approved: boolean().default(false),
-	approvedAt: timestamp('approved_at', { withTimezone: true }),
 	validationCode: text('validation_code'),
 	recordedAt: timestamp('recorded_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
@@ -715,19 +716,29 @@ export const formSubmissions = civilio.table('form_submissions', {
 		columns: [t.formVersion],
 		foreignColumns: [formVersions.id]
 	}).onDelete('cascade').onUpdate('cascade'),
-	primaryKey({ columns: [t.index, t.formVersion] })
+	primaryKey({ columns: [t.index] })
 ]);
 
 export const submissionVersions = civilio.table('submission_versions', {
 	id: uuid().notNull().primaryKey().defaultRandom(),
 	index: bigint('submission_index', { mode: 'number' }).notNull(),
 	formVersion: uuid('form_version').notNull(),
-	recordedAt: timestamp('recorded_at', { mode: 'date', withTimezone: true }).notNull().defaultNow()
+	recordedAt: timestamp('recorded_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
+	approved: boolean().default(false),
+	approvedAt: timestamp('approved_at', { withTimezone: true }),
+	isCurrent: boolean('is_current').default(true)
 }, t => [
+	index().on(t.index),
+	index().on(t.formVersion),
+	index().on(t.index, t.formVersion),
 	foreignKey({
-		columns: [t.index, t.formVersion],
-		foreignColumns: [formSubmissions.index, formSubmissions.formVersion]
-	}).onDelete('cascade').onUpdate('cascade')
+		columns: [t.index],
+		foreignColumns: [formSubmissions.index]
+	}).onDelete('cascade').onUpdate('cascade'),
+	foreignKey({
+		columns: [t.formVersion],
+		foreignColumns: [formVersions.id]
+	})
 ]);
 
 export const submissionResponses = civilio.table('submission_responses', {
@@ -737,8 +748,18 @@ export const submissionResponses = civilio.table('submission_responses', {
 	responseVersionId: uuid('response_id').notNull(),
 	value: text(),
 }, t => [
+	// Index for the composite foreign key to formSubmissions
+	index('submission_responses_sub_idx').on(t.submissionIndex, t.formVersion),
+	// Index for the composite foreign key to formFields
+	index('submission_responses_field_idx').on(t.fieldId, t.formVersion),
+	// Index for the foreign key to submissionVersions
+	index('submission_responses_version_idx').on(t.responseVersionId),
 	primaryKey({
 		columns: [t.submissionIndex, t.fieldId, t.formVersion, t.responseVersionId],
+	}),
+	foreignKey({
+		columns: [t.submissionIndex],
+		foreignColumns: [formSubmissions.index]
 	}),
 	foreignKey({
 		columns: [t.fieldId, t.formVersion],
@@ -756,14 +777,37 @@ export const relations = defineRelations({
 	formFields,
 	formSections,
 	formSubmissions,
+	submissionVersions,
 	submissionResponses,
 	datasets,
-	datasetItems
+	datasetItems,
 }, r => ({
 	formSubmissions: {
 		responses: r.many.submissionResponses({
 			from: [r.formSubmissions.index, r.formSubmissions.formVersion],
 			to: [r.submissionResponses.submissionIndex, r.submissionResponses.formVersion]
+		}),
+		versions: r.many.submissionVersions({
+			from: [r.formSubmissions.index],
+			to: [r.submissionVersions.index]
+		})
+	},
+	submissionVersions: {
+		responses: r.many.submissionResponses({
+			from: r.submissionVersions.id,
+			to: r.submissionResponses.responseVersionId
+		})
+	},
+	submissionResponses: {
+		submission: r.one.formSubmissions({
+			from: r.submissionResponses.responseVersionId.through(r.submissionVersions.index),
+			to: r.formSubmissions.index.through(r.submissionVersions.index),
+			optional: true
+		}),
+		field: r.one.formFields({
+			from: [r.submissionResponses.fieldId, r.submissionResponses.formVersion],
+			to: [r.formFields.fieldId, r.formFields.formVersion],
+			optional: true
 		})
 	},
 	datasets: {

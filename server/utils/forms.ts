@@ -1,4 +1,25 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
+
+export async function getCurrentFormVersionTx(conn: Connection | Transaction, form: string) {
+	const result = await conn.query.formVersions.findFirst({
+		columns: { id: true },
+		where: {
+			form,
+			isCurrent: true,
+		},
+		orderBy: {
+			updatedAt: 'desc'
+		}
+	});
+	return result || null;
+}
+
+export async function formVersionExistsTx(tx: Transaction | Connection, slug: string, version: string) {
+	const result = await tx.execute<{ exists: boolean }>(sql`
+		SELECT EXISTS (SELECT 1 FROM ${formVersions} WHERE ${and(eq(formVersions.id, version), eq(formVersions.form, slug))}) AS "exists"
+		`);
+	return result.rows[0]?.exists ?? false;
+}
 
 export async function findFormDefinition(slug: string, version?: string) {
 	const db = provideDb();

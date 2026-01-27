@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."submission_versions" ADD COLUMN "is_current" boolean DEFAULT true;
