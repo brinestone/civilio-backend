@@ -11,7 +11,7 @@
       ],
       "outputCapture": "std",
       "restart": true,
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "skipFiles": [
         "<node_internals>/**"
       ]
