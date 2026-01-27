@@ -5,7 +5,7 @@ const CLIENT_CODES = {
 } as const;
 
 export default defineNitroPlugin((app) => {
-  const PORT = 5544; // Shared port between client and server
+  const PORT = 5534; // Shared port between client and server
   const server = dgram.createSocket('udp4');
 
   server.on('error', (err) => {

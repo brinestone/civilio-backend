@@ -1,3 +1,3 @@
 export default defineCachedEventHandler(event => {
-  return { ok: true };
-})
+	return { ok: true };
+});

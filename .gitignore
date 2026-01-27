@@ -7,3 +7,6 @@ dist
 .env
 .env.local
 logs
+screenshots
+.idea
+docker

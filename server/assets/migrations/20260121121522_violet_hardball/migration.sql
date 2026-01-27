@@ -1,0 +1,1 @@
+ALTER TABLE "civilio"."form_definitions" RENAME COLUMN "icon" TO "logo";

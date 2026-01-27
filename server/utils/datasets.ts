@@ -1,0 +1,145 @@
+import { and, eq } from "drizzle-orm";
+import _ from 'lodash';
+
+export async function deleteGroup(groupId: string) {
+	const db = provideDb();
+	Logger.info(`Deleting dataset group`, { groupId });
+	const { rowCount } = await db.transaction(tx => tx.delete(datasets)
+		.where(eq(datasets.id, groupId))
+	);
+	Logger.info(`Dataset group deleted`, { affectedRows: rowCount });
+}
+
+export async function deleteOption(groupId: string, optionId: string) {
+	const db = provideDb();
+	await db.transaction(async tx => {
+		await tx.delete(datasetItems)
+			.where(and(
+				eq(datasetItems.id, optionId),
+				eq(datasetItems.dataset, groupId)
+			));
+	});
+}
+
+export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
+	const db = provideDb();
+	await db.transaction(async tx => {
+		for (const group of param) {
+			await tx.transaction(async ttx => {
+				let groupId: string;
+				if (group.isNew) {
+					const [result] = await ttx.insert(datasets)
+						.values({
+							title: group.data.title,
+							description: group.data.description || null,
+							key: group.data.key,
+							parentId: group.data.parentId,
+						}).returning({
+							id: datasets.id
+						});
+					groupId = result.id;
+
+					for (const option of group.data.options) {
+						await ttx.insert(datasetItems)
+							.values({
+								groupId,
+								label: option.label,
+								value: option.value,
+								i18nKey: option.i18nKey,
+								ordinal: option.ordinal,
+								parentValue: option.parentValue || null
+							});
+					}
+				} else {
+					const change = _.omit(group.data, ['id', 'options']);
+					await ttx.update(datasets)
+						.set(change)
+						.where(
+							eq(datasets.id, group.data.id)
+						).returning({
+							id: datasets.id
+						});
+					groupId = group.data.id;
+					for (const option of group.data.options) {
+						if (option.isNew) {
+							await ttx.insert(datasetItems)
+								.values({
+									groupId,
+									label: option.label,
+									ordinal: option.ordinal,
+									value: option.value,
+									i18nKey: option.i18nKey,
+									parentValue: option.parentValue || null
+								});
+						} else {
+							await ttx.update(datasetItems)
+								.set({
+									value: option.value,
+									label: option.label,
+									ordinal: option.ordinal,
+									i18nKey: option.i18nKey,
+									parentValue: option.parentValue || null
+								}).where(and(
+									eq(datasetItems.dataset, groupId),
+									eq(datasetItems.id, option.id)
+								))
+						}
+					}
+				}
+
+				// for (const option of group.data.options ?? []) {
+				//   await ttx.insert(choiceValues)
+				/* {
+							label: option.label,
+							groupId,
+							i18nKey: option.i18nKey || null,
+							value: option.value,
+						}
+								*/
+				//     .values(change).onConflictDoUpdate({
+				//       target: [choiceValues.id],
+				//       set: {
+				//         label: option.label,
+				//         i18nKey: option.i18nKey || null
+				//       }
+				//     })
+				// }
+			});
+		}
+	})
+}
+
+export async function datasetGroupKeyAvailable(form: string, key: string) {
+	const db = provideDb();
+	const count = await db.$count(choices, and(
+		eq(choices.group, key),
+		eq(choices.version, form)
+	));
+	return count == 0;
+}
+
+export async function findAllDatasets() {
+	const db = provideDb();
+
+	return await db.query.datasets.findMany({
+		orderBy: {
+			title: 'asc',
+			createdAt: 'desc',
+			updatedAt: 'desc',
+		},
+		with: {
+			parent: {
+				columns: {
+					title: true,
+					description: true,
+					key: true
+				}
+			},
+			items: {
+				orderBy: {
+					ordinal: 'asc'
+				}
+			}
+		},
+	});
+}

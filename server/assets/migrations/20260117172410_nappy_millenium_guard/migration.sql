@@ -1,0 +1,1 @@
+CREATE INDEX "choice_groups_parent_id_index" ON "civilio"."choice_groups" ("parent_id") WHERE ("parent_id" is not null);
