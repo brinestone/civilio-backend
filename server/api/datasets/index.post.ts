@@ -8,7 +8,6 @@ defineRouteMeta({
 		description: 'Creates a new dataset',
 		requestBody: {
 			required: true,
-			summary: 'Payload',
 			description: 'The payload for creating a dataset',
 			content: {
 				'application/json': {
@@ -18,7 +17,6 @@ defineRouteMeta({
 		},
 		responses: {
 			'202': {
-				summary: 'Accepted',
 				description: 'The dataset was created successfully'
 			}
 		}

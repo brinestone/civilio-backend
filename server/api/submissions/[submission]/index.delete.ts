@@ -19,8 +19,8 @@ defineRouteMeta({
 		parameters: [
 			{ in: 'path', required: true, name: 'submission', description: 'The submission index', schema: { type: 'integer' } },
 			{ in: 'query', required: true, name: 'form', description: 'The form slug to identify the form', schema: { type: 'string' } },
-			{ in: 'query', name: 'fv', example: 'current', schema: { type: 'string' }, required: false, summary: 'The form version UUID', description: 'The form version to use, leave empty to use the current version' },
-			{ in: 'query', name: 'sv', example: 'current', schema: { type: 'string' }, required: false, summary: 'The submission version UUID', description: 'The submission version to use, leave empty to delete all versions, use "current" to delete the current version' },
+			{ in: 'query', name: 'fv', example: 'current', schema: { type: 'string' }, required: false,  description: 'The form version to use, leave empty to use the current version' },
+			{ in: 'query', name: 'sv', example: 'current', schema: { type: 'string' }, required: false,  description: 'The submission version to use, leave empty to delete all versions, use "current" to delete the current version' },
 		],
 		responses: {
 			'202': {

@@ -3,11 +3,12 @@ import z from "zod";
 defineRouteMeta({
 	openAPI: {
 		tags: ['Datasets'],
+		operationId: 'deleteDatasetItem',
 		summary: 'Delete a dataset Item',
 		description: 'Delete an item from a dataset',
 		parameters: [
-			{ summary: 'The dataset\'s ID', in: 'path', name: 'group', required: true },
-			{ summary: 'The item\'s ID', in: 'path', name: 'item', required: true }
+			{ description: 'The dataset\'s ID', in: 'path', name: 'group', required: true },
+			{ description: 'The item\'s ID', in: 'path', name: 'item', required: true }
 		]
 	}
 })

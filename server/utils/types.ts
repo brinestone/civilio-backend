@@ -135,19 +135,6 @@ export const FieldMappingSchema = z.object({
 });
 
 export const validationStatuses = z.enum(['validation_status_approved', 'validation_status_on_hold', 'validation_status_not_approved']);
-export const FormSubmissionSchema = z.object({
-  id: z.number(),
-  index: z.number(),
-  validationStatus: validationStatuses.optional().nullable(),
-  validationCode: z.string(),
-  facilityName: z.string().nullable(),
-  submissionTime: z.coerce.date(),
-  form: FormTypeSchema,
-  isValid: z.boolean(),
-  lastModifiedAt: z.coerce.date().nullable(),
-  lastModifiedBy: z.string().nullable(),
-  currentVersion: z.string().nullable(),
-});
 export const AppPrefsSchema = z.object({
   theme: ThemeSchema,
   locale: LocaleSchema,

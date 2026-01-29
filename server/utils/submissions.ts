@@ -1,6 +1,25 @@
 import { and, desc, eq, isNull, not, or, sql } from "drizzle-orm";
 import _ from "lodash";
 
+export async function lookupFormSubmissions({ limit, page, form, fv, sort }: LookupFormSubmissionsRequest) {
+	const db = provideDb();
+
+	const _sort = sort ?? { updatedAt: 'desc', recordedAt: 'desc' };
+
+	return await db.query.formSubmissions.findMany({
+		orderBy: _sort,
+		offset: page * limit,
+		limit,
+		with: {
+			currentVersion: {
+				columns: {
+					id: true,
+				}
+			}
+		}
+	});
+}
+
 async function getCurrentSubmissionVersionTx(conn: Connection | Transaction, form: string, index: number, formVersion: string) {
 	const result = await conn.query.submissionVersions.findFirst({
 		columns: { id: true },

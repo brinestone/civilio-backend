@@ -19,13 +19,12 @@ defineRouteMeta({
 		parameters: [
 			{ in: 'query', name: 'form', schema: { type: 'string' }, required: true, description: 'The form identifier' },
 			{ in: 'path', name: 'submission', schema: { type: 'integer' }, required: true, description: 'The submission index' },
-			{ in: 'query', name: 'fv', schema: { type: 'string' }, required: false, summary: 'The form version UUID', description: 'The form version to use, leave empty to use the latest or current version' },
-			{ in: 'query', name: 'sv', schema: { type: 'string' }, required: false, summary: 'The submission version UUID', description: 'The submission version to use, leave empty to use the latest or current version' },
+			{ in: 'query', name: 'fv', schema: { type: 'string' }, required: false, description: 'The form version to use, leave empty to use the latest or current version' },
+			{ in: 'query', name: 'sv', schema: { type: 'string' }, required: false, description: 'The submission version to use, leave empty to use the latest or current version' },
 		],
 		responses: {
 			'202': {
 				description: 'The status for the submission was toggled successfully',
-				summary: 'Operation successful'
 			}
 		}
 	}

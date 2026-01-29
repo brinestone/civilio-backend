@@ -42,7 +42,7 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 					for (const option of group.data.options) {
 						await ttx.insert(datasetItems)
 							.values({
-								groupId,
+								dataset: groupId,
 								label: option.label,
 								value: option.value,
 								i18nKey: option.i18nKey,
@@ -64,7 +64,7 @@ export async function upsertFormOptions(param: FormOptionsUpsertRequest) {
 						if (option.isNew) {
 							await ttx.insert(datasetItems)
 								.values({
-									groupId,
+									dataset: groupId,
 									label: option.label,
 									ordinal: option.ordinal,
 									value: option.value,

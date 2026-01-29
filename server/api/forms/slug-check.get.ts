@@ -11,7 +11,19 @@ defineRouteMeta({
 		description: 'Check whether a form slug is available',
 		parameters: [
 			{ in: 'query', name: 'slug', required: true, }
-		]
+		],
+		responses: {
+			'200': {
+				'description': 'OK',
+				content: {
+					'application/json': {
+						schema: {
+							$ref: '#/components/schemas/AvailabilityResponse'
+						}
+					}
+				}
+			},
+		}
 	}
 })
 export default defineEventHandler(async event => {

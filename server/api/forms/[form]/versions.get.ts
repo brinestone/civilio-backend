@@ -8,7 +8,43 @@ defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
 		summary: 'Lookup form versions',
-		description: 'Lookup versions for a form using its slug'
+		description: 'Lookup versions for a form using its slug',
+		operationId: 'lookupFormVersions',
+		responses: {
+			'200': {
+				description: 'OK',
+				content: {
+					'application/json': {
+						schema: {
+							type: 'array',
+							items: {
+								$ref: '#/components/schemas/FormVersionLookup'
+							}
+						}
+					}
+				}
+			}
+		},
+		$global: {
+			components: {
+				schemas: {
+					FormVersionLookup: {
+						description: 'Lookup for a form version',
+						type: "object",
+						required: ["label", "createdAt", "updatedAt", "id", "form", "isCurrent"],
+						properties: {
+							label: { type: "string" },
+							createdAt: { type: "string", format: "date-time" },
+							updatedAt: { type: "string", format: "date-time" },
+							id: { type: "string", format: 'uuid' },
+							form: { type: "string" },
+							parentId: { type: "string", nullable: true },
+							isCurrent: { type: "boolean" }
+						}
+					}
+				}
+			}
+		}
 	}
 })
 export default defineEventHandler(async event => {

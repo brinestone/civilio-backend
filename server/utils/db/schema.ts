@@ -15,6 +15,7 @@ import {
 	uniqueIndex,
 	uuid
 } from "drizzle-orm/pg-core";
+import { createSelectSchema } from "drizzle-zod";
 import { FormFieldTypeSchema } from "../dto";
 
 export const civilio = pgSchema("civilio").existing();
@@ -716,7 +717,8 @@ export const formSubmissions = civilio.table('form_submissions', {
 		columns: [t.formVersion],
 		foreignColumns: [formVersions.id]
 	}).onDelete('cascade').onUpdate('cascade'),
-	primaryKey({ columns: [t.index] })
+	primaryKey({ columns: [t.index] }),
+	index().on(t.validationCode).where(isNotNull(t.validationCode))
 ]);
 
 export const submissionVersions = civilio.table('submission_versions', {
@@ -790,6 +792,18 @@ export const relations = defineRelations({
 		versions: r.many.submissionVersions({
 			from: [r.formSubmissions.index],
 			to: [r.submissionVersions.index]
+		}),
+		form: r.one.formDefinitions({
+			from: r.formSubmissions.formVersion.through(r.formVersions.id),
+			to: r.formDefinitions.slug.through(r.formVersions.form)
+		}),
+		currentVersion: r.one.submissionVersions({
+			optional: true,
+			from: r.formSubmissions.index,
+			to: r.submissionVersions.index,
+			where: {
+				isCurrent: true
+			}
 		})
 	},
 	submissionVersions: {

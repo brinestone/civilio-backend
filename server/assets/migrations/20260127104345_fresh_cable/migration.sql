@@ -1,0 +1,1 @@
+CREATE INDEX "form_submissions_validation_code_index" ON "civilio"."form_submissions" ("validation_code") WHERE ("validation_code" is not null);
