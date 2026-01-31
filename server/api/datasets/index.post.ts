@@ -1,4 +1,9 @@
+import { defineEventHandler, readValidatedBody, setResponseStatus } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
 import { prettifyError } from "zod";
+import { upsertFormOptions } from "~/utils/datasets";
+import { FormOptionsUpsertRequestSchema } from "~/utils/dto";
+import Logger from "~/utils/logger";
 
 const bodySchema = FormOptionsUpsertRequestSchema;
 defineRouteMeta({
@@ -8,7 +13,6 @@ defineRouteMeta({
 		description: 'Creates a new dataset',
 		requestBody: {
 			required: true,
-			summary: 'Payload',
 			description: 'The payload for creating a dataset',
 			content: {
 				'application/json': {
@@ -18,7 +22,6 @@ defineRouteMeta({
 		},
 		responses: {
 			'202': {
-				summary: 'Accepted',
 				description: 'The dataset was created successfully'
 			}
 		}

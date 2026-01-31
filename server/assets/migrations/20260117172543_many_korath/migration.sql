@@ -1,1 +1,0 @@
-CREATE INDEX "choice_items_parent_value_index" ON "civilio"."choice_items" ("parent_value") WHERE ("parent_value" is not null);

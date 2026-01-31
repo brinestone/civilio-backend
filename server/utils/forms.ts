@@ -1,4 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
+import { provideDb } from "./db";
+import { formDefinitions, formVersions } from "./db/schema";
+import { Connection, Transaction } from "./types";
 
 export async function getCurrentFormVersionTx(conn: Connection | Transaction, form: string) {
 	const result = await conn.query.formVersions.findFirst({
@@ -25,6 +28,7 @@ export async function findFormDefinition(slug: string, version?: string) {
 	const db = provideDb();
 	if (version) {
 		return await db.query.formVersions.findFirst({
+			columns: { form: false },
 			where: {
 				AND: [
 					{ form: slug },
@@ -32,16 +36,21 @@ export async function findFormDefinition(slug: string, version?: string) {
 				]
 			},
 			with: {
-				sections: {
+				items: {
+					orderBy: {
+						position: 'asc'
+					},
 					with: {
-						fields: true
+						parent: {
+							columns: { id: true }
+						}
 					}
 				},
-				fields: true
 			}
-		})
+		});
 	}
 	return await db.query.formVersions.findFirst({
+		columns: { form: false },
 		where: {
 			AND: [
 				{ form: slug },
@@ -49,14 +58,18 @@ export async function findFormDefinition(slug: string, version?: string) {
 			]
 		},
 		with: {
-			sections: {
+			items: {
+				orderBy: {
+					position: 'asc'
+				},
 				with: {
-					fields: true
+					parent: {
+						columns: { id: true }
+					}
 				}
 			},
-			fields: true
 		}
-	})
+	});
 }
 
 export async function formSlugAvailable(slug: string) {

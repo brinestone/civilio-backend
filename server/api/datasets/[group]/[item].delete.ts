@@ -1,13 +1,18 @@
+import { defineEventHandler, setResponseStatus } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
+import { deleteOption } from "~/utils/datasets";
+import { validateZodRouterParams } from "~/utils/dto/zod";
 
 defineRouteMeta({
 	openAPI: {
 		tags: ['Datasets'],
+		operationId: 'deleteDatasetItem',
 		summary: 'Delete a dataset Item',
 		description: 'Delete an item from a dataset',
 		parameters: [
-			{ summary: 'The dataset\'s ID', in: 'path', name: 'group', required: true },
-			{ summary: 'The item\'s ID', in: 'path', name: 'item', required: true }
+			{ description: 'The dataset\'s ID', in: 'path', name: 'group', required: true },
+			{ description: 'The item\'s ID', in: 'path', name: 'item', required: true }
 		]
 	}
 })

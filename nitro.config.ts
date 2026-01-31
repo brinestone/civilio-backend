@@ -4,6 +4,7 @@ const compatibilityDate = "2026-01-03"
 
 // https://nitro.build/config
 export default defineNitroConfig({
+	imports: { autoImport: false },
 	routeRules: {
 		'/api/**': {
 			cors: true,

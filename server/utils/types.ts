@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { provideDb } from './db';
 
 export type Connection = ReturnType<typeof provideDb>;
 export type Transaction = Parameters<Parameters<Connection['transaction']>[0]>[0];
@@ -135,19 +136,6 @@ export const FieldMappingSchema = z.object({
 });
 
 export const validationStatuses = z.enum(['validation_status_approved', 'validation_status_on_hold', 'validation_status_not_approved']);
-export const FormSubmissionSchema = z.object({
-  id: z.number(),
-  index: z.number(),
-  validationStatus: validationStatuses.optional().nullable(),
-  validationCode: z.string(),
-  facilityName: z.string().nullable(),
-  submissionTime: z.coerce.date(),
-  form: FormTypeSchema,
-  isValid: z.boolean(),
-  lastModifiedAt: z.coerce.date().nullable(),
-  lastModifiedBy: z.string().nullable(),
-  currentVersion: z.string().nullable(),
-});
 export const AppPrefsSchema = z.object({
   theme: ThemeSchema,
   locale: LocaleSchema,
@@ -184,7 +172,6 @@ export type FieldMapping = z.infer<typeof FieldMappingSchema>;
 export type GeoPoint = z.infer<typeof GeoPointSchema>;
 export type FormType = z.infer<typeof FormTypeSchema>;
 export type AppConfig = z.infer<typeof AppConfigSchema>;
-export type FormSubmission = z.infer<typeof FormSubmissionSchema>;
 export type Option = z.infer<typeof OptionSchema>;
 export type ThemeMode = z.infer<typeof ThemeSchema>;
 export type Locale = z.infer<typeof LocaleSchema>;

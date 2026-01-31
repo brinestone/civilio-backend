@@ -1,3 +1,5 @@
+import { createError } from "h3";
+
 export type ErrorData = any;
 
 export type ErrorCode = 'resource_conflict' | 'unprocessible' | 'resource_not_found';

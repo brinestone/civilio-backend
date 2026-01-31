@@ -1,3 +1,7 @@
+import { validateZodRouterParams } from "~/utils/dto/zod";
+import { defineEventHandler, getRouterParam } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
+import { datasetGroupKeyAvailable } from "~/utils/datasets";
 import { z } from "zod";
 
 defineRouteMeta({
@@ -5,15 +9,42 @@ defineRouteMeta({
 		tags: ['Datasets'],
 		description: 'Check if dataset key is available',
 		summary: 'Key check',
+		$global: {
+			components: {
+				schemas: {
+					AvailabilityResponse: {
+						type: 'object',
+						required: ['available'],
+						properties: {
+							available: {
+								type: 'boolean'
+							}
+						}
+					}
+				}
+			}
+		},
 		parameters: [
 			{
 				in: 'query',
 				name: 'key',
-				summary: 'Dataset Key',
+				description: 'Dataset Key',
 				required: true,
 				example: 'commune'
 			}
-		]
+		],
+		responses: {
+			'200': {
+				'description': 'OK',
+				content: {
+					'application/json': {
+						schema: {
+							$ref: '#/components/schemas/AvailabilityResponse'
+						}
+					}
+				}
+			},
+		}
 	}
 });
 
