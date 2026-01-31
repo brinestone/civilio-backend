@@ -609,7 +609,7 @@ export const vwFacilities = civilio.view("vw_facilities", {
 								c.q1_02_division::TEXT) AS info
 `);
 
-export const formDefinitions = civilio.table('form_definitions', {
+export const forms = civilio.table('form_definitions', {
 	slug: text().notNull(),
 	logo: text(),
 	label: text().notNull(),
@@ -640,7 +640,7 @@ export const formVersions = civilio.table('form_versions', {
 		.onUpdate('cascade'),
 	foreignKey({
 		columns: [t.form],
-		foreignColumns: [formDefinitions.slug]
+		foreignColumns: [forms.slug]
 	}).onDelete('cascade')
 		.onUpdate('cascade'),
 	index().on(t.form),
@@ -683,7 +683,7 @@ export const formVersionItems = civilio.table('form_version_items', {
 	index().on(t.parentId).where(isNotNull(t.parentId)),
 	foreignKey({
 		columns: [t.form],
-		foreignColumns: [formDefinitions.slug]
+		foreignColumns: [forms.slug]
 	}).onDelete('cascade').onUpdate('cascade'),
 	foreignKey({
 		columns: [t.formVersion, t.form],
@@ -710,7 +710,7 @@ export const formSubmissions = civilio.table('form_submissions', {
 	}).onDelete('cascade').onUpdate('cascade'),
 	foreignKey({
 		columns: [t.form],
-		foreignColumns: [formDefinitions.slug]
+		foreignColumns: [forms.slug]
 	}).onDelete('cascade').onUpdate('cascade')
 ]);
 
@@ -743,7 +743,7 @@ export const submissionVersions = civilio.table('submission_versions', {
 	}).onUpdate('cascade').onDelete('cascade'),
 	foreignKey({
 		columns: [t.form],
-		foreignColumns: [formDefinitions.slug]
+		foreignColumns: [forms.slug]
 	}).onUpdate('cascade')
 ]);
 
@@ -772,12 +772,12 @@ export const submissionResponses = civilio.table('submission_responses', {
 		.onUpdate('cascade'),
 	foreignKey({
 		columns: [t.form],
-		foreignColumns: [formDefinitions.slug]
+		foreignColumns: [forms.slug]
 	}).onUpdate('cascade'),
 ]);
 
 export const relations = defineRelations({
-	formDefinitions,
+	formDefinitions: forms,
 	formVersions,
 	formItems,
 	formSubmissions,

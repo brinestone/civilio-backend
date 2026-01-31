@@ -59,10 +59,11 @@ defineRouteMeta({
 							relevance: { $ref: '#/components/schemas/RelevanceDefinition', nullable: true },
 							meta: { type: 'object', additionalProperties: true, },
 							position: { type: 'integer' },
-							parent: {
-								type: 'object',
-								nullable: true,
-								$ref: '#/components/schemas/FormItemParentRef'
+							children: {
+								type: 'array',
+								items: {
+									$ref: '#/components/schemas/FormItemParentRef'
+								}
 							}
 						},
 						required: ['id', 'type', 'title', 'position']

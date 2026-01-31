@@ -1,6 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 import { provideDb } from "./db";
-import { formDefinitions, formVersions } from "./db/schema";
+import { forms, formVersions } from "./db/schema";
 import { Connection, Transaction } from "./types";
 
 export async function getCurrentFormVersionTx(conn: Connection | Transaction, form: string) {
@@ -41,9 +41,7 @@ export async function findFormDefinition(slug: string, version?: string) {
 						position: 'asc'
 					},
 					with: {
-						parent: {
-							columns: { id: true }
-						}
+						children: true
 					}
 				},
 			}
@@ -63,9 +61,7 @@ export async function findFormDefinition(slug: string, version?: string) {
 					position: 'asc'
 				},
 				with: {
-					parent: {
-						columns: { id: true }
-					}
+					children: true
 				}
 			},
 		}
@@ -76,8 +72,8 @@ export async function formSlugAvailable(slug: string) {
 	const db = provideDb();
 	const result = await db.execute<{ exists: boolean }>(sql`
     SELECT NOT EXISTS(SELECT 1
-                  FROM ${formDefinitions}
-                  WHERE ${eq(formDefinitions.slug, slug)}) AS "exists"
+                  FROM ${forms}
+                  WHERE ${eq(forms.slug, slug)}) AS "exists"
   `);
 	return result.rows[0].exists;
 }
