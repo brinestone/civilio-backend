@@ -1,4 +1,4 @@
-import { H3Event } from "h3";
+import { createError, getValidatedQuery, getValidatedRouterParams, H3Event } from "h3";
 import z from "zod";
 
 export async function validateZodQueryParams<T extends z.ZodType>(event: H3Event, schema: T) {

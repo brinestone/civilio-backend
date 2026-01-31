@@ -1,4 +1,6 @@
 import { defineNitroPlugin } from 'nitropack/runtime';
+import Logger from '~/utils/logger';
+import { requestLogger } from '~/utils/logging';
 
 export default defineNitroPlugin((nitroApp) => {
   // Add request logging middleware

@@ -1,4 +1,9 @@
+import { validateZodRouterParams, validateZodQueryParams } from "~/utils/dto/zod";
+import { defineEventHandler } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
+import { ExecutionError, fromExecutionError } from "~/utils/errors";
+import { findSubmissionResponses } from "~/utils/submissions";
 
 const pathSchema = z.object({
 	submission: z.coerce.number()
@@ -22,51 +27,57 @@ defineRouteMeta({
 			{ in: 'query', name: 'sv', schema: { type: 'string', format: 'uuid' }, required: false },
 			{ in: 'query', name: 'form', required: true }
 		],
+		$global: {
+			components: {
+				schemas: {
+					SubmissionResponse: {
+						type: 'object',
+						description: 'A single submission response',
+						properties: {
+							submissionIndex: {
+								type: 'integer',
+								format: 'int64',
+								description: 'The index of the submission'
+							},
+							fieldId: {
+								type: 'string',
+								format: 'uuid',
+								description: 'UUID of the form field'
+							},
+							formVersion: {
+								type: 'string',
+								format: 'uuid',
+								description: 'UUID of the form version'
+							},
+							submissionVersionId: {
+								type: 'string',
+								format: 'uuid',
+								description: 'UUID of the submission version (response_id in database)'
+							},
+							form: {
+								type: 'string',
+								description: 'The form identifier/slug'
+							},
+							value: {
+								type: ['string', 'null'],
+								description: 'The response value for the field'
+							}
+						},
+						required: ['submissionIndex', 'fieldId', 'formVersion', 'submissionVersionId', 'form']
+					}
+				}
+			}
+		},
 		responses: {
 			'200': {
 				description: 'OK',
 				content: {
 					'application/json': {
 						schema: {
-							type: "array",
+							type: 'array',
+							description: 'Array of submission responses',
 							items: {
-								type: "object",
-								required: ["formVersion", "fieldId", "submissionIndex", "responseVersionId", "value", "field"],
-								properties: {
-									formVersion: { type: "string" },
-									fieldId: { type: "string" },
-									submissionIndex: { type: "number" },
-									responseVersionId: { type: "string" },
-									value: { type: "string", nullable: true },
-									field: {
-										type: "object",
-										nullable: true,
-										required: [
-											"formVersion", "readonly", "description", "createdAt", "updatedAt",
-											"fieldId", "title", "sectionKey", "span", "relevance", "fieldType"
-										],
-										properties: {
-											formVersion: { type: "string" },
-											readonly: { type: "boolean", nullable: true },
-											description: { type: "string", nullable: true },
-											createdAt: { type: "string", format: "date-time" },
-											updatedAt: { type: "string", format: "date-time" },
-											fieldId: { type: "string" },
-											title: { type: "string" },
-											sectionKey: { type: "string", nullable: true },
-											span: { type: "number", nullable: true },
-											relevance: { type: "object" },
-											fieldType: {
-												type: "string",
-												enum: [
-													"number", "boolean", "date", "file", "url", "text",
-													"multiline", "date-time", "email", "geo-point",
-													"single-select", "multi-select", "phone"
-												]
-											}
-										}
-									}
-								}
+								$ref: '#/components/schema/SubmissionResponse'
 							}
 						}
 					}

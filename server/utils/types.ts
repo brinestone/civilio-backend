@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { provideDb } from './db';
 
 export type Connection = ReturnType<typeof provideDb>;
 export type Transaction = Parameters<Parameters<Connection['transaction']>[0]>[0];
@@ -171,7 +172,6 @@ export type FieldMapping = z.infer<typeof FieldMappingSchema>;
 export type GeoPoint = z.infer<typeof GeoPointSchema>;
 export type FormType = z.infer<typeof FormTypeSchema>;
 export type AppConfig = z.infer<typeof AppConfigSchema>;
-export type FormSubmission = z.infer<typeof FormSubmissionSchema>;
 export type Option = z.infer<typeof OptionSchema>;
 export type ThemeMode = z.infer<typeof ThemeSchema>;
 export type Locale = z.infer<typeof LocaleSchema>;

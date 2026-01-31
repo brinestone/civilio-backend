@@ -3,3 +3,7 @@ logs
 node_modules
 README.md
 drizzle.config.ts
+.tool-versions
+docs
+.idea
+.vscode

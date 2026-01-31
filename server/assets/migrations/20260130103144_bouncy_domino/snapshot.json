@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "b6cdec9c-8a1b-4dcd-a06d-bd304e1986e0",
+  "id": "2b36adfb-1cf9-4c6b-9a2a-10d24140b3dc",
   "prevIds": [
-    "8ef91534-44db-4d26-9246-c072946c0804"
+    "9076b01b-1387-4fac-a215-7500da3cf440"
   ],
   "ddl": [
     {
@@ -16,6 +16,39 @@
       "name": "change_op",
       "entityType": "enums",
       "schema": "revisions"
+    },
+    {
+      "values": [
+        "text",
+        "multiline",
+        "date",
+        "date-time",
+        "email",
+        "url",
+        "geo-point",
+        "single-select",
+        "multi-select",
+        "file",
+        "number",
+        "phone",
+        "boolean"
+      ],
+      "name": "form_field_type",
+      "entityType": "enums",
+      "schema": "civilio"
+    },
+    {
+      "values": [
+        "field",
+        "note",
+        "image",
+        "group",
+        "list",
+        "separator"
+      ],
+      "name": "form_item_type",
+      "entityType": "enums",
+      "schema": "civilio"
     },
     {
       "values": [
@@ -35,19 +68,19 @@
     },
     {
       "isRlsEnabled": false,
-      "name": "choice_groups",
-      "entityType": "tables",
-      "schema": "civilio"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "choice_items",
-      "entityType": "tables",
-      "schema": "civilio"
-    },
-    {
-      "isRlsEnabled": false,
       "name": "choices",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "dataset_items",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "datasets",
       "entityType": "tables",
       "schema": "civilio"
     },
@@ -71,13 +104,37 @@
     },
     {
       "isRlsEnabled": false,
-      "name": "form_fields",
+      "name": "form_items",
       "entityType": "tables",
       "schema": "civilio"
     },
     {
       "isRlsEnabled": false,
-      "name": "form_sections",
+      "name": "form_submissions",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "form_version_items",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "form_versions",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "submission_responses",
+      "entityType": "tables",
+      "schema": "civilio"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "submission_versions",
       "entityType": "tables",
       "schema": "civilio"
     },
@@ -145,214 +202,6 @@
       "entityType": "columns",
       "schema": "revisions",
       "table": "ledger"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "title",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "parent_id",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "description",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "key",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_groups"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "label",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "value",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "parentValue",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "i18n_key",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "group_id",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "ordinal",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "choice_items"
     },
     {
       "type": "text",
@@ -457,6 +306,214 @@
       "entityType": "columns",
       "schema": "civilio",
       "table": "choices"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "label",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "value",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_value",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "i18n_key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "dataset_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "ordinal",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "dataset_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "title",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "key",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "datasets"
     },
     {
       "type": "text",
@@ -703,7 +760,7 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "name",
+      "name": "slug",
       "entityType": "columns",
       "schema": "civilio",
       "table": "form_definitions"
@@ -716,7 +773,7 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "icon",
+      "name": "logo",
       "entityType": "columns",
       "schema": "civilio",
       "table": "form_definitions"
@@ -787,71 +844,6 @@
       "table": "form_definitions"
     },
     {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "form_name",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": "false",
-      "generated": null,
-      "identity": null,
-      "name": "readonly",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
       "type": "text",
       "typeSchema": null,
       "notNull": true,
@@ -862,20 +854,7 @@
       "name": "title",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "t_translated",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_items"
     },
     {
       "type": "text",
@@ -888,46 +867,20 @@
       "name": "description",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_items"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "d_translated",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
+      "type": "form_item_type",
+      "typeSchema": "civilio",
       "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "section_key",
+      "name": "type",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": "12",
-      "generated": null,
-      "identity": null,
-      "name": "span",
-      "entityType": "columns",
-      "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_items"
     },
     {
       "type": "jsonb",
@@ -940,20 +893,85 @@
       "name": "relevance",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_items"
     },
     {
-      "type": "text",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_items"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "meta",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_items"
+    },
+    {
+      "type": "integer",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "key",
+      "name": "position",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_items"
+    },
+    {
+      "type": "bigserial",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "_index",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_submissions"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "recorded_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_submissions"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form_version",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_submissions"
     },
     {
       "type": "text",
@@ -966,7 +984,20 @@
       "name": "form",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_submissions"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "item_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_version_items"
     },
     {
       "type": "text",
@@ -976,10 +1007,36 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "title",
+      "name": "form",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_version_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form_version",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_version_items"
     },
     {
       "type": "jsonb",
@@ -989,10 +1046,36 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "relevance",
+      "name": "meta",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_version_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_versions"
     },
     {
       "type": "timestamp",
@@ -1005,7 +1088,7 @@
       "name": "created_at",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_versions"
     },
     {
       "type": "timestamp",
@@ -1018,7 +1101,215 @@
       "name": "updated_at",
       "entityType": "columns",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_versions"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "is_current",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "type": "bigint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "submission_index",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "field_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form_version",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "response_id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "value",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "bigint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "submission_index",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form_version",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "validation_code",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "recorded_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "approved_at",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "is_current",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "form",
+      "entityType": "columns",
+      "schema": "civilio",
+      "table": "submission_versions"
     },
     {
       "nameExplicit": false,
@@ -1059,22 +1350,22 @@
       "nameExplicit": false,
       "columns": [
         {
-          "value": "key",
+          "value": "parent_value",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
           "opclass": null
         }
       ],
-      "isUnique": true,
-      "where": null,
+      "isUnique": false,
+      "where": "(\"parent_value\" is not null)",
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "choice_groups_key_index",
+      "name": "dataset_items_parent_value_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "choice_groups"
+      "table": "dataset_items"
     },
     {
       "nameExplicit": false,
@@ -1092,16 +1383,16 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "choice_items_id_index",
+      "name": "dataset_items_id_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "choice_items"
+      "table": "dataset_items"
     },
     {
       "nameExplicit": false,
       "columns": [
         {
-          "value": "group_id",
+          "value": "dataset_id",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1120,10 +1411,52 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "choice_items_group_id_value_index",
+      "name": "dataset_items_dataset_id_value_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "choice_items"
+      "table": "dataset_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "parent_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"parent_id\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "datasets_parent_id_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "datasets"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "key",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "datasets_key_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "datasets"
     },
     {
       "nameExplicit": false,
@@ -1318,7 +1651,7 @@
       "nameExplicit": false,
       "columns": [
         {
-          "value": "name",
+          "value": "slug",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1330,7 +1663,7 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_definitions_name_index",
+      "name": "form_definitions_slug_index",
       "entityType": "indexes",
       "schema": "civilio",
       "table": "form_definitions"
@@ -1381,27 +1714,6 @@
       "nameExplicit": false,
       "columns": [
         {
-          "value": "form_name",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "form_fields_form_name_index",
-      "entityType": "indexes",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        {
           "value": "title",
           "isExpression": false,
           "asc": true,
@@ -1414,10 +1726,10 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_fields_title_index",
+      "name": "form_items_title_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_items"
     },
     {
       "nameExplicit": false,
@@ -1435,58 +1747,16 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_fields_description_index",
+      "name": "form_items_description_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_items"
     },
     {
       "nameExplicit": false,
       "columns": [
         {
-          "value": "t_translated",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": "(\"description\" is not null)",
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "form_fields_t_translated_index",
-      "entityType": "indexes",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        {
-          "value": "d_translated",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": "(\"description\" is not null)",
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "form_fields_d_translated_index",
-      "entityType": "indexes",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        {
-          "value": "section_key",
+          "value": "form",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1498,16 +1768,16 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_fields_section_key_index",
+      "name": "form_submissions_form_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_submissions"
     },
     {
       "nameExplicit": false,
       "columns": [
         {
-          "value": "title",
+          "value": "form_version",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1519,16 +1789,23 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_sections_title_index",
+      "name": "form_submissions_form_version_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_submissions"
     },
     {
       "nameExplicit": false,
       "columns": [
         {
-          "value": "key",
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "form_version",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1540,16 +1817,310 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_sections_key_index",
+      "name": "form_submissions_form_form_version_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_submissions"
     },
     {
       "nameExplicit": false,
       "columns": [
         {
-          "value": "key",
+          "value": "item_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_version_items_item_id_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_version_items_form_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form_version",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_version_items_form_version_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "parent_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"parent_id\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_version_items_parent_id_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_versions_form_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "parent_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "(\"parent_id\" is not null)",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_versions_parent_id_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_responses_form_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "field_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_responses_field_id_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form_version",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_responses_form_version_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "response_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_responses_response_id_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "validation_code",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_versions_validation_code_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_versions_form_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "submission_index",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_versions_submission_index_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form_version",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_versions_form_version_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "submission_index",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1563,15 +2134,60 @@
           "opclass": null
         }
       ],
-      "isUnique": true,
+      "isUnique": false,
       "where": null,
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "form_sections_key_form_index",
+      "name": "submission_versions_submission_index_form_index",
       "entityType": "indexes",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "form_version",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "form",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_versions_form_version_form_index",
+      "entityType": "indexes",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "dataset_id"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "datasets",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "dataset_items_dataset_id_datasets_id_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "dataset_items"
     },
     {
       "nameExplicit": false,
@@ -1579,69 +2195,35 @@
         "parent_id"
       ],
       "schemaTo": "civilio",
-      "tableTo": "choice_groups",
+      "tableTo": "datasets",
       "columnsTo": [
         "id"
       ],
       "onUpdate": "CASCADE",
       "onDelete": "SET NULL",
-      "name": "choice_groups_parent_id_choice_groups_id_fkey",
+      "name": "datasets_parent_id_datasets_id_fkey",
       "entityType": "fks",
       "schema": "civilio",
-      "table": "choice_groups"
+      "table": "datasets"
     },
     {
       "nameExplicit": false,
       "columns": [
-        "group_id"
+        "form_version",
+        "form"
       ],
       "schemaTo": "civilio",
-      "tableTo": "choice_groups",
+      "tableTo": "form_versions",
       "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "CASCADE",
-      "onDelete": "CASCADE",
-      "name": "choice_items_group_id_choice_groups_id_fkey",
-      "entityType": "fks",
-      "schema": "civilio",
-      "table": "choice_items"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "form_name"
-      ],
-      "schemaTo": "civilio",
-      "tableTo": "form_definitions",
-      "columnsTo": [
-        "name"
-      ],
-      "onUpdate": "CASCADE",
-      "onDelete": "CASCADE",
-      "name": "form_fields_form_name_form_definitions_name_fkey",
-      "entityType": "fks",
-      "schema": "civilio",
-      "table": "form_fields"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "section_key",
-        "form_name"
-      ],
-      "schemaTo": "civilio",
-      "tableTo": "form_sections",
-      "columnsTo": [
-        "key",
+        "id",
         "form"
       ],
       "onUpdate": "CASCADE",
       "onDelete": "CASCADE",
-      "name": "form_fields_section_key_form_name_form_sections_key_form_fkey",
+      "name": "form_submissions_form_version_form_form_versions_id_form_fkey",
       "entityType": "fks",
       "schema": "civilio",
-      "table": "form_fields"
+      "table": "form_submissions"
     },
     {
       "nameExplicit": false,
@@ -1651,25 +2233,234 @@
       "schemaTo": "civilio",
       "tableTo": "form_definitions",
       "columnsTo": [
-        "name"
+        "slug"
       ],
       "onUpdate": "CASCADE",
       "onDelete": "CASCADE",
-      "name": "form_sections_form_form_definitions_name_fkey",
+      "name": "form_submissions_form_form_definitions_slug_fkey",
       "entityType": "fks",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_submissions"
     },
     {
+      "nameExplicit": false,
       "columns": [
-        "group_id",
+        "item_id"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_items",
+      "columnsTo": [
         "id"
       ],
-      "nameExplicit": false,
-      "name": "choice_items_pkey",
-      "entityType": "pks",
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_version_items_item_id_form_items_id_fkey",
+      "entityType": "fks",
       "schema": "civilio",
-      "table": "choice_items"
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form_version",
+        "parent_id"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_version_items",
+      "columnsTo": [
+        "form_version",
+        "item_id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "SET NULL",
+      "name": "form_version_items_fU9TFYVa3lSA_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_definitions",
+      "columnsTo": [
+        "slug"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_version_items_form_form_definitions_slug_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form_version",
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_versions",
+      "columnsTo": [
+        "id",
+        "form"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_version_items_form_version_form_form_versions_id_form_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "parent_id",
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_versions",
+      "columnsTo": [
+        "id",
+        "form"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "name": "form_versions_parent_id_form_form_versions_id_form_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_definitions",
+      "columnsTo": [
+        "slug"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "form_versions_form_form_definitions_slug_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "response_id",
+        "form_version",
+        "submission_index",
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "submission_versions",
+      "columnsTo": [
+        "id",
+        "form_version",
+        "submission_index",
+        "form"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "name": "submission_responses_tPteqUmlUlJA_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "field_id"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_items",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "submission_responses_field_id_form_items_id_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_definitions",
+      "columnsTo": [
+        "slug"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "NO ACTION",
+      "name": "submission_responses_form_form_definitions_slug_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "submission_index",
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_submissions",
+      "columnsTo": [
+        "_index",
+        "form"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "submission_versions_qHwtaP0jzrzD_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form_version",
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_versions",
+      "columnsTo": [
+        "id",
+        "form"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "CASCADE",
+      "name": "submission_versions_YhadBCm4auX1_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        "form"
+      ],
+      "schemaTo": "civilio",
+      "tableTo": "form_definitions",
+      "columnsTo": [
+        "slug"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "NO ACTION",
+      "name": "submission_versions_form_form_definitions_slug_fkey",
+      "entityType": "fks",
+      "schema": "civilio",
+      "table": "submission_versions"
     },
     {
       "columns": [
@@ -1682,6 +2473,17 @@
       "entityType": "pks",
       "schema": "civilio",
       "table": "choices"
+    },
+    {
+      "columns": [
+        "dataset_id",
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "dataset_items_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "dataset_items"
     },
     {
       "columns": [
@@ -1710,7 +2512,7 @@
     },
     {
       "columns": [
-        "name"
+        "slug"
       ],
       "nameExplicit": false,
       "name": "form_definitions_pkey",
@@ -1720,23 +2522,71 @@
     },
     {
       "columns": [
-        "key",
+        "_index",
         "form"
       ],
       "nameExplicit": false,
-      "name": "form_sections_pkey",
+      "name": "form_submissions_pkey",
       "entityType": "pks",
       "schema": "civilio",
-      "table": "form_sections"
+      "table": "form_submissions"
+    },
+    {
+      "columns": [
+        "form_version",
+        "item_id"
+      ],
+      "nameExplicit": false,
+      "name": "form_version_items_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "form_version_items"
+    },
+    {
+      "columns": [
+        "id",
+        "form"
+      ],
+      "nameExplicit": false,
+      "name": "form_versions_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "form_versions"
+    },
+    {
+      "columns": [
+        "submission_index",
+        "field_id",
+        "form_version",
+        "response_id"
+      ],
+      "nameExplicit": false,
+      "name": "submission_responses_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "submission_responses"
+    },
+    {
+      "columns": [
+        "id",
+        "form_version",
+        "submission_index",
+        "form"
+      ],
+      "nameExplicit": false,
+      "name": "submission_versions_pkey",
+      "entityType": "pks",
+      "schema": "civilio",
+      "table": "submission_versions"
     },
     {
       "columns": [
         "id"
       ],
       "nameExplicit": false,
-      "name": "choice_groups_pkey",
+      "name": "datasets_pkey",
       "schema": "civilio",
-      "table": "choice_groups",
+      "table": "datasets",
       "entityType": "pks"
     },
     {
@@ -1744,9 +2594,9 @@
         "id"
       ],
       "nameExplicit": false,
-      "name": "form_fields_pkey",
+      "name": "form_items_pkey",
       "schema": "civilio",
-      "table": "form_fields",
+      "table": "form_items",
       "entityType": "pks"
     },
     {

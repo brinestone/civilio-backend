@@ -1,3 +1,10 @@
+import { validateZodQueryParams } from "~/utils/dto/zod";
+import { defineEventHandler } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
+import { LookupFormSubmissionsRequestSchema } from "~/utils/dto";
+import { ExecutionError, fromExecutionError } from "~/utils/errors";
+import { lookupFormSubmissions } from "~/utils/submissions";
+
 defineRouteMeta({
 	openAPI: {
 		summary: 'Lookup submissions',
@@ -11,6 +18,39 @@ defineRouteMeta({
 			{ in: 'query', required: false, schema: { type: 'string', format: 'uuid' }, name: 'fv', description: 'A form version identifier' },
 			{ in: 'query', required: false, schema: { type: 'string' }, name: 'sort', description: 'A JSON string expressing sorting orders' },
 		],
+		$global: {
+			components: {
+				schemas: {
+					SubmissionVersionLookup: {
+						type: 'object',
+						required: ['id', 'recordedAt', 'validationCode', 'isCurrent'],
+						properties: {
+							id: { type: 'string', format: 'uuid' },
+							isCurrent: { type: 'boolean' },
+							recordedAt: { type: 'string', format: 'date-time' },
+							validationCode: { type: 'string' },
+							approvedAt: { type: 'string', format: 'date-time' }
+						}
+					},
+					SubmissionLookup: {
+						type: 'object',
+						required: ['form', 'formVersion', 'index', 'recordedAt', 'versions'],
+						properties: {
+							form: { type: 'string' },
+							formVersion: { type: 'string', format: 'uuid' },
+							index: { type: 'integer' },
+							recordedAt: { type: 'string', format: 'date-time' },
+							versions: {
+								type: 'array',
+								items: {
+									$ref: '#/components/schemas/SubmissionVersionLookup'
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		responses: {
 			'200': {
 				description: 'OK',
@@ -19,38 +59,7 @@ defineRouteMeta({
 						schema: {
 							type: "array",
 							items: {
-								type: "object",
-								required: ["updatedAt", "formVersion", "index", "recordedAt"],
-								properties: {
-									updatedAt: {
-										type: "string",
-										format: "date-time"
-									},
-									formVersion: {
-										type: "string"
-									},
-									index: {
-										type: "integer"
-									},
-									validationCode: {
-										type: "string",
-										nullable: true
-									},
-									recordedAt: {
-										type: "string",
-										format: "date-time"
-									},
-									currentVersion: {
-										type: "object",
-										nullable: true,
-										properties: {
-											id: {
-												type: "string",
-												format: "uuid"
-											}
-										}
-									}
-								}
+								$ref: '#/components/schemas/SubmissionLookup'
 							}
 						}
 					}

@@ -1,4 +1,9 @@
+import { defineEventHandler } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
+import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
+import { ExecutionError, fromExecutionError, NotFoundError } from "~/utils/errors";
+import { findFormDefinition } from "~/utils/forms";
 
 const pathSchema = z.object({
 	form: z.string().trim().nonempty()
@@ -19,129 +24,60 @@ defineRouteMeta({
 		$global: {
 			components: {
 				schemas: {
-					FormSection: {
-						type: "object",
+					FormVersionDefinition: {
+						type: 'object',
+						additionalProperties: false,
 						properties: {
-							key: {
-								type: "string"
+							id: { type: 'string', format: 'uuid' },
+							parentId: { nullable: true, type: 'string', format: 'uuid' },
+							items: { nullable: false, type: 'array', items: { $ref: '#/components/schemas/FormItemDefinition' } }
+						},
+						required: ['id', 'items']
+					},
+					FormItemParentRef: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['id'],
+						properties: {
+							id: { type: 'string', format: 'uuid' }
+						}
+					},
+					FormItemDefinition: {
+						type: 'object',
+						additionalProperties: false,
+						properties: {
+							type: {
+								type: 'string',
+								enum: ["field", "note", "image", "group", "list", "separator"]
 							},
-							title: {
-								type: "string"
+							description: {
+								type: 'string',
+								nullable: true,
 							},
-							relevance: {
-								type: ["object", "null"]
-							},
-							createdAt: {
-								type: "string",
-								format: "date-time"
-							},
-							updatedAt: {
-								type: "string",
-								format: "date-time"
-							},
-							formVersion: {
-								type: "string",
-								format: "uuid"
-							},
-							fields: {
-								type: "array",
-								items: {
-									$ref: "#/components/schemas/FormField"
-								}
+							id: { type: 'string', format: 'uuid' },
+							title: { type: 'string' },
+							relevance: { $ref: '#/components/schemas/RelevanceDefinition', nullable: true },
+							meta: { type: 'object', additionalProperties: true, },
+							position: { type: 'integer' },
+							parent: {
+								type: 'object',
+								nullable: true,
+								$ref: '#/components/schemas/FormItemParentRef'
 							}
 						},
-						required: ["key", "title", "createdAt", "updatedAt", "formVersion", "fields"]
+						required: ['id', 'type', 'title', 'position']
 					},
 					RelevanceDefinition: {
 						type: 'object',
-						additionalProperties: { type: 'string' }
-					},
-					FormField: {
-						type: "object",
+						additionalProperties: true,
 						properties: {
-							fieldId: {
-								type: "string",
-								format: "uuid"
+							dependencies: {
+								type: 'array',
+								items: { type: 'string' }
 							},
-							createdAt: {
-								type: "string",
-								format: "date-time"
-							},
-							updatedAt: {
-								type: "string",
-								format: "date-time"
-							},
-							readonly: {
-								type: "boolean"
-							},
-							title: {
-								type: "string"
-							},
-							description: {
-								type: ["string", "null"]
-							},
-							sectionKey: {
-								type: ["string", "null"]
-							},
-							span: {
-								type: "integer"
-							},
-							relevance: {
-								$ref: '#/components/schemas/RelevanceDefinition'
-							},
-							formVersion: {
-								type: "string",
-								format: "uuid"
-							},
-							fieldType: {
-								type: "string"
-							}
 						},
-						required: ["fieldId", "createdAt", "updatedAt", "title", "formVersion", "fieldType"]
-					},
-					FormDefinition: {
-						type: "object",
-						properties: {
-							id: {
-								type: "string",
-								format: "uuid"
-							},
-							label: {
-								type: "string"
-							},
-							form: {
-								type: "string"
-							},
-							createdAt: {
-								type: "string",
-								format: "date-time"
-							},
-							updatedAt: {
-								type: "string",
-								format: "date-time"
-							},
-							parentId: {
-								type: ["string", "null"],
-								format: "uuid"
-							},
-							isCurrent: {
-								type: "boolean"
-							},
-							sections: {
-								type: "array",
-								items: {
-									$ref: '#/components/schemas/FormSection'
-								}
-							},
-							fields: {
-								type: "array",
-								items: {
-									$ref: "#/components/schemas/FormField"
-								}
-							}
-						},
-						required: ["id", "label", "form", "createdAt", "updatedAt", "isCurrent", "sections", "fields"]
-					},
+						required: ['logic', 'dependencies']
+					}
 				}
 			}
 		},
@@ -151,7 +87,7 @@ defineRouteMeta({
 				content: {
 					'application/json': {
 						schema: {
-							$ref: '#/components/schemas/FormDefinition'
+							$ref: '#/components/schemas/FormVersionDefinition'
 						}
 					}
 				}

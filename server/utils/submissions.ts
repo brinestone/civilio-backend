@@ -1,21 +1,33 @@
-import { and, desc, eq, isNull, not, or, sql } from "drizzle-orm";
-import _ from "lodash";
+import { and, desc, eq, sql } from "drizzle-orm";
+import { DeleteSubmissionRequest, LookupFormSubmissionsRequest, ToggleApprovalStatusRequest } from "./dto";
+import { provideDb } from "./db";
+import { Connection, Transaction } from "./types";
+import { submissionVersions, formVersions, submissionResponses, formSubmissions, deltaChanges } from "./db/schema";
+import { NotFoundError, UnprocessibleError } from "./errors";
+import { formVersionExistsTx, getCurrentFormVersionTx } from "./forms";
+import Logger from "./logger";
 
 export async function lookupFormSubmissions({ limit, page, form, fv, sort }: LookupFormSubmissionsRequest) {
 	const db = provideDb();
 
-	const _sort = sort ?? { updatedAt: 'desc', recordedAt: 'desc' };
+	const _sort = sort ?? { recordedAt: 'desc' };
 
 	return await db.query.formSubmissions.findMany({
 		orderBy: _sort,
 		offset: page * limit,
 		limit,
 		with: {
-			currentVersion: {
+			versions: {
 				columns: {
-					id: true,
+					index: false,
+					formVersion: false,
+					form: false
 				}
 			}
+		},
+		where: {
+			form,
+			formVersion: fv
 		}
 	});
 }
@@ -36,10 +48,29 @@ async function getCurrentSubmissionVersionTx(conn: Connection | Transaction, for
 	return result || null;
 }
 
+/**
+ * Retrieves all submission responses for a specific submission and form version.
+ * 
+ * @param form - The identifier of the form
+ * @param submissionIndex - The index of the submission within the form
+ * @param formVersion - Optional specific form version ID. If not provided, uses the current version
+ * @param submissionVersion - Optional specific submission version ID. If not provided, uses the current version
+ * 
+ * @returns A promise that resolves to an array of submission response objects
+ * 
+ * @throws {NotFoundError} If the specified form version does not exist
+ * @throws {NotFoundError} If the form has no current version or does not exist
+ * @throws {Error} If the specified submission version does not exist
+ * @throws {NotFoundError} If no submission version exists for the given submission index, or if the form, form version, or submission does not exist
+ * 
+ * @example
+ * const responses = await findSubmissionResponses('form-123', 0);
+ * const responsesWithVersion = await findSubmissionResponses('form-123', 0, 'v1', 'v1-sub');
+ */
 export async function findSubmissionResponses(form: string, submissionIndex: number, formVersion?: string, submissionVersion?: string) {
 	const db = provideDb();
 
-	let formVersionId: string | null;
+	let formVersionId: string;
 	if (formVersion) {
 		const formVersionExists = await formVersionExistsTx(db, form, formVersion);
 		if (!formVersionExists) throw new NotFoundError(`Version: "${formVersion}" does not exist for the form: "${form}"`);
@@ -50,7 +81,7 @@ export async function findSubmissionResponses(form: string, submissionIndex: num
 		formVersionId = currentFormVersionRef.id;
 	}
 
-	let submissionVersionId: string | null;
+	let submissionVersionId: string;
 	if (submissionVersion) {
 		const submissionVersionExists = await submissionVersionExistsTx(db, submissionVersion);
 		if (!submissionVersionExists) throw new Error(`Version for submission: "${submissionIndex}" does not exist.`);
@@ -63,11 +94,8 @@ export async function findSubmissionResponses(form: string, submissionIndex: num
 
 	const result = await db.query.submissionResponses.findMany({
 		where: {
-			responseVersionId: submissionVersionId
+			submissionVersionId
 		},
-		with: {
-			field: true
-		}
 	});
 	return result;
 }
@@ -97,8 +125,7 @@ export async function toggleApprovalStatus({ form, index, formVersion, submissio
 		if (submissionVersion) {
 			return await tx.update(submissionVersions)
 				.set({
-					approved: sql`NOT ${submissionVersions.approved}`,
-					approvedAt: sql`CASE WHEN NOT ${submissionVersions.approved} OR ${isNull(submissionVersions.approved)}THEN ${null} ELSE NOW() END`
+					approvedAt: new Date()
 				}).where(eq(submissionVersions.id, submissionVersion))
 				.execute();
 		} else {
@@ -120,8 +147,7 @@ export async function toggleApprovalStatus({ form, index, formVersion, submissio
 
 			return await tx.update(submissionVersions)
 				.set({
-					approved: not(submissionVersions.approved),
-					approvedAt: sql`CASE WHEN ${or(not(submissionVersions.approved), isNull(submissionVersions.approved))} THEN ${null} ELSE NOW() END`
+					approvedAt: new Date()
 				}).where(and(
 					eq(submissionVersions.index, index),
 					eq(submissionVersions.isCurrent, true),
@@ -146,7 +172,7 @@ async function deleteCurrentSubmissionVersionTx(tx: Transaction, submissionIndex
 		}
 	});
 	if (!target) return responseSummary;
-	responseSummary.responsesDeleted = await tx.$count(submissionResponses, eq(submissionResponses.responseVersionId, target.id))
+	responseSummary.responsesDeleted = await tx.$count(submissionResponses, eq(submissionResponses.submissionVersionId, target.id))
 	const result = await tx.delete(submissionVersions)
 		.where(eq(submissionVersions.id, target.id))
 		.execute();
@@ -162,7 +188,7 @@ async function deleteCurrentSubmissionVersionTx(tx: Transaction, submissionIndex
 async function deleteSubmissionVersionTx(tx: Transaction, submissionIndex: number, formVersion: string, submissionVersion: string) {
 	Logger.debug(`Deleting submission version: ${submissionVersion}`, { formVersion, submissionIndex, submissionVersion });
 	const summary = { responsesDeleted: 0, versionsDeleted: 0 };
-	summary.responsesDeleted = await tx.$count(submissionResponses, eq(submissionResponses.responseVersionId, submissionVersion));
+	summary.responsesDeleted = await tx.$count(submissionResponses, eq(submissionResponses.submissionVersionId, submissionVersion));
 	const result = await tx.delete(submissionVersions)
 		.where(eq(submissionVersions.id, submissionVersion))
 		.execute();

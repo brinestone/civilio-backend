@@ -1,4 +1,6 @@
+import { defineNitroPlugin, useRuntimeConfig } from 'nitropack/runtime';
 import dgram from 'node:dgram';
+import Logger from '~/utils/logger';
 
 const CLIENT_CODES = {
   civilio: 'g8eULU5uY6u1ZQSuGTUeDQABLgArt2yOTDKJ0AB1Y13GYCHt6Hkj7Q0qsUGWtRqS'

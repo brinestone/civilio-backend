@@ -1,1 +1,0 @@
-ALTER TABLE "civilio"."choice_items" RENAME COLUMN "parentValue" TO "parent_value";

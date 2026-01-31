@@ -1,8 +1,13 @@
+import { defineEventHandler } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
+import { ExecutionError, fromExecutionError } from "~/utils/errors";
+import { lookupForms } from "~/utils/forms";
+
 defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
-		summary: 'Lookup form definitions',
-		description: 'Lookup all form definitions',
+		summary: 'Lookup forms',
+		description: 'Lookup all forms',
 		$global: {
 			components: {
 				schemas: {
@@ -42,6 +47,13 @@ defineRouteMeta({
 });
 
 const handler = async () => {
-	return await lookupForms();
+	try {
+		return await lookupForms();
+	} catch (e) {
+		if (e instanceof ExecutionError) {
+			throw fromExecutionError(e);
+		}
+		throw e;
+	}
 };
 export default defineEventHandler(handler);

@@ -1,3 +1,5 @@
+import { defineRouteMeta, defineCachedEventHandler } from "nitropack/runtime"
+
 defineRouteMeta({
   openAPI: {
     tags: ['Internal']

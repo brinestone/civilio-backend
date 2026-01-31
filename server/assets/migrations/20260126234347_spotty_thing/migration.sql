@@ -1,1 +1,0 @@
-ALTER TABLE "civilio"."form_versions" RENAME COLUMN "parentId" TO "parent_id";

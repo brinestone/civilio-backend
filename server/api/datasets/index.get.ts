@@ -1,3 +1,8 @@
+import { defineEventHandler } from "h3";
+import { defineRouteMeta } from "nitropack/runtime";
+import { findAllDatasets } from "~/utils/datasets";
+import { FindAllDatasetsResponseSchema } from "~/utils/dto";
+
 defineRouteMeta({
 	openAPI: {
 		tags: ['Datasets'],
@@ -8,16 +13,7 @@ defineRouteMeta({
 				content: {
 					'application/json': {
 						schema: {
-							type: 'object',
-							required: ['groups'],
-							properties: {
-								groups: {
-									type: 'array',
-									items: {
-										$ref: '#/components/schemas/Dataset'
-									}
-								}
-							}
+							$ref: '#/components/schemas/DatasetResponse'
 						}
 					}
 				}
@@ -25,7 +21,30 @@ defineRouteMeta({
 		},
 		$global: {
 			components: {
+				responses: {
+					NotFound: {
+						description: 'Dataset not found'
+					},
+					Unauthorized: {
+						description: 'Unauthorized access'
+					},
+					BadRequest: {
+						description: 'Invalid request parameters'
+					}
+				},
 				schemas: {
+					DatasetResponse: {
+						type: 'object',
+						required: ['groups'],
+						properties: {
+							groups: {
+								type: 'array',
+								items: {
+									$ref: '#/components/schemas/Dataset'
+								}
+							}
+						}
+					},
 					DatasetItem: {
 						type: 'object',
 						required: ['id', 'label', 'ordinal', 'value'],
@@ -65,6 +84,7 @@ defineRouteMeta({
 								}
 							},
 							parent: {
+								type: 'object',
 								$ref: '#/components/schemas/DatasetParentRef'
 							}
 						}
