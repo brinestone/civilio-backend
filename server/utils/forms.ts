@@ -24,6 +24,21 @@ export async function formVersionExistsTx(tx: Transaction | Connection, slug: st
 	return result.rows[0]?.exists ?? false;
 }
 
+/**
+ * Finds a form definition by slug and optional version.
+ * 
+ * @param slug - The form slug identifier
+ * @param version - Optional specific version ID. If not provided, returns the current version
+ * @returns A promise that resolves to the form version with its items and children, or undefined if not found
+ * 
+ * @example
+ * // Get current form version
+ * const form = await findFormDefinition('contact-form');
+ * 
+ * @example
+ * // Get specific form version
+ * const form = await findFormDefinition('contact-form', 'v1.2.0');
+ */
 export async function findFormDefinition(slug: string, version?: string) {
 	const db = provideDb();
 	if (version) {
