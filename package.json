@@ -6,6 +6,8 @@
     "scripts": {
         "build": "nitro build",
         "dev": "nitro dev",
+        "seed": "nitro task run db:seed",
+        "tasks": "nitro task list",
         "preview": "node .output/server/index.mjs",
         "migrate.local": "pnpm drizzle-kit generate",
         "script:custom": "pnpm drizzle-kit generate --custom",

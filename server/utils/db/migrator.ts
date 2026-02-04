@@ -1,10 +1,8 @@
 import crypto from 'crypto';
 import { DrizzleError, sql } from 'drizzle-orm';
-import { provideDb } from '../db';
 import { useStorage } from 'nitropack/runtime';
 import Logger from '../logger';
-
-type DBType = ReturnType<typeof provideDb>;
+import { Connection } from '../types';
 
 const statementSeparator = '--> statement-breakpoint';
 
@@ -55,7 +53,7 @@ async function readMigrationFiles(): Promise<MigrationFile[]> {
 	}
 }
 
-async function checkMigrations(table: string, db: DBType): Promise<{
+async function checkMigrations(table: string, db: Connection): Promise<{
 	needsMigration: boolean;
 	pending: MigrationFile[];
 	appliedCount: number;
@@ -105,7 +103,7 @@ function generateHash(content: string): string {
 		.digest('hex');
 }
 
-async function ensureMigrationsTable(table: string, db: DBType): Promise<void> {
+async function ensureMigrationsTable(table: string, db: Connection): Promise<void> {
 	await db.transaction(async tx => {
 		await tx.execute(sql`
       CREATE TABLE IF NOT EXISTS ${sql.identifier(table)}
@@ -130,7 +128,7 @@ async function ensureMigrationsTable(table: string, db: DBType): Promise<void> {
 	})
 }
 
-export async function runMigrations(table: string, db: DBType) {
+export async function runMigrations(table: string, db: Connection) {
 	await ensureMigrationsTable(table, db);
 	const status = await checkMigrations(table, db);
 

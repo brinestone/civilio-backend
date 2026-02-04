@@ -57,12 +57,12 @@ defineRouteMeta({
 							id: { type: 'string', format: 'uuid' },
 							title: { type: 'string' },
 							relevance: { $ref: '#/components/schemas/RelevanceDefinition', nullable: true },
-							meta: { type: 'object', additionalProperties: true, },
+							meta: { type: 'object', additionalProperties: true },
 							position: { type: 'integer' },
 							children: {
 								type: 'array',
 								items: {
-									$ref: '#/components/schemas/FormItemParentRef'
+									$ref: '#/components/schemas/FormItemDefinition'
 								}
 							}
 						},

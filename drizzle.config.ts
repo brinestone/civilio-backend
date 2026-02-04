@@ -10,5 +10,4 @@ export default defineConfig({
   },
   out: './server/assets/migrations',
   schema: './server/utils/db/schema.ts',
-  schemaFilter: ['civilio', 'revisions'],
 })

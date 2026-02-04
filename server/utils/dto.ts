@@ -38,59 +38,56 @@ export const DeleteSubmissionRequestSchema = z.object({
 	submissionVersion: z.string().optional()
 });
 
-export const OptionItemSchema = z.object({
-	i18nKey: z.string().nullable(),
+export const DatasetItemSchema = z.object({
 	id: z.uuid(),
-	groupId: z.uuid().nullable(),
+	dataset: z.uuid().nullish(),
 	label: z.string(),
-	parentValue: z.string().nullable().optional(),
+	parentValue: z.string().nullish(),
 	value: z.string(),
 	ordinal: z.int()
 });
 
-export const GroupLineSchema = z.object({
-	description: z.string().nullable().optional(),
-	title: z.string(),
-	parentId: z.string().nullable().optional(),
-	id: z.uuid().optional(),
-	key: z.string().nonempty(),
-	options: OptionItemSchema.array().default([])
+export const DatasetLineSchema = z.object({
+	description: z.string().nullish(),
+	title: z.string().nonempty('Title is required'),
+	parentId: z.string().nullish(),
+	id: z.uuid().nullish(),
+	key: z.string().nonempty('Key is required'),
+	items: DatasetItemSchema.array().default([])
 })
 
-export const FormOptionsUpsertRequestSchema = z.discriminatedUnion('isNew', [
+export const DatasetUpsertRequestSchema = z.discriminatedUnion('isNew', [
 	z.object({
-		isNew: z.literal(true),
-		data: GroupLineSchema.extend({
-			options: OptionItemSchema.omit({
+		isNew: z.literal('true'),
+		data: DatasetLineSchema.extend({
+			items: DatasetItemSchema.omit({
 				id: true,
-				groupId: true
+				dataset: true
 			}).array().default([])
 		}).omit({
 			id: true
 		})
 	}),
 	z.object({
-		isNew: z.literal(false),
-		data: GroupLineSchema.partial().extend({
+		isNew: z.literal('false'),
+		data: DatasetLineSchema.partial().extend({
 			id: z.uuid(),
-			options: z.discriminatedUnion('isNew', [
-				OptionItemSchema.partial().extend({
-					isNew: z.literal(false),
+			items: z.discriminatedUnion('isNew', [
+				DatasetItemSchema.partial().extend({
+					isNew: z.literal('false'),
 					id: z.uuid()
-				}).omit({
-					groupId: true,
 				}),
-				OptionItemSchema.extend({
-					isNew: z.literal(true),
+				DatasetItemSchema.extend({
+					isNew: z.literal('true'),
 				}).omit({
 					id: true,
-					groupId: true,
+					dataset: true,
 				})
 			]).array().default([])
 		})
 	})
 ]).array();
-export type FormOptionsUpsertRequest = z.infer<typeof FormOptionsUpsertRequestSchema>;
+export type DatasetUpsertRequest = z.infer<typeof DatasetUpsertRequestSchema>;
 
 export const FindAllDatasetsResponseSchema = z.object({
 	groups: z.object({

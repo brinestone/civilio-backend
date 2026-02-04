@@ -1,7 +1,6 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import { findAllDatasets } from "~/utils/datasets";
-import { FindAllDatasetsResponseSchema } from "~/utils/dto";
 
 defineRouteMeta({
 	openAPI: {
@@ -13,7 +12,10 @@ defineRouteMeta({
 				content: {
 					'application/json': {
 						schema: {
-							$ref: '#/components/schemas/DatasetResponse'
+							type: 'array',
+							items: {
+								$ref: '#/components/schemas/Dataset'
+							}
 						}
 					}
 				}
@@ -33,20 +35,9 @@ defineRouteMeta({
 					}
 				},
 				schemas: {
-					DatasetResponse: {
-						type: 'object',
-						required: ['groups'],
-						properties: {
-							groups: {
-								type: 'array',
-								items: {
-									$ref: '#/components/schemas/Dataset'
-								}
-							}
-						}
-					},
 					DatasetItem: {
 						type: 'object',
+						additionalProperties: false,
 						required: ['id', 'label', 'ordinal', 'value'],
 						properties: {
 							id: { type: 'string', 'format': 'uuid' },
@@ -54,12 +45,12 @@ defineRouteMeta({
 							parentValue: { type: 'string' },
 							ordinal: { type: 'integer', minimum: 0 },
 							value: { type: 'string' },
-							i18nKey: { type: 'string' }
 						}
 					},
 					DatasetParentRef: {
 						type: 'object',
 						required: ['key', 'title'],
+						additionalProperties: false,
 						properties: {
 							title: { type: 'string' },
 							description: { type: 'string' },
@@ -69,6 +60,7 @@ defineRouteMeta({
 					Dataset: {
 						type: 'object',
 						required: ['title', 'id', 'key', 'createdAt', 'updatedAt', 'items'],
+						additionalProperties: false,
 						properties: {
 							description: { type: 'string' },
 							title: { type: 'string' },
@@ -84,7 +76,7 @@ defineRouteMeta({
 								}
 							},
 							parent: {
-								type: 'object',
+								nullable: true,
 								$ref: '#/components/schemas/DatasetParentRef'
 							}
 						}
@@ -96,6 +88,5 @@ defineRouteMeta({
 });
 
 export default defineEventHandler(async () => {
-	const groups = await findAllDatasets();
-	return FindAllDatasetsResponseSchema.parse({ groups });
+	return await findAllDatasets();
 });

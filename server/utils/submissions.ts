@@ -2,7 +2,7 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { DeleteSubmissionRequest, LookupFormSubmissionsRequest, ToggleApprovalStatusRequest } from "./dto";
 import { provideDb } from "./db";
 import { Connection, Transaction } from "./types";
-import { submissionVersions, formVersions, submissionResponses, formSubmissions, deltaChanges } from "./db/schema";
+import { submissionVersions, formVersions, submissionResponses, formSubmissions } from "./db/schema";
 import { NotFoundError, UnprocessibleError } from "./errors";
 import { formVersionExistsTx, getCurrentFormVersionTx } from "./forms";
 import Logger from "./logger";
@@ -304,9 +304,9 @@ export async function submissionVersionExists(
 	const db = provideDb();
 	const result = await db.execute<{ exists: boolean }>(sql`
 		SELECT EXISTS(SELECT 1 FROM ${submissionVersions} WHERE ${and(
-		eq(deltaChanges.submissionIndex, index),
-		eq(deltaChanges.hash, version),
-		eq(deltaChanges.form, form)
+		eq(submissionVersions.index, index),
+		eq(submissionVersions.id, version),
+		eq(submissionVersions.form, form)
 	)}) AS "exists"
 		`);
 	return result.rows[0] ?? { exists: false };

@@ -1,0 +1,200 @@
+[
+  {
+    "id": "038f36d9-5d96-46af-9767-4610f8e35741",
+    "label": "MIFI",
+    "value": 3,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 3,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 10:08:33.506"
+  },
+  {
+    "id": "03d23ddd-b151-4593-9ce8-3ccc5ab5272b",
+    "label": "NDIAN",
+    "value": 2,
+    "parentValue": 3,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 2,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 10:08:33.505"
+  },
+  {
+    "id": "11081559-9367-4a14-8796-4426d4266c89",
+    "label": "HAUT-NKAM",
+    "value": 5,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 5,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "24e0f00e-c83a-4a79-bc15-048829742969",
+    "label": "SOUTH-WEST",
+    "value": 3,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 3,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "2d0817cf-956a-4fae-bc2f-4e5f84503024",
+    "label": "SOUTH",
+    "value": 8,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 8,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "32ec70af-af62-4574-a004-2104983f0b91",
+    "label": "NDE",
+    "value": 9,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 9,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "3f57a2db-a069-45c0-a44f-7114b1f58b94",
+    "label": "BAMBOUTOS",
+    "value": 6,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 6,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "46bdc27d-92fb-47f1-a8f8-3a4f109cebd0",
+    "label": "MENOUA",
+    "value": 8,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 8,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "78b5eedf-3d8e-4031-921d-20b6c5ce978c",
+    "label": "NOUN",
+    "value": 10,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 10,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "7beb5662-3bb0-43cb-abc1-845b94eb7c21",
+    "label": "FAR-NORTH",
+    "value": 7,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 7,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "929c12e6-04a0-4a84-9851-20aa5c0b8fe8",
+    "label": "KOUNG-KHI",
+    "value": 7,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 7,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "9c9ae4b0-e144-4612-bbb6-6e2af9f40767",
+    "label": "HAUTS PLATEUX",
+    "value": 4,
+    "parentValue": 4,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 4,
+    "createdAt": "2026-02-04 10:08:33.49529",
+    "updatedAt": "2026-02-04 10:08:33.49529"
+  },
+  {
+    "id": "cc0efc7f-3393-4156-8dd7-01892df38e1c",
+    "label": "EAST",
+    "value": 6,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 6,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "d7605c55-cc71-48ef-96c8-842e452ec517",
+    "label": "WEST",
+    "value": 4,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 4,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "d84a6033-f844-477f-a3eb-6b3a5d2fa52d",
+    "label": "FAKO",
+    "value": 1,
+    "parentValue": 3,
+    "i18nKey": null,
+    "dataset": "0ea57809-510a-4b5e-80e6-d607537d7ce2",
+    "ordinal": 1,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 10:08:33.502"
+  },
+  {
+    "id": "e56f3326-999d-4aac-aa79-153c52f4e497",
+    "label": "CENTER",
+    "value": 2,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 2,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "e9ad1b81-09c2-4090-a7bd-042f559bac15",
+    "label": "NORTH-WEST",
+    "value": 5,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 5,
+    "createdAt": "2026-02-04 09:54:40.3496",
+    "updatedAt": "2026-02-04 09:54:40.3496"
+  },
+  {
+    "id": "f7abc9f6-0406-4a9b-ade8-3251ba4b2cee",
+    "label": "ADAMAWA",
+    "value": 1,
+    "parentValue": null,
+    "i18nKey": null,
+    "dataset": "69641952-025a-45f5-8d53-ce3b07794ce2",
+    "ordinal": 1,
+    "createdAt": "2026-02-04 09:49:37.474533",
+    "updatedAt": "2026-02-04 09:54:40.378"
+  }
+]
