@@ -13,10 +13,9 @@ import {
 	text,
 	timestamp,
 	uniqueIndex,
-	uuid
+	uuid,
+	varchar
 } from "drizzle-orm/pg-core";
-
-// export const civilio = pgSchema("civilio").existing();
 
 export const datasets = pgTable('datasets', {
 	title: text().notNull(),
@@ -24,8 +23,8 @@ export const datasets = pgTable('datasets', {
 	parentId: uuid('parent_id'),
 	description: text(),
 	key: text().notNull(),
-	createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-	updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow().notNull().$onUpdate(() => new Date()),
+	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).defaultNow().notNull(),
+	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).defaultNow().notNull().$onUpdate(() => new Date()),
 }, (t) => [
 	index().on(t.parentId).where(isNotNull(t.parentId)),
 	uniqueIndex().on(t.key),
@@ -47,14 +46,14 @@ export const datasets = pgTable('datasets', {
 ]);
 
 export const datasetItems = pgTable('dataset_items', {
-	id: uuid().defaultRandom(),
+	id: uuid().defaultRandom().notNull(),
 	label: text().notNull(),
 	value: text().notNull(),
 	parentValue: text('parent_value'),
 	dataset: uuid('dataset_id').notNull(),
-	ordinal: integer(),
-	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+	ordinal: integer().notNull(),
+	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, t => [
 	index('dataset_items_vector_idx').using('gin', sql`to_tsvector('simple', ${t.label})`),
 	index('dataset_items_fuzzy_label_idx').using('gin', t.label.op('gin_trgm_ops')),
@@ -68,6 +67,42 @@ export const datasetItems = pgTable('dataset_items', {
 		columns: [t.dataset],
 		foreignColumns: [datasets.id]
 	}).onDelete('cascade').onUpdate('cascade')
+]);
+
+export const refType = pgEnum('dataset_ref_types', ['all', 'subset']);
+export const datasetRefs = pgTable('dataset_refs', {
+	slug: varchar({ length: 64 }).notNull().primaryKey(),
+	type: refType().notNull().default('all'),
+	inUse: boolean('in_use').default(false).notNull(),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+	dataset: uuid().notNull()
+}, t => [
+	index().on(t.dataset),
+	foreignKey({
+		columns: [t.dataset],
+		foreignColumns: [datasets.id]
+	}).onDelete('cascade')
+]);
+
+export const datasetRefItems = pgTable('dataset_ref_items', {
+	ref: text().notNull(),
+	dataset: uuid('dataset_id').notNull(),
+	itemId: uuid('item_id').notNull(),
+}, t => [
+	index().on(t.ref),
+	index().on(t.itemId),
+	index().on(t.dataset),
+	index().on(t.dataset, t.itemId),
+	index().on(t.ref, t.itemId),
+	foreignKey({
+		columns: [t.ref],
+		foreignColumns: [datasetRefs.slug]
+	}).onDelete('cascade'),
+	foreignKey({
+		columns: [t.dataset, t.itemId],
+		foreignColumns: [datasetItems.dataset, datasetItems.id]
+	}).onDelete('cascade')
 ]);
 
 // export const choices = pgTable(
@@ -477,8 +512,8 @@ export const forms = pgTable('form_definitions', {
 	label: text().notNull(),
 	description: text(),
 	createdBy: text('created_by'),
-	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, t => [
 	uniqueIndex().on(t.slug),
 	index().on(t.label),
@@ -489,8 +524,8 @@ export const forms = pgTable('form_definitions', {
 export const formVersions = pgTable('form_versions', {
 	id: uuid().notNull().defaultRandom(),
 	form: text().notNull(),
-	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow().$onUpdate(() => new Date()),
+	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 	parentId: uuid('parent_id'),
 	isCurrent: boolean('is_current').notNull().default(true),
 }, t => [
@@ -517,7 +552,6 @@ export const formItems = pgTable('form_items', {
 	relevance: jsonb(),
 	id: uuid().notNull().defaultRandom().primaryKey(),
 	meta: jsonb(),
-	position: integer().notNull()
 }, t => [
 	index().on(t.title),
 	index().on(t.description).where(isNotNull(t.description)),
@@ -528,6 +562,7 @@ export const formVersionItems = pgTable('form_version_items', {
 	form: text().notNull(),
 	formVersion: uuid('form_version').notNull(),
 	parentId: uuid('parent_id'),
+	path: text().notNull(),
 	meta: jsonb(),
 }, t => [
 	index().on(t.itemId),

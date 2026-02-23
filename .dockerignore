@@ -7,3 +7,4 @@ drizzle.config.ts
 docs
 .idea
 .vscode
+server/public/uploads/*

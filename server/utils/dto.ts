@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const NewDatasetRefRequestSchema = z.object({
+	dataset: z.string().trim().nonempty('dataset is required').pipe(z.uuid('Invalid dataset ID format')),
+	selectedItems: z.string().trim().nonempty('Invalid item ID').pipe(z.uuid('Invalid item ID format')).array(),
+	selectAll: z.boolean(),
+	followDatasetUpdates: z.boolean(),
+});
+export type NewDatasetRefRequest = z.output<typeof NewDatasetRefRequestSchema>;
+
 export const LookupFormSubmissionsRequestSchema = z.object({
 	page: z.coerce.number().min(0).default(0),
 	limit: z.coerce.number().min(1).default(100),

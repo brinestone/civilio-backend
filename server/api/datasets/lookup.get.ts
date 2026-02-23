@@ -7,7 +7,8 @@ import { validateZodQueryParams } from "~/utils/dto/zod";
 const querySchema = z.object({
 	page: z.string().trim().optional().default('0').pipe(z.coerce.number()),
 	size: z.string().trim().optional().default('10').pipe(z.coerce.number()),
-	filter: z.string().trim().optional()
+	filter: z.string().trim().optional(),
+	excludeEmpty: z.string().optional()
 });
 
 defineRouteMeta({
@@ -38,7 +39,8 @@ defineRouteMeta({
 		parameters: [
 			{ in: 'query', required: false, schema: { type: 'integer', minimum: 0, default: 0 }, name: 'page', },
 			{ in: 'query', required: false, schema: { type: 'integer', minimum: 1, default: 10 }, name: 'size', },
-			{ in: 'query', required: false, schema: { type: 'string' }, name: 'filter' }
+			{ in: 'query', required: false, schema: { type: 'string' }, name: 'filter' },
+			{ in: 'query', required: false, schema: { type: 'boolean', default: true }, name: 'excludeEmpty' }
 		],
 		responses: {
 			'200': {
@@ -68,5 +70,5 @@ defineRouteMeta({
 
 export default defineEventHandler(async event => {
 	const query = await validateZodQueryParams(event, querySchema);
-	return await lookupDatasets(query.page, query.size, query.filter);
+	return await lookupDatasets(query.page, query.size, query.excludeEmpty === 'true' || !query.excludeEmpty, query.filter);
 })

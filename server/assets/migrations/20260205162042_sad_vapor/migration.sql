@@ -1,0 +1,1 @@
+ALTER TABLE "dataset_refs" ALTER COLUMN "slug" SET DATA TYPE varchar(64) USING "slug"::varchar(64);
