@@ -3,6 +3,7 @@ import { provideDb } from './db';
 
 export type Connection = ReturnType<typeof provideDb>;
 export type Transaction = Parameters<Parameters<Connection['transaction']>[0]>[0];
+export type ConnectionLike = Connection | Transaction;
 
 export const FieldKeySchema = z.string();
 export const RelevanceChainOperatorSchema = z.enum([

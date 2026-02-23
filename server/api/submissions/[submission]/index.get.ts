@@ -31,6 +31,7 @@ defineRouteMeta({
 			components: {
 				schemas: {
 					SubmissionResponse: {
+						additionalProperties: false,
 						type: 'object',
 						description: 'A single submission response',
 						properties: {

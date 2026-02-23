@@ -7,6 +7,16 @@ const paramsSchema = z.object({
 	form: z.string()
 });
 
+export default defineEventHandler(async event => {
+	const { success, data, error } = await getValidatedRouterParams(event, paramsSchema.safeParse);
+	if (!success) {
+		setResponseStatus(event, 400);
+		return { message: prettifyError(error) };
+	}
+
+	const result = await lookupFormVersionsByFormSlug(data.form);
+	return result || null;
+})
 defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
@@ -32,6 +42,7 @@ defineRouteMeta({
 			components: {
 				schemas: {
 					FormVersionLookup: {
+						additionalProperties: false,
 						description: 'Lookup for a form version',
 						type: "object",
 						required: ["label", "createdAt", "updatedAt", "id", "form", "isCurrent"],
@@ -49,14 +60,4 @@ defineRouteMeta({
 			}
 		}
 	}
-})
-export default defineEventHandler(async event => {
-	const { success, data, error } = await getValidatedRouterParams(event, paramsSchema.safeParse);
-	if (!success) {
-		setResponseStatus(event, 400);
-		return { message: prettifyError(error) };
-	}
-
-	const result = await lookupFormVersionsByFormSlug(data.form);
-	return result || null;
-})
+});

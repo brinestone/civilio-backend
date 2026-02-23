@@ -4,6 +4,7 @@ import { findAllDatasets } from "~/utils/datasets";
 
 defineRouteMeta({
 	openAPI: {
+		deprecated: true,
 		tags: ['Datasets'],
 		summary: 'Get Datasets',
 		responses: {

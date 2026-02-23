@@ -27,7 +27,6 @@ export default defineNitroPlugin(async app => {
   try {
     Logger.info('Running database migrations');
     await runTask('db:migrate');
-    Logger.info('Database migrations completed successfully');
   } catch (e) {
     Logger.error(e);
     throw e;
