@@ -22,6 +22,7 @@ defineRouteMeta({
 			components: {
 				schemas: {
 					SubmissionVersionLookup: {
+						additionalProperties: false,
 						type: 'object',
 						required: ['id', 'recordedAt', 'validationCode', 'isCurrent'],
 						properties: {
@@ -33,6 +34,7 @@ defineRouteMeta({
 						}
 					},
 					SubmissionLookup: {
+						additionalProperties: false,
 						type: 'object',
 						required: ['form', 'formVersion', 'index', 'recordedAt', 'versions'],
 						properties: {

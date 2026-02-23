@@ -52,9 +52,6 @@ export async function findFormDefinition(slug: string, version?: string) {
 			},
 			with: {
 				items: {
-					orderBy: {
-						position: 'asc'
-					},
 					with: {
 						children: true
 					}
@@ -72,9 +69,6 @@ export async function findFormDefinition(slug: string, version?: string) {
 		},
 		with: {
 			items: {
-				orderBy: {
-					position: 'asc'
-				},
 				with: {
 					children: true
 				}

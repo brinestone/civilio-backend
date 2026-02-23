@@ -1,15 +1,99 @@
-import { and, asc, count, desc, eq, getColumns, ne, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, getColumns, gt, ne, or, sql } from "drizzle-orm";
 import _ from 'lodash';
 import { provideDb } from "./db";
-import { datasetItems, datasets } from "./db/schema";
-import { DatasetUpsertRequest } from "./dto";
+import { datasetItems, datasetRefItems, datasetRefs, datasets } from "./db/schema";
+import { DatasetUpsertRequest, NewDatasetRefRequest } from "./dto";
+import { NotFoundError } from "./errors";
+import { hashThese } from "./helpers";
 import Logger from "./logger";
+import { ConnectionLike } from "./types";
+
+export async function findDatasetRefItems(ref: string) {
+	const db = provideDb();
+	const refExists = await datasetRefExistsByIdTx(db, ref);
+	if (!refExists) throw new NotFoundError('Ref does not exist');
+	const [dataset] = await db.select({ title: datasets.title, id: datasets.id })
+		.from(datasetRefs)
+		.rightJoin(datasets, eq(datasetRefs.dataset, datasets.id))
+		.where(eq(datasetRefs.slug, ref))
+		.limit(1);
+	const items = await db.select({
+		..._.pick(getColumns(datasetItems), 'id', 'label', 'ordinal', 'value', 'parentValue')
+	}).from(datasetRefItems)
+		.rightJoin(datasetItems, eq(datasetItems.id, datasetRefItems.itemId))
+		.where(eq(datasetRefItems.ref, ref))
+		.orderBy(asc(datasetItems.ordinal));
+	return { dataset, items };
+}
+
+export async function createDatasetReference({
+	dataset, followDatasetUpdates, selectAll, selectedItems
+}: NewDatasetRefRequest) {
+	const db = provideDb();
+
+	return await db.transaction(async tx => {
+		const datasetExists = await datasetExistsByIdTx(tx, dataset);
+		if (!datasetExists) throw new NotFoundError('Dataset does not exist with id: ' + dataset);
+
+		const id = hashThese(dataset, String(followDatasetUpdates), String(selectAll), JSON.stringify(selectedItems));
+		const refExists = await datasetRefExistsByIdTx(tx, id);
+		if (!refExists) {
+			await tx.transaction(tx => tx.insert(datasetRefs)
+				.values({
+					slug: id,
+					type: followDatasetUpdates && selectAll ? 'all' : 'subset',
+					dataset,
+				}));
+
+			if (!followDatasetUpdates && selectAll) {
+				const currentItems = await tx.select({ id: datasetItems.id })
+					.from(datasetItems)
+					.where(eq(datasetItems.dataset, dataset));
+				await tx.transaction(async tx => {
+					for (const item of currentItems) {
+						await tx.insert(datasetRefItems)
+							.values({
+								ref: id,
+								dataset,
+								itemId: item.id
+							});
+					}
+				})
+			} else
+				await tx.transaction(async tx => {
+					for (const item of selectedItems) {
+						await tx.insert(datasetRefItems)
+							.values({
+								ref: id,
+								dataset,
+								itemId: item
+							})
+					}
+				});
+		}
+		return id;
+	})
+}
+
+export async function datasetRefExistsByIdTx(tx: ConnectionLike, id: string) {
+	const result = await tx.execute<{ exists: boolean }>(sql`
+		SELECT EXISTS(SELECT 1 FROM ${datasetRefs} WHERE ${eq(datasetRefs.slug, id)})
+		`);
+	return result.rows[0].exists;
+}
+
+export async function datasetExistsByIdTx(tx: ConnectionLike, id: string) {
+	const result = await tx.execute<{ exists: boolean }>(sql`
+		SELECT EXISTS(SELECT 1 FROM ${datasets} WHERE ${eq(datasets.id, id)})
+		`);
+	return result.rows[0].exists;
+}
 
 export async function lookupDatasetItems(dataset: string, page: number, size: number, filter?: string) {
 	const db = provideDb();
 
 	const baseFilters = [eq(datasetItems.dataset, dataset)];
-	const columns = getColumns(datasetItems);
+	const columns = _.omit(getColumns(datasetItems), ['dataset']);
 	if (filter) {
 		// Prepare the tsquery string
 		const formattedFilter = filter.trim().split(/\s+/).join(' & ') + ':*';
@@ -28,16 +112,16 @@ export async function lookupDatasetItems(dataset: string, page: number, size: nu
 
 		const subQuery = db.select({
 			...columns,
-			rank: sql<number>`ts_rank(${vector}, ${query})`,
-			similarity: sql<number>`similarity(${datasetItems.label}, ${filter})`
+			rank: sql<number>`ts_rank(${vector}, ${query})`.as('rank'),
+			similarity: sql<number>`similarity(${datasetItems.label}, ${filter})`.as('similarity')
 		})
 			.from(datasetItems)
 			.where(searchFilter)
-			.orderBy(t => desc(sql`ts_rank(${vector}, ${query}) + similarity(${datasetItems.label}, ${filter})`)).as('subQuery');
+			.orderBy(() => [desc(sql`ts_rank(${vector}, ${query}) + similarity(${datasetItems.label}, ${filter})`),]).as('subQuery');
 
-		const selectedColumns = _.omit(getColumns(subQuery), ['rank', 'similarity']);
+		const forwardedColumns = _.omit(getColumns(subQuery), ['rank', 'similarity']);
 		const result = await db.select({
-			...selectedColumns
+			...forwardedColumns
 		}).from(subQuery)
 			.offset(page * size)
 			.limit(size);
@@ -47,10 +131,12 @@ export async function lookupDatasetItems(dataset: string, page: number, size: nu
 		return { totalRecords, data: result };
 	} else {
 		// Standard paginated list
-		const result = await db.select()
+		const result = await db.select({
+			...columns
+		})
 			.from(datasetItems)
 			.where(and(...baseFilters))
-			.orderBy(asc(datasetItems.ordinal), desc(datasetItems.createdAt))
+			.orderBy(asc(datasetItems.ordinal))
 			.offset(page * size)
 			.limit(size);
 
@@ -60,11 +146,11 @@ export async function lookupDatasetItems(dataset: string, page: number, size: nu
 	}
 }
 
-export async function lookupDatasets(page: number, size: number, filter?: string) {
+export async function lookupDatasets(page: number, size: number, excludeEmpty: boolean, filter?: string) {
 	const db = provideDb();
 	const columns = {
 		...getColumns(datasets),
-		itemCount: count(datasetItems.id)
+		itemCount: count(datasetItems.id).as('itemCount')
 	};
 	const groupByExp = [datasets.id];
 
@@ -86,17 +172,22 @@ export async function lookupDatasets(page: number, size: number, filter?: string
 			sql`${datasets.key} % ${filter}`
 		);
 
-		const result = await db.select({
+		const subQuery = db.select({
 			...columns,
-			rank: sql<number>`ts_rank(${vector}, ${query})`,
+			rank: sql<number>`ts_rank(${vector}, ${query})`.as('rank'),
 			// Add trigram similarity to the score if TS rank is low
-			similarity: sql<number>`similarity(${datasets.title}, ${filter})`,
+			similarity: sql<number>`similarity(${datasets.title}, ${filter})`.as('similarity'),
 		})
 			.from(datasets)
 			.leftJoin(datasetItems, eq(datasetItems.dataset, datasets.id))
 			.where(sqlFilter)
+			.having(excludeEmpty ? gt(count(datasetItems.id), 0) : eq(sql`${1}`, 1))
 			.groupBy(...groupByExp)
-			.orderBy(t => desc(sql`ts_rank(${vector}, ${query}) + similarity(${datasets.title}, ${filter})`))
+			.orderBy(() => desc(sql`ts_rank(${vector}, ${query}) + similarity(${datasets.title}, ${filter})`)).as('subQuery');
+		const forwardedColumns = _.omit(getColumns(subQuery), ['similarity', 'rank']);
+		const result = await db.select({
+			...forwardedColumns
+		}).from(subQuery)
 			.offset(page * size)
 			.limit(size);
 
@@ -106,6 +197,7 @@ export async function lookupDatasets(page: number, size: number, filter?: string
 		const result = await db.select(columns)
 			.from(datasets)
 			.leftJoin(datasetItems, eq(datasetItems.dataset, datasets.id))
+			.having(excludeEmpty ? gt(count(datasetItems.id), 0) : eq(sql`${1}`, 1))
 			.groupBy(...groupByExp)
 			.orderBy(desc(datasets.updatedAt))
 			.offset(page * size)

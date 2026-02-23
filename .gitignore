@@ -10,3 +10,4 @@ logs
 screenshots
 .idea
 docker
+server/public/uploads/*

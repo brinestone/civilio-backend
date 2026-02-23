@@ -3,6 +3,17 @@ import { defineRouteMeta } from "nitropack/runtime";
 import { ExecutionError, fromExecutionError } from "~/utils/errors";
 import { lookupForms } from "~/utils/forms";
 
+const handler = async () => {
+	try {
+		return await lookupForms();
+	} catch (e) {
+		if (e instanceof ExecutionError) {
+			throw fromExecutionError(e);
+		}
+		throw e;
+	}
+};
+export default defineEventHandler(handler);
 defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
@@ -13,6 +24,7 @@ defineRouteMeta({
 				schemas: {
 					FormLookup: {
 						type: "object",
+						additionalProperties: false,
 						required: ["slug", "label", "createdAt", "updatedAt"],
 						properties: {
 							slug: { type: "string" },
@@ -45,15 +57,3 @@ defineRouteMeta({
 		}
 	}
 });
-
-const handler = async () => {
-	try {
-		return await lookupForms();
-	} catch (e) {
-		if (e instanceof ExecutionError) {
-			throw fromExecutionError(e);
-		}
-		throw e;
-	}
-};
-export default defineEventHandler(handler);
