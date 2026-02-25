@@ -1,9 +1,11 @@
 import { defineEventHandler } from "h3";
+import _ from "lodash";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
 import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
-import { ExecutionError, fromExecutionError, NotFoundError } from "~/utils/errors";
-import { findFormDefinition } from "~/utils/forms";
+import { ExecutionError, NotFoundError } from "~/utils/types/errors";
+import { findFormDefinition } from "~/utils/helpers/forms";
+import { fromExecutionError } from "~/utils/misc";
 
 const pathSchema = z.object({
 	form: z.string().trim().nonempty()
@@ -20,7 +22,7 @@ export default defineEventHandler(async event => {
 
 		if (!result)
 			throw new NotFoundError('definition not found');
-		return result;
+		return _.pick(result, ['id', 'parentId', 'items']);
 	} catch (e) {
 		if (e instanceof ExecutionError) {
 			throw fromExecutionError(e);
@@ -168,7 +170,7 @@ defineRouteMeta({
 								required: ['children'],
 								properties: {
 									type: { type: 'string', enum: ['group'] },
-									children: { type: 'array', items: { $ref: '#/components/schemas/FormItemDefinition' } }
+									fields: { type: 'array', items: { $ref: '#/components/schemas/FormItemField' } }
 								}
 							}
 						]

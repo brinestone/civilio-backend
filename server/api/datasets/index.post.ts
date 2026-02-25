@@ -1,8 +1,8 @@
 import { defineEventHandler, setResponseStatus } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { upsertFormOptions } from "~/utils/datasets";
-import { DatasetUpsertRequestSchema } from "~/utils/dto";
+import { upsertFormOptions } from "~/utils/helpers/datasets";
 import { validateZodRequestBody } from "~/utils/dto/zod";
+import { DatasetUpsertRequestSchema } from "~/utils/dto/dataset";
 
 const bodySchema = DatasetUpsertRequestSchema;
 defineRouteMeta({

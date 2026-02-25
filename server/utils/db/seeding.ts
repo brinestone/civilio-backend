@@ -1,7 +1,7 @@
 import { PgTable } from "drizzle-orm/pg-core";
 import { useStorage } from "nitropack/runtime";
 import Logger from "../logger";
-import { Connection } from "../types";
+import { Connection } from "../types/types";
 import { datasetItems, datasets } from "./schema";
 import { sql } from "drizzle-orm";
 

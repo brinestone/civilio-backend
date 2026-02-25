@@ -28,11 +28,3 @@ function toStatusCode(code: ErrorCode) {
 	};
 }
 
-export function fromExecutionError<TError extends ExecutionError>(e: TError) {
-	return createError({
-		statusCode: toStatusCode(e.code),
-		data: e.data,
-		message: e.message,
-		cause: e
-	});
-}

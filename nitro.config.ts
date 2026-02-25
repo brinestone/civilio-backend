@@ -17,7 +17,7 @@ export default defineNitroConfig({
 			cors: true,
 			headers: {
 				// Only specify these if 'cors: true' isn't sufficient for your environment
-				'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,PATCH,DELETE',
+				'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,PATCH,DELETE,PUT',
 				'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 				'Access-Control-Allow-Origin': '*',
 

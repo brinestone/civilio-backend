@@ -1,7 +1,7 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import { z } from "zod";
-import { datasetKeyAvailable } from "~/utils/datasets";
+import { datasetKeyAvailable } from "~/utils/helpers/datasets";
 import { validateZodQueryParams } from "~/utils/dto/zod";
 
 defineRouteMeta({

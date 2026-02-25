@@ -1,4 +1,4 @@
-import { z } from "zod";
+import z from "zod";
 
 export const NewDatasetRefRequestSchema = z.object({
 	dataset: z.string().trim().nonempty('dataset is required').pipe(z.uuid('Invalid dataset ID format')),
@@ -7,45 +7,6 @@ export const NewDatasetRefRequestSchema = z.object({
 	followDatasetUpdates: z.boolean(),
 });
 export type NewDatasetRefRequest = z.output<typeof NewDatasetRefRequestSchema>;
-
-export const LookupFormSubmissionsRequestSchema = z.object({
-	page: z.coerce.number().min(0).default(0),
-	limit: z.coerce.number().min(1).default(100),
-	form: z.string().trim().optional(),
-	fv: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional()),
-	sort: z.record(z.string(), z.enum(['asc', 'desc'])).optional()
-});
-
-export const FormFieldTypeSchema = z.enum([
-	'text',
-	'multiline',
-	'date',
-	'date-time',
-	'email',
-	'url',
-	'geo-point',
-	'single-select',
-	'multi-select',
-	'file',
-	'number',
-	'phone',
-	'boolean',
-]);
-
-export const ToggleApprovalStatusRequestSchema = z.object({
-	index: z.coerce.number(),
-	form: z.string().nonempty(),
-	formVersion: z.uuid().optional(),
-	submissionVersion: z.uuid().optional()
-})
-
-export const DeleteSubmissionRequestSchema = z.object({
-	index: z.coerce.number(),
-	form: z.string().nonempty(),
-	formVersion: z.string().optional(),
-	submissionVersion: z.string().optional()
-});
-
 export const DatasetItemSchema = z.object({
 	id: z.uuid(),
 	dataset: z.uuid().nullish(),
@@ -121,8 +82,3 @@ export const FindAllDatasetsResponseSchema = z.object({
 		}).nullish()
 	}).array()
 });
-
-export type DeleteSubmissionRequest = z.output<typeof DeleteSubmissionRequestSchema>;
-export type ToggleApprovalStatusRequestInput = z.input<typeof ToggleApprovalStatusRequestSchema>;
-export type ToggleApprovalStatusRequest = z.output<typeof ToggleApprovalStatusRequestSchema>;
-export type LookupFormSubmissionsRequest = z.output<typeof LookupFormSubmissionsRequestSchema>;

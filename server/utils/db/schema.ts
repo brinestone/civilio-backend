@@ -509,14 +509,15 @@ export const datasetRefItems = pgTable('dataset_ref_items', {
 export const forms = pgTable('form_definitions', {
 	slug: text().notNull(),
 	logo: text(),
-	label: text().notNull(),
+	title: text('label').notNull(),
 	description: text(),
 	createdBy: text('created_by'),
+	archived: boolean().notNull().default(false),
 	createdAt: timestamp('created_at', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 }, t => [
 	uniqueIndex().on(t.slug),
-	index().on(t.label),
+	index().on(t.title),
 	index().on(t.description).where(isNotNull(t.description)),
 	primaryKey({ columns: [t.slug] })
 ]);

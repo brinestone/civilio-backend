@@ -1,7 +1,47 @@
-import { and, eq, sql } from "drizzle-orm";
-import { provideDb } from "./db";
-import { forms, formVersions } from "./db/schema";
-import { Connection, Transaction } from "./types";
+import { and, eq, ne, not, sql } from "drizzle-orm";
+import { provideDb } from "../db";
+import { forms, formVersions } from "../db/schema";
+import { randomString } from "../misc";
+import { Connection, Transaction } from "../types/types";
+
+export async function toggleFormArchived(slug: string) {
+	const db = provideDb();
+	await db.transaction(tx => tx.update(forms)
+		.set({ archived: not(forms.archived) })
+		.where(eq(forms.slug, slug))
+	)
+}
+
+export async function createForm(title: string, description?: string) {
+	const db = provideDb();
+	const newSlug = randomString(16);
+	return await db.transaction(async tx => {
+		const [formInfo] = await tx.insert(forms).values({
+			slug: newSlug,
+			title,
+			description,
+		}).returning();
+
+		const [versionInfo] = await tx.insert(formVersions).values({
+			form: newSlug,
+			isCurrent: true,
+		}).returning();
+
+		await tx.update(formVersions).set({ isCurrent: false }).where(and(
+			eq(formVersions.form, newSlug),
+			ne(formVersions.id, versionInfo.id),
+		));
+		return { formInfo, versionInfo };
+	})
+}
+
+export async function formTitleAvailable(title: string) {
+	const db = provideDb();
+	const result = await db.execute<{ available: boolean }>(sql`
+		SELECT NOT EXISTS(SELECT 1 FROM ${forms} WHERE ${eq(forms.title, title)}) AS "available"
+		`);
+	return result.rows[0];
+}
 
 export async function getCurrentFormVersionTx(conn: Connection | Transaction, form: string) {
 	const result = await conn.query.formVersions.findFirst({
@@ -123,5 +163,26 @@ export async function lookupFormVersionsByFormSlug(slug: string) {
 
 export async function lookupForms() {
 	const db = provideDb();
-	return await db.query.formDefinitions.findMany();
+	return await db.query.formDefinitions.findMany({
+		columns: {
+			slug: true,
+			updatedAt: true,
+			title: true,
+		},
+		with: {
+			currentVersion: {
+				columns: {
+					id: true
+				}
+			}
+		},
+		orderBy: {
+			updatedAt: 'desc'
+		},
+		where: {
+			archived: {
+				ne: true
+			}
+		}
+	});
 }

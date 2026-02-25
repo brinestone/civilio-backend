@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { provideDb } from './db';
+import { provideDb } from '../db';
 
 export type Connection = ReturnType<typeof provideDb>;
 export type Transaction = Parameters<Parameters<Connection['transaction']>[0]>[0];

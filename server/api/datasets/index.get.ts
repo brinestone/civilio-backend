@@ -1,6 +1,6 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { findAllDatasets } from "~/utils/datasets";
+import { findAllDatasets } from "~/utils/helpers/datasets";
 
 defineRouteMeta({
 	openAPI: {

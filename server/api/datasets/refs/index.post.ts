@@ -1,11 +1,26 @@
 import { defineEventHandler, setResponseStatus } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { createDatasetReference } from "~/utils/datasets";
-import { NewDatasetRefRequestSchema } from "~/utils/dto";
+import { createDatasetReference } from "~/utils/helpers/datasets";
 import { validateZodRequestBody } from "~/utils/dto/zod";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
+import { ExecutionError, } from "~/utils/types/errors";
+import { NewDatasetRefRequestSchema } from "~/utils/dto/dataset";
+import { fromExecutionError } from "~/utils/misc";
 
 const bodySchema = NewDatasetRefRequestSchema;
+
+export default defineEventHandler(async event => {
+	const dto = await validateZodRequestBody(event, bodySchema);
+	try {
+		const result = await createDatasetReference(dto);
+		setResponseStatus(event, 201);
+		return { ref: result };
+	} catch (e) {
+		if (e instanceof ExecutionError) {
+			throw fromExecutionError(e);
+		}
+		throw e;
+	}
+});
 
 defineRouteMeta({
 	openAPI: {
@@ -60,18 +75,4 @@ defineRouteMeta({
 			}
 		}
 	}
-})
-
-export default defineEventHandler(async event => {
-	const dto = await validateZodRequestBody(event, bodySchema);
-	try {
-		const result = await createDatasetReference(dto);
-		setResponseStatus(event, 201);
-		return { ref: result };
-	} catch (e) {
-		if (e instanceof ExecutionError) {
-			throw fromExecutionError(e);
-		}
-		throw e;
-	}
-})
+});

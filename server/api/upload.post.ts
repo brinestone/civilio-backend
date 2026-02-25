@@ -3,7 +3,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import { createError, defineEventHandler, readMultipartFormData, setResponseStatus } from 'h3';
 import { defineRouteMeta, useRuntimeConfig } from 'nitropack/runtime';
 import path from 'path';
-import { hashTheseMd5 } from '~/utils/helpers';
+import { hashTheseMd5 } from '~/utils/misc';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];

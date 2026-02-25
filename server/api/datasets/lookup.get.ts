@@ -1,7 +1,7 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { lookupDatasets } from "~/utils/datasets";
+import { lookupDatasets } from "~/utils/helpers/datasets";
 import { validateZodQueryParams } from "~/utils/dto/zod";
 
 const querySchema = z.object({

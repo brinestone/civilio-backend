@@ -1,9 +1,10 @@
-import { validateZodRouterParams, validateZodQueryParams } from "~/utils/dto/zod";
 import { defineEventHandler, setResponseStatus } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import z from "zod"
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
-import { toggleApprovalStatus } from "~/utils/submissions";
+import z from "zod";
+import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
+import { toggleApprovalStatus } from "~/utils/helpers/submissions";
+import { fromExecutionError } from "~/utils/misc";
+import { ExecutionError, } from "~/utils/types/errors";
 
 const pathSchema = z.object({
 	submission: z.coerce.number()

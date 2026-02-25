@@ -2,8 +2,9 @@ import { validateZodRouterParams, validateZodQueryParams } from "~/utils/dto/zod
 import { defineEventHandler, setResponseStatus } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
-import { deleteSubmission } from "~/utils/submissions";
+import { ExecutionError, } from "~/utils/types/errors";
+import { deleteSubmission } from "~/utils/helpers/submissions";
+import { fromExecutionError } from "~/utils/misc";
 
 const pathSchema = z.object({
 	submission: z.string().trim().pipe(z.coerce.number()),
@@ -24,8 +25,8 @@ defineRouteMeta({
 		parameters: [
 			{ in: 'path', required: true, name: 'submission', description: 'The submission index', schema: { type: 'integer' } },
 			{ in: 'query', required: true, name: 'form', description: 'The form slug to identify the form', schema: { type: 'string' } },
-			{ in: 'query', name: 'fv', example: 'current', schema: { type: 'string' }, required: false,  description: 'The form version to use, leave empty to use the current version' },
-			{ in: 'query', name: 'sv', example: 'current', schema: { type: 'string' }, required: false,  description: 'The submission version to use, leave empty to delete all versions, use "current" to delete the current version' },
+			{ in: 'query', name: 'fv', example: 'current', schema: { type: 'string' }, required: false, description: 'The form version to use, leave empty to use the current version' },
+			{ in: 'query', name: 'sv', example: 'current', schema: { type: 'string' }, required: false, description: 'The submission version to use, leave empty to delete all versions, use "current" to delete the current version' },
 		],
 		responses: {
 			'202': {

@@ -1,6 +1,6 @@
 import { defineNitroPlugin, runTask, useRuntimeConfig } from "nitropack/runtime";
 import { initPool, closePool } from "~/utils/db";
-import { pause } from "~/utils/helpers";
+import { pause } from "~/utils/misc";
 import Logger from "~/utils/logger";
 
 export default defineNitroPlugin(async app => {

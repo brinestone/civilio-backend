@@ -1,9 +1,10 @@
 import { defineEventHandler, setHeader } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { findDatasetRefItems } from "~/utils/datasets";
+import { findDatasetRefItems } from "~/utils/helpers/datasets";
 import { validateZodRouterParams } from "~/utils/dto/zod";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
+import { ExecutionError } from "~/utils/types/errors";
+import { fromExecutionError } from "~/utils/misc";
 
 const pathSchema = z.object({
 	ref: z.string().trim().nonempty('ref cannot be empty')

@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { DrizzleError, sql } from 'drizzle-orm';
 import { useStorage } from 'nitropack/runtime';
 import Logger from '../logger';
-import { Connection } from '../types';
+import { Connection } from '../types/types';
 
 const statementSeparator = '--> statement-breakpoint';
 

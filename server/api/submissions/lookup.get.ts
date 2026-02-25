@@ -1,9 +1,29 @@
 import { validateZodQueryParams } from "~/utils/dto/zod";
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { LookupFormSubmissionsRequestSchema } from "~/utils/dto";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
-import { lookupFormSubmissions } from "~/utils/submissions";
+import { LookupFormSubmissionsRequestSchema } from "~/utils/dto/submission";
+import { ExecutionError, } from "~/utils/types/errors";
+import { lookupFormSubmissions } from "~/utils/helpers/submissions";
+import { fromExecutionError } from "~/utils/misc";
+
+export default defineEventHandler(async event => {
+	const { limit, page, form, fv, sort } = await validateZodQueryParams(event, LookupFormSubmissionsRequestSchema);
+
+	try {
+		return lookupFormSubmissions({
+			page,
+			limit,
+			form,
+			fv,
+			sort
+		})
+	} catch (e) {
+		if (e instanceof ExecutionError) {
+			throw fromExecutionError(e);
+		}
+		throw e;
+	}
+});
 
 defineRouteMeta({
 	openAPI: {
@@ -69,22 +89,4 @@ defineRouteMeta({
 			}
 		}
 	}
-})
-export default defineEventHandler(async event => {
-	const { limit, page, form, fv, sort } = await validateZodQueryParams(event, LookupFormSubmissionsRequestSchema);
-
-	try {
-		return lookupFormSubmissions({
-			page,
-			limit,
-			form,
-			fv,
-			sort
-		})
-	} catch (e) {
-		if (e instanceof ExecutionError) {
-			throw fromExecutionError(e);
-		}
-		throw e;
-	}
-})
+});

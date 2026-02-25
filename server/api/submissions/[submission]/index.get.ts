@@ -2,8 +2,9 @@ import { validateZodRouterParams, validateZodQueryParams } from "~/utils/dto/zod
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
-import { findSubmissionResponses } from "~/utils/submissions";
+import { ExecutionError, } from "~/utils/types/errors";
+import { findSubmissionResponses } from "~/utils/helpers/submissions";
+import { fromExecutionError } from "~/utils/misc";
 
 const pathSchema = z.object({
 	submission: z.coerce.number()
@@ -13,6 +14,26 @@ const querySchema = z.object({
 	form: z.string(),
 	fv: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional()),
 	sv: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional())
+});
+
+
+export default defineEventHandler(async event => {
+	const pathResult = await validateZodRouterParams(event, pathSchema);
+	const queryResult = await validateZodQueryParams(event, querySchema);
+
+	try {
+		return await findSubmissionResponses(
+			queryResult.form,
+			pathResult.submission,
+			queryResult.fv,
+			queryResult.sv
+		);
+	} catch (e) {
+		if (e instanceof ExecutionError) {
+			throw fromExecutionError(e);
+		}
+		throw e;
+	}
 });
 
 defineRouteMeta({
@@ -85,23 +106,5 @@ defineRouteMeta({
 				}
 			}
 		}
-	}
-})
-export default defineEventHandler(async event => {
-	const pathResult = await validateZodRouterParams(event, pathSchema);
-	const queryResult = await validateZodQueryParams(event, querySchema);
-
-	try {
-		return await findSubmissionResponses(
-			queryResult.form,
-			pathResult.submission,
-			queryResult.fv,
-			queryResult.sv
-		);
-	} catch (e) {
-		if (e instanceof ExecutionError) {
-			throw fromExecutionError(e);
-		}
-		throw e;
 	}
 });
