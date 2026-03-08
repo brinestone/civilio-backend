@@ -11,3 +11,4 @@ screenshots
 .idea
 docker
 server/public/uploads/*
+.vfox/
