@@ -1,1 +1,0 @@
-ALTER TABLE "form_definitions" ADD COLUMN "archived" boolean DEFAULT false NOT NULL;

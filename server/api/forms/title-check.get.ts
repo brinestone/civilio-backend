@@ -18,8 +18,14 @@ defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
 		summary: 'Check title availability',
+		operationId: 'isFormTitleAvailable',
 		parameters: [
-			{ in: 'query', name: 'title', required: true, }
+			{
+				in: 'query',
+				name: 'title',
+				required: true,
+				schema: { type: 'string' }
+			}
 		],
 		responses: {
 			200: {

@@ -17,7 +17,13 @@ defineRouteMeta({
 		description: 'Get the items under a dataset reference',
 		operationId: 'findDatasetRefItems',
 		parameters: [
-			{ in: 'path', name: 'ref', schema: { type: 'string' }, required: true, allowEmptyValue: false, description: 'The ID of the reference' }
+			{
+				in: 'path',
+				name: 'ref',
+				schema: { type: 'string' },
+				required: true,
+				description: 'The ID of the reference'
+			}
 		],
 		responses: {
 			'400': { description: 'Bad request' },
@@ -25,8 +31,16 @@ defineRouteMeta({
 			'200': {
 				description: 'OK',
 				headers: {
-					'x-dataset-title': { description: 'The title of the referenced dataset', required: true, schema: { type: 'string' } },
-					'x-dataset-id': { description: 'The ID of the referenced dataset', required: true, schema: { type: 'string', format: 'uuid' } },
+					'x-dataset-title': {
+						description: 'The title of the referenced dataset',
+						required: true,
+						schema: { type: 'string' }
+					},
+					'x-dataset-id': {
+						description: 'The ID of the referenced dataset',
+						required: true,
+						schema: { type: 'string', format: 'uuid' }
+					},
 				},
 				content: {
 					'application/json': {

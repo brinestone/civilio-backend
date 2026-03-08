@@ -26,8 +26,10 @@ defineRouteMeta({
 						required: ['id', 'title', 'key', 'createdAt', 'updatedAt', 'itemCount'],
 						properties: {
 							id: { type: 'string', format: 'uuid' },
+							parentId: { type: 'string', format: 'uuid', nullable: true, default: null },
 							title: { type: 'string' },
-							description: { type: 'string', nullable: true },
+							key: { type: 'string' },
+							description: { type: 'string', nullable: true, default: null },
 							createdAt: { type: 'string', format: 'date-time' },
 							updatedAt: { type: 'string', format: 'date-time' },
 							itemCount: { type: 'integer', minimum: 0 }

@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "413a803e-f922-43a0-a5b3-dd416a0db290",
+  "id": "3e983293-c7f2-4bf9-ba21-979991b27ca1",
   "prevIds": [
-    "77608c80-a002-4b92-b4c4-b5820ce2c88a"
+    "0b8dc8b0-57e1-467f-a6f2-b81ee69a5f51"
   ],
   "ddl": [
     {
@@ -162,7 +162,7 @@
     {
       "type": "integer",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -173,7 +173,7 @@
       "table": "dataset_items"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -186,7 +186,7 @@
       "table": "dataset_items"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -238,7 +238,7 @@
       "table": "dataset_ref_items"
     },
     {
-      "type": "text",
+      "type": "varchar(64)",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -271,7 +271,7 @@
       "default": "false",
       "generated": null,
       "identity": null,
-      "name": "inUse",
+      "name": "in_use",
       "entityType": "columns",
       "schema": "public",
       "table": "dataset_refs"
@@ -381,7 +381,7 @@
       "table": "datasets"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -394,7 +394,7 @@
       "table": "datasets"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -407,32 +407,6 @@
       "table": "datasets"
     },
     {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "title",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "form_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "description",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "form_items"
-    },
-    {
       "type": "form_item_type",
       "typeSchema": "public",
       "notNull": true,
@@ -441,19 +415,6 @@
       "generated": null,
       "identity": null,
       "name": "type",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "form_items"
-    },
-    {
-      "type": "jsonb",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "relevance",
       "entityType": "columns",
       "schema": "public",
       "table": "form_items"
@@ -479,20 +440,20 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "meta",
+      "name": "config",
       "entityType": "columns",
       "schema": "public",
       "table": "form_items"
     },
     {
-      "type": "integer",
+      "type": "text",
       "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
+      "notNull": false,
+      "dimensions": 1,
+      "default": "'{}'",
       "generated": null,
       "identity": null,
-      "name": "position",
+      "name": "tags",
       "entityType": "columns",
       "schema": "public",
       "table": "form_items"
@@ -550,6 +511,19 @@
       "table": "form_submissions"
     },
     {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_submissions"
+    },
+    {
       "type": "uuid",
       "typeSchema": null,
       "notNull": true,
@@ -558,6 +532,32 @@
       "generated": null,
       "identity": null,
       "name": "item_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "parent_path",
       "entityType": "columns",
       "schema": "public",
       "table": "form_version_items"
@@ -589,14 +589,14 @@
       "table": "form_version_items"
     },
     {
-      "type": "uuid",
+      "type": "text",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "parent_id",
+      "name": "path",
       "entityType": "columns",
       "schema": "public",
       "table": "form_version_items"
@@ -609,7 +609,59 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "meta",
+      "name": "relevance",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "config",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 1,
+      "default": "'{}'",
+      "generated": null,
+      "identity": null,
+      "name": "tags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "added_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
       "entityType": "columns",
       "schema": "public",
       "table": "form_version_items"
@@ -641,7 +693,7 @@
       "table": "form_versions"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -654,7 +706,7 @@
       "table": "form_versions"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -688,6 +740,19 @@
       "generated": null,
       "identity": null,
       "name": "is_current",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_versions"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
       "entityType": "columns",
       "schema": "public",
       "table": "form_versions"
@@ -758,7 +823,20 @@
       "table": "form_definitions"
     },
     {
-      "type": "timestamp",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "archived",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_definitions"
+    },
+    {
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -771,7 +849,7 @@
       "table": "form_definitions"
     },
     {
-      "type": "timestamp",
+      "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -823,14 +901,14 @@
       "table": "submission_responses"
     },
     {
-      "type": "uuid",
+      "type": "text",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "response_id",
+      "name": "submission_tag",
       "entityType": "columns",
       "schema": "public",
       "table": "submission_responses"
@@ -862,14 +940,27 @@
       "table": "submission_responses"
     },
     {
-      "type": "uuid",
+      "type": "text",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": "gen_random_uuid()",
+      "default": null,
       "generated": null,
       "identity": null,
-      "name": "id",
+      "name": "change_notes",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "submission_versions"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "tag",
       "entityType": "columns",
       "schema": "public",
       "table": "submission_versions"
@@ -922,6 +1013,19 @@
       "generated": null,
       "identity": null,
       "name": "recorded_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "submission_versions"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "archived_at",
       "entityType": "columns",
       "schema": "public",
       "table": "submission_versions"
@@ -1359,48 +1463,6 @@
       "nameExplicit": false,
       "columns": [
         {
-          "value": "title",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": null,
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "form_items_title_index",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "form_items"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        {
-          "value": "description",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": "(\"description\" is not null)",
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "form_items_description_index",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "form_items"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        {
           "value": "form",
           "isExpression": false,
           "asc": true,
@@ -1534,6 +1596,27 @@
       "nameExplicit": false,
       "columns": [
         {
+          "value": "path",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "form_version_items_path_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
           "value": "parent_id",
           "isExpression": false,
           "asc": true,
@@ -1542,7 +1625,7 @@
         }
       ],
       "isUnique": false,
-      "where": "(\"parent_id\" is not null)",
+      "where": null,
       "with": "",
       "method": "btree",
       "concurrently": false,
@@ -1723,7 +1806,7 @@
       "nameExplicit": false,
       "columns": [
         {
-          "value": "response_id",
+          "value": "submission_tag",
           "isExpression": false,
           "asc": true,
           "nullsFirst": false,
@@ -1735,7 +1818,7 @@
       "with": "",
       "method": "btree",
       "concurrently": false,
-      "name": "submission_responses_response_id_index",
+      "name": "submission_responses_submission_tag_index",
       "entityType": "indexes",
       "schema": "public",
       "table": "submission_responses"
@@ -1757,6 +1840,27 @@
       "method": "btree",
       "concurrently": false,
       "name": "submission_versions_validation_code_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "submission_versions"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
+        {
+          "value": "tag",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "submission_versions_tag_index",
       "entityType": "indexes",
       "schema": "public",
       "table": "submission_versions"
@@ -2006,6 +2110,27 @@
     {
       "nameExplicit": false,
       "columns": [
+        "form_version",
+        "parent_id",
+        "parent_path"
+      ],
+      "schemaTo": "public",
+      "tableTo": "form_version_items",
+      "columnsTo": [
+        "form_version",
+        "item_id",
+        "path"
+      ],
+      "onUpdate": "CASCADE",
+      "onDelete": "SET NULL",
+      "name": "form_version_items_uQN3IPdgvV5n_fkey",
+      "entityType": "fks",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "nameExplicit": false,
+      "columns": [
         "item_id"
       ],
       "schemaTo": "public",
@@ -2016,25 +2141,6 @@
       "onUpdate": "CASCADE",
       "onDelete": "CASCADE",
       "name": "form_version_items_item_id_form_items_id_fkey",
-      "entityType": "fks",
-      "schema": "public",
-      "table": "form_version_items"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "form_version",
-        "parent_id"
-      ],
-      "schemaTo": "public",
-      "tableTo": "form_version_items",
-      "columnsTo": [
-        "form_version",
-        "item_id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "SET NULL",
-      "name": "form_version_items_fU9TFYVa3lSA_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "form_version_items"
@@ -2114,7 +2220,7 @@
     {
       "nameExplicit": false,
       "columns": [
-        "response_id",
+        "submission_tag",
         "form_version",
         "submission_index",
         "form"
@@ -2122,14 +2228,14 @@
       "schemaTo": "public",
       "tableTo": "submission_versions",
       "columnsTo": [
-        "id",
+        "tag",
         "form_version",
         "submission_index",
         "form"
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "submission_responses_tPteqUmlUlJA_fkey",
+      "name": "submission_responses_uz4m945uEVUl_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "submission_responses"
@@ -2248,7 +2354,8 @@
     {
       "columns": [
         "form_version",
-        "item_id"
+        "item_id",
+        "path"
       ],
       "nameExplicit": false,
       "name": "form_version_items_pkey",
@@ -2282,7 +2389,7 @@
         "submission_index",
         "field_id",
         "form_version",
-        "response_id"
+        "submission_tag"
       ],
       "nameExplicit": false,
       "name": "submission_responses_pkey",
@@ -2292,7 +2399,7 @@
     },
     {
       "columns": [
-        "id",
+        "tag",
         "form_version",
         "submission_index",
         "form"

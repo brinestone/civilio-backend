@@ -32,8 +32,8 @@ defineRouteMeta({
 				in: 'query',
 				name: 'key',
 				required: true,
-				example: 'commune',
-				description: 'The key value to use to check'
+				description: 'The key value to use to check',
+				schema: { type: 'string' }
 			},
 			{
 				in: 'query',

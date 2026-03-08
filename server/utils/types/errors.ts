@@ -1,4 +1,3 @@
-import { createError } from "h3";
 
 export type ErrorData = any;
 
@@ -19,7 +18,7 @@ export class ConflictError extends extendExecutionError('resource_conflict') { }
 export class UnprocessibleError extends extendExecutionError('unprocessible') { }
 export class NotFoundError extends extendExecutionError('resource_not_found'){}
 
-function toStatusCode(code: ErrorCode) {
+export function toStatusCode(code: ErrorCode) {
 	switch (code) {
 		case 'resource_conflict': return 409;
 		case 'unprocessible': return 422;

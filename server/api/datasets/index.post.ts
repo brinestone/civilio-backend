@@ -13,31 +13,6 @@ defineRouteMeta({
 		operationId: 'upsertDataset',
 		$global: {
 			components: {
-				requestBodies: {
-					UpsertFormDatasetRequest: {
-						required: true,
-						content: {
-							'application/json': {
-								schema: {
-									type: 'array',
-									items: {
-										oneOf: [
-											{ $ref: '#/components/schemas/DatasetInsert' },
-											{ $ref: '#/components/schemas/DatasetUpdate' }
-										],
-										discriminator: {
-											propertyName: 'isNew',
-											mapping: {
-												true: '#/components/schemas/DatasetInsert',
-												false: '#/components/schemas/DatasetUpdate'
-											}
-										}
-									}
-								} as any
-							}
-						}
-					}
-				},
 				schemas: {
 					NewDatasetItem: {
 						type: 'object',
@@ -128,7 +103,27 @@ defineRouteMeta({
 			},
 		},
 		requestBody: {
-			$ref: '#/components/requestBodies/UpsertFormDatasetRequest'
+			required: true,
+			content: {
+				'application/json': {
+					schema: {
+						type: 'array',
+						items: {
+							oneOf: [
+								{ $ref: '#/components/schemas/DatasetInsert' },
+								{ $ref: '#/components/schemas/DatasetUpdate' }
+							],
+							discriminator: {
+								propertyName: 'isNew',
+								mapping: {
+									true: '#/components/schemas/DatasetInsert',
+									false: '#/components/schemas/DatasetUpdate'
+								}
+							}
+						}
+					} as any
+				}
+			}
 		},
 		responses: {
 			'202': {

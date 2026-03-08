@@ -9,11 +9,12 @@ import { fromExecutionError } from "~/utils/misc";
 export default defineEventHandler(async event => {
 	const body = await validateZodRequestBody(event, requestBodySchema)
 	try {
-		const { formInfo, versionInfo } = await createForm(body.title, body.description ?? undefined)
+		const {
+			formInfo,
+			versionInfo
+		} = await createForm(body.title, body.description ?? undefined)
 		setResponseStatus(event, 201);
 		return {
-			// title: formInfo.label,
-			// description: formInfo.description,
 			slug: formInfo.slug,
 			version: versionInfo.id
 		}
@@ -34,56 +35,41 @@ defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
 		summary: 'Create form',
-		requestBody: {
-			$ref: '#/components/requestBodies/CreateFormRequest'
-		},
+		operationId: 'createNewForm',
 		responses: {
 			201: {
-				$ref: '#/components/responses/NewFormResponse'
-			}
-		},
-		$global: {
-			components: {
-				requestBodies: {
-					CreateFormRequest: {
-						description: 'Form creation request body',
-						required: true,
-						content: {
-							'application/json': {
-								schema: {
-									type: 'object',
-									required: ['title'],
-									additionalProperties: false,
-									properties: {
-										title: { type: 'string' },
-										description: { type: 'string', nullable: true }
-									}
-								}
-							}
-						}
-					}
-				},
-				responses: {
-					NewFormResponse: {
-						description: 'Response schema for newly created form',
-						content: {
-							'application/json': {
-								schema: {
-									type: 'object',
-									required: ['version', 'slug', 'title'],
-									additionalProperties: false,
-									properties: {
-										slug: { type: 'string' },
-										// title: { type: 'string' },
-										// description: { type: 'string', nullable: true },
-										version: { type: 'string', format: 'uuid' }
-									}
-								}
+				description: 'The form was created successfully',
+				content: {
+					'application/json': {
+						schema: {
+							type: 'object',
+							additionalProperties: false,
+							required: ['slug', 'version'],
+							properties: {
+								slug: { type: 'string' },
+								version: { type: 'string', format: 'uuid' },
 							}
 						}
 					}
 				}
 			}
-		}
+		},
+		requestBody: {
+			required: true,
+			description: 'Form creation request payload',
+			content: {
+				'application/json': {
+					schema: {
+						type: 'object',
+						required: ['title'],
+						additionalProperties: false,
+						properties: {
+							title: { type: 'string' },
+							description: { type: 'string', nullable: true }
+						}
+					}
+				}
+			}
+		},
 	}
 })

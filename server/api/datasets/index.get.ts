@@ -6,7 +6,8 @@ defineRouteMeta({
 	openAPI: {
 		deprecated: true,
 		tags: ['Datasets'],
-		summary: 'Get Datasets',
+		operationId: 'findDatasets',
+		summary: 'Find Datasets',
 		responses: {
 			'200': {
 				description: 'Datasets payload',

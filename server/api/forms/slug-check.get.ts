@@ -10,11 +10,18 @@ const querySchema = z.object({
 
 defineRouteMeta({
 	openAPI: {
+		deprecated: true,
 		tags: ['Forms'],
 		summary: 'Check slug',
+		operationId: 'isSlugAvailable',
 		description: 'Check whether a form slug is available',
 		parameters: [
-			{ in: 'query', name: 'slug', required: true, }
+			{
+				in: 'query',
+				name: 'slug',
+				required: true,
+				schema: { type: 'string' }
+			},
 		],
 		responses: {
 			'200': {

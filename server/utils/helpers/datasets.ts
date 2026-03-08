@@ -1,18 +1,37 @@
-import { and, asc, count, desc, eq, getColumns, gt, ne, or, sql } from "drizzle-orm";
+import {
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	getColumns,
+	gt,
+	ne,
+	or,
+	sql
+} from "drizzle-orm";
 import _ from 'lodash';
 import { provideDb } from "../db";
-import { datasetItems, datasetRefItems, datasetRefs, datasets } from "../db/schema";
-import { DatasetUpsertRequest, NewDatasetRefRequest } from "../dto/submission";
+import {
+	datasetItems,
+	datasetRefItems,
+	datasetRefs,
+	datasets
+} from "../db/schema";
 import { NotFoundError } from "../types/errors";
 import { hashThese } from "../misc";
 import Logger from "../logger";
 import { ConnectionLike } from "../types/types";
+import { DatasetUpsertRequest, NewDatasetRefRequest } from "../dto/dataset";
 
 export async function findDatasetRefItems(ref: string) {
 	const db = provideDb();
 	const refExists = await datasetRefExistsByIdTx(db, ref);
 	if (!refExists) throw new NotFoundError('Ref does not exist');
-	const [dataset] = await db.select({ title: datasets.title, id: datasets.id })
+	const [dataset] = await db.select({
+		title: datasets.title,
+		id: datasets.id
+	})
 		.from(datasetRefs)
 		.rightJoin(datasets, eq(datasetRefs.dataset, datasets.id))
 		.where(eq(datasetRefs.slug, ref))
@@ -27,8 +46,11 @@ export async function findDatasetRefItems(ref: string) {
 }
 
 export async function createDatasetReference({
-	dataset, followDatasetUpdates, selectAll, selectedItems
-}: NewDatasetRefRequest) {
+												 dataset,
+												 followDatasetUpdates,
+												 selectAll,
+												 selectedItems
+											 }: NewDatasetRefRequest) {
 	const db = provideDb();
 
 	return await db.transaction(async tx => {
@@ -78,14 +100,14 @@ export async function createDatasetReference({
 export async function datasetRefExistsByIdTx(tx: ConnectionLike, id: string) {
 	const result = await tx.execute<{ exists: boolean }>(sql`
 		SELECT EXISTS(SELECT 1 FROM ${datasetRefs} WHERE ${eq(datasetRefs.slug, id)})
-		`);
+	`);
 	return result.rows[0].exists;
 }
 
 export async function datasetExistsByIdTx(tx: ConnectionLike, id: string) {
 	const result = await tx.execute<{ exists: boolean }>(sql`
 		SELECT EXISTS(SELECT 1 FROM ${datasets} WHERE ${eq(datasets.id, id)})
-		`);
+	`);
 	return result.rows[0].exists;
 }
 

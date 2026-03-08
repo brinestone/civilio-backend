@@ -1,11 +1,13 @@
 import { z } from "zod";
 
 export const LookupFormSubmissionsRequestSchema = z.object({
+	filter: z.string().trim().optional(),
 	page: z.coerce.number().min(0).default(0),
 	limit: z.coerce.number().min(1).default(100),
 	form: z.string().trim().optional(),
-	fv: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional()),
-	sort: z.record(z.string(), z.enum(['asc', 'desc'])).optional()
+	version: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional()),
+	// sort: z.record(z.string(), z.enum(['asc', 'desc'])).optional(),
+	includeArchived: z.coerce.boolean().default(false)
 });
 
 export const ToggleApprovalStatusRequestSchema = z.object({

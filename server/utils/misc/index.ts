@@ -1,5 +1,5 @@
 import { createHash, getRandomValues } from "crypto";
-import { ExecutionError } from "../types/errors";
+import { ExecutionError, toStatusCode } from "../types/errors";
 import { createError } from "h3";
 
 export function pause(dur = 5000) {
@@ -57,8 +57,4 @@ export function fromExecutionError<TError extends ExecutionError>(e: TError) {
 		message: e.message,
 		cause: e
 	});
-}
-
-function toStatusCode(code: string): number | undefined {
-	throw new Error("Function not implemented.");
 }

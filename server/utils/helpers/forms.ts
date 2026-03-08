@@ -1,8 +1,115 @@
 import { and, eq, ne, not, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
+import _ from "lodash";
 import { provideDb } from "../db";
-import { forms, formVersions } from "../db/schema";
+import { formItems, forms, formVersionItems, formVersions } from "../db/schema";
+import { FormItemDefinition, NewFormItemDefinition } from "../dto/form";
+import Logger from "../logger";
 import { randomString } from "../misc";
-import { Connection, Transaction } from "../types/types";
+import { ConnectionLike } from "../types/types";
+
+export async function deleteItemsFromForm(tx: ConnectionLike, slug: string, version: string, ids: string[]) {
+	await tx.transaction(async tx => {
+
+	})
+}
+
+export async function updateFormItems(tx: ConnectionLike, slug: string, version: string, items: FormItemDefinition[], parentId?: string) {
+	Logger.info(`Attempting to update ${items.length} form item(s) under form: ${slug}`);
+	const fvi = alias(formVersionItems, 'fvi');
+	const ids = Array<string>();
+	await tx.transaction(async tx => {
+		for (const item of items) {
+			const { config, path, relevance, itemId, tags, id: linkId } = item;
+			const [{ returnedId }] = await tx.insert(fvi)
+				.values({
+					id: linkId,
+					path,
+					relevance,
+					parentId,
+					tags,
+					config,
+					form: slug,
+					formVersion: version,
+					itemId: itemId ?? null
+				})
+				.onConflictDoUpdate({
+					target: [fvi.formVersion, fvi.itemId, fvi.id],
+					set: {
+						tags,
+						parentId: sql`excluded.parent`,
+						relevance,
+					}
+				}).returning({ returnedId: fvi.id });
+
+			ids.push(returnedId);
+		}
+		const now = new Date();
+		await tx.update(fvi)
+			.set({ updatedAt: now }).where(and(
+				eq(fvi.form, slug),
+				eq(fvi.id, version)
+			));
+		await tx.update(forms)
+			.set({
+				updatedAt: now
+			})
+			.where(eq(forms.slug, slug));
+	});
+	return ids;
+}
+
+export async function formVersionHasItemTx(conn: ConnectionLike, formVersion: string, slug: string, id: string) {
+	const result = await conn.execute<{ exists: boolean }>(sql`
+		SELECT EXISTS(SELECT 1
+					  FROM ${formVersionItems}
+					  WHERE ${and(
+		eq(formVersionItems.formVersion, formVersion),
+		eq(formVersionItems.form, slug),
+		eq(formVersionItems.id, id),
+		// eq(formVersionItems.itemId, itemId)
+	)})
+	`);
+	return result.rows[0].exists;
+}
+
+export async function createFormItems(tx: ConnectionLike, slug: string, version: string, items: NewFormItemDefinition[], parentId?: string) {
+	const now = new Date();
+	return await tx.transaction(async tx => {
+		const ids = Array<string>();
+		for (const item of items) {
+			const [{ id: itemId }] = await tx.insert(formItems)
+				.values({
+					type: item.type,
+					config: _.omit(item.config, ['dataKey']),
+				}).returning({ id: formItems.id });
+
+			const [{ ref }] = await tx.insert(formVersionItems)
+				.values(({
+					itemId: itemId,
+					form: slug,
+					formVersion: version,
+					path: item.path,
+					parentId,
+					config: item.config,
+					relevance: item.relevance,
+				} as typeof formVersionItems.$inferInsert))
+				.returning({ ref: formVersionItems.id });
+			ids.push(ref)
+		}
+		await tx.update(formVersions)
+			.set({ updatedAt: now }).where(and(
+				eq(formVersions.form, slug),
+				eq(formVersions.id, version)
+			));
+		await tx.update(forms)
+			.set({
+				updatedAt: now
+			})
+			.where(eq(forms.slug, slug));
+		return ids;
+	});
+}
 
 export async function toggleFormArchived(slug: string) {
 	const db = provideDb();
@@ -39,11 +146,11 @@ export async function formTitleAvailable(title: string) {
 	const db = provideDb();
 	const result = await db.execute<{ available: boolean }>(sql`
 		SELECT NOT EXISTS(SELECT 1 FROM ${forms} WHERE ${eq(forms.title, title)}) AS "available"
-		`);
+	`);
 	return result.rows[0];
 }
 
-export async function getCurrentFormVersionTx(conn: Connection | Transaction, form: string) {
+export async function getCurrentFormVersionTx(conn: ConnectionLike, form: string) {
 	const result = await conn.query.formVersions.findFirst({
 		columns: { id: true },
 		where: {
@@ -57,98 +164,73 @@ export async function getCurrentFormVersionTx(conn: Connection | Transaction, fo
 	return result || null;
 }
 
-export async function formVersionExistsTx(tx: Transaction | Connection, slug: string, version: string) {
+export async function formVersionExistsTx(tx: ConnectionLike, slug: string, version: string) {
 	const result = await tx.execute<{ exists: boolean }>(sql`
 		SELECT EXISTS (SELECT 1 FROM ${formVersions} WHERE ${and(eq(formVersions.id, version), eq(formVersions.form, slug))}) AS "exists"
-		`);
+	`);
 	return result.rows[0]?.exists ?? false;
 }
 
 /**
  * Finds a form definition by slug and optional version.
- * 
+ *
  * @param slug - The form slug identifier
  * @param version - Optional specific version ID. If not provided, returns the current version
  * @returns A promise that resolves to the form version with its items and children, or undefined if not found
- * 
+ *
  * @example
  * // Get current form version
  * const form = await findFormDefinition('contact-form');
- * 
+ *
  * @example
  * // Get specific form version
  * const form = await findFormDefinition('contact-form', 'v1.2.0');
  */
-export async function findFormDefinition(slug: string, version?: string) {
+export async function findFormVersionDefinition(slug: string, version?: string) {
 	const db = provideDb();
-	if (version) {
-		return await db.query.formVersions.findFirst({
-			columns: { form: false },
-			where: {
-				AND: [
-					{ form: slug },
-					{ id: version }
-				]
-			},
-			with: {
-				items: {
-					with: {
-						children: true
-					}
-				},
-			}
-		});
-	}
-	return await db.query.formVersions.findFirst({
-		columns: { form: false },
-		where: {
-			AND: [
-				{ form: slug },
-				{ isCurrent: true }
-			]
-		},
-		with: {
-			items: {
-				with: {
-					children: true
-				}
-			},
-		}
-	});
+	const fv = alias(formVersions, 'fv');
+	const fvi = alias(formVersionItems, 'fvi');
+	const fi = alias(formItems, 'fi');
+	const formItemsQuery = db.select({
+		type: fi.type,
+		id: fi.id,
+		path: fvi.path,
+		relevance: fvi.relevance,
+		config: sql`COALESCE(${fi.config}, '{}'::JSONB) || ${fvi.config}`.as('config'),
+		tags: sql<string[]>`COALESCE(${fi.tags}, '{}'::TEXT[]) || COALESCE(${fvi.tags}, '{}'::TEXT[])`.as('tags'),
+		// dataKey: fvi.dataKey,
+	}).from(fi)
+		.innerJoin(fvi, eq(fvi.itemId, fi.id))
+		.where(eq(fv.id, fvi.formVersion))
+		.as('t');
+
+	const aggregatedItemsQuery = db.select({
+		r: sql`COALESCE(json_agg(row_to_json(t.*)), '[]')`.as('r')
+	}).from(formItemsQuery)
+		.as('items');
+
+	const [result] = await db.select({
+		id: fv.id,
+		parentId: fv.parentId,
+		items: sql`items.r`.as('items')
+	}).from(fv)
+		.leftJoinLateral(
+			aggregatedItemsQuery, sql`${true}`
+		).where(and(
+			eq(fv.form, slug),
+			version ? eq(fv.id, version) : eq(fv.isCurrent, true)
+		));
+	return result;
 }
 
 export async function formSlugAvailable(slug: string) {
 	const db = provideDb();
 	const result = await db.execute<{ exists: boolean }>(sql`
-    SELECT NOT EXISTS(SELECT 1
-                  FROM ${forms}
-                  WHERE ${eq(forms.slug, slug)}) AS "exists"
-  `);
+		SELECT NOT EXISTS(SELECT 1
+						  FROM ${forms}
+						  WHERE ${eq(forms.slug, slug)}) AS "exists"
+	`);
 	return result.rows[0].exists;
-}
-
-export async function findFormSubmissionData(index: number, form: string, version?: string) {
-	const db = provideDb();
-
-	let result = {} as Record<string, any>;
-	let queryResult = await db.execute<{ t: string }>(sql`
-    SELECT DISTINCT t.table_name::TEXT as t
-    FROM information_schema.tables t
-    WHERE t.table_schema = ${form};
-  `);
-
-	const tableNames = queryResult.rows.map(row => row.t);
-	for (const tableName of tableNames) {
-		// language=PostgreSQL
-		const queryResult = await db.execute<{ data: Record<string, unknown> }>(sql`
-      SELECT revisions.get_version_data(${form}, ${index}, ${tableName},
-                                        ${version || null}, ${false}) as data
-    `);
-		const row = queryResult.rows[0]?.data;
-		if (!row) continue;
-		result = { ...result, ...row };
-	}
-	return result;
 }
 
 export async function lookupFormVersionsByFormSlug(slug: string) {

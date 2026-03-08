@@ -7,15 +7,25 @@ import { lookupFormSubmissions } from "~/utils/helpers/submissions";
 import { fromExecutionError } from "~/utils/misc";
 
 export default defineEventHandler(async event => {
-	const { limit, page, form, fv, sort } = await validateZodQueryParams(event, LookupFormSubmissionsRequestSchema);
+	const {
+		limit,
+		page,
+		includeArchived,
+		form,
+		version,
+		filter,
+		// sort
+	} = await validateZodQueryParams(event, LookupFormSubmissionsRequestSchema);
 
 	try {
 		return lookupFormSubmissions({
 			page,
 			limit,
 			form,
-			fv,
-			sort
+			includeArchived,
+			version,
+			filter,
+			// sort
 		})
 	} catch (e) {
 		if (e instanceof ExecutionError) {
@@ -32,41 +42,67 @@ defineRouteMeta({
 		tags: ['Submissions'],
 		operationId: 'lookupFormSubmissions',
 		parameters: [
-			{ in: 'query', required: false, schema: { type: 'integer', minimum: 0 }, name: 'page', description: 'Pagination page offset' },
-			{ in: 'query', required: false, schema: { type: 'integer', minimum: 1 }, name: 'limit', description: 'Pagination result size' },
-			{ in: 'query', required: false, schema: { type: 'string' }, name: 'form', description: 'A form identifier' },
-			{ in: 'query', required: false, schema: { type: 'string', format: 'uuid' }, name: 'fv', description: 'A form version identifier' },
-			{ in: 'query', required: false, schema: { type: 'string' }, name: 'sort', description: 'A JSON string expressing sorting orders' },
+			{
+				in: 'query',
+				name: 'includeArchived',
+				required: false,
+				schema: { type: 'boolean', default: false },
+				description: 'Whether or not archived submissions should be included'
+			},
+			{
+				in: 'query',
+				required: false,
+				schema: { type: 'string' },
+				description: 'A filter to filter the results',
+				name: 'filter'
+			},
+			{
+				in: 'query',
+				required: false,
+				schema: { type: 'integer', minimum: 0 },
+				name: 'page',
+				description: 'Pagination page offset'
+			},
+			{
+				in: 'query',
+				required: false,
+				schema: { type: 'integer', minimum: 1 },
+				name: 'limit',
+				description: 'Pagination result size'
+			},
+			{
+				in: 'query',
+				required: false,
+				schema: { type: 'string' },
+				name: 'form',
+				description: 'A form identifier'
+			},
+			{
+				in: 'query',
+				required: false,
+				schema: { type: 'string', format: 'uuid' },
+				name: 'fv',
+				description: 'A form version identifier'
+			},
 		],
 		$global: {
 			components: {
 				schemas: {
-					SubmissionVersionLookup: {
-						additionalProperties: false,
-						type: 'object',
-						required: ['id', 'recordedAt', 'validationCode', 'isCurrent'],
-						properties: {
-							id: { type: 'string', format: 'uuid' },
-							isCurrent: { type: 'boolean' },
-							recordedAt: { type: 'string', format: 'date-time' },
-							validationCode: { type: 'string' },
-							approvedAt: { type: 'string', format: 'date-time' }
-						}
-					},
 					SubmissionLookup: {
 						additionalProperties: false,
 						type: 'object',
-						required: ['form', 'formVersion', 'index', 'recordedAt', 'versions'],
+						required: ['form', 'formVersion', 'index', 'recordedAt', 'versionCount'],
 						properties: {
+							slug: { type: 'string' },
 							form: { type: 'string' },
 							formVersion: { type: 'string', format: 'uuid' },
 							index: { type: 'integer' },
 							recordedAt: { type: 'string', format: 'date-time' },
-							versions: {
-								type: 'array',
-								items: {
-									$ref: '#/components/schemas/SubmissionVersionLookup'
-								}
+							lastUpdatedAt: { type: 'string', format: 'date-time' },
+							versionCount: {
+								type: 'integer',
+								minimum: 0,
+								default: 0
 							}
 						}
 					}
@@ -79,9 +115,17 @@ defineRouteMeta({
 				content: {
 					'application/json': {
 						schema: {
-							type: "array",
-							items: {
-								$ref: '#/components/schemas/SubmissionLookup'
+							type: 'object',
+							additionalProperties: false,
+							required: ['data', 'totalRecords'],
+							properties: {
+								totalRecords: { type: 'integer', minimum: 0 },
+								data: {
+									type: "array",
+									items: {
+										$ref: '#/components/schemas/SubmissionLookup'
+									}
+								}
 							}
 						}
 					}

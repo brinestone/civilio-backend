@@ -1,0 +1,1 @@
+ALTER TABLE "form_version_items" ADD COLUMN "id" uuid DEFAULT gen_random_uuid() NOT NULL;

@@ -1,4 +1,7 @@
-import { validateZodRouterParams, validateZodQueryParams } from "~/utils/dto/zod";
+import {
+	validateZodRouterParams,
+	validateZodQueryParams
+} from "~/utils/dto/zod";
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
@@ -43,10 +46,30 @@ defineRouteMeta({
 		description: 'Fetch the responses for a particular submission',
 		operationId: 'getSubmissionData',
 		parameters: [
-			{ in: 'path', name: 'submission', schema: { type: 'number' }, required: true },
-			{ in: 'query', name: 'fv', schema: { type: 'string', format: 'uuid' }, required: false },
-			{ in: 'query', name: 'sv', schema: { type: 'string', format: 'uuid' }, required: false },
-			{ in: 'query', name: 'form', required: true }
+			{
+				in: 'path',
+				name: 'submission',
+				schema: { type: 'number' },
+				required: true
+			},
+			{
+				in: 'query',
+				name: 'fv',
+				schema: { type: 'string', format: 'uuid' },
+				required: false
+			},
+			{
+				in: 'query',
+				name: 'sv',
+				schema: { type: 'string', format: 'uuid' },
+				required: false
+			},
+			{
+				in: 'path',
+				name: 'form',
+				required: true,
+				schema: { type: 'string' }
+			}
 		],
 		$global: {
 			components: {
@@ -58,7 +81,6 @@ defineRouteMeta({
 						properties: {
 							submissionIndex: {
 								type: 'integer',
-								format: 'int64',
 								description: 'The index of the submission'
 							},
 							fieldId: {
@@ -71,10 +93,8 @@ defineRouteMeta({
 								format: 'uuid',
 								description: 'UUID of the form version'
 							},
-							submissionVersionId: {
+							submissionTag: {
 								type: 'string',
-								format: 'uuid',
-								description: 'UUID of the submission version (response_id in database)'
 							},
 							form: {
 								type: 'string',
@@ -85,7 +105,7 @@ defineRouteMeta({
 								description: 'The response value for the field'
 							}
 						},
-						required: ['submissionIndex', 'fieldId', 'formVersion', 'submissionVersionId', 'form']
+						required: ['submissionIndex', 'fieldId', 'formVersion', 'submissionTag', 'form']
 					}
 				}
 			}
@@ -99,7 +119,7 @@ defineRouteMeta({
 							type: 'array',
 							description: 'Array of submission responses',
 							items: {
-								$ref: '#/components/schema/SubmissionResponse'
+								$ref: '#/components/schemas/SubmissionResponse'
 							}
 						}
 					}

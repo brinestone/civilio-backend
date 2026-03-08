@@ -19,6 +19,7 @@ defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
 		summary: 'Lookup forms',
+		operationId: 'lookupForms',
 		description: 'Lookup all forms',
 		$global: {
 			components: {
@@ -47,7 +48,6 @@ defineRouteMeta({
 				}
 			}
 		},
-		operationId: 'lookupFormDefinitions',
 		responses: {
 			'200': {
 				description: 'OK',
