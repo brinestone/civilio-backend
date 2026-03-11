@@ -41,7 +41,7 @@ CREATE TABLE "form_items" (
 	"type" "form_item_type" NOT NULL,
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
 	"config" jsonb,
-	"tags" text[] DEFAULT '{}'::text[]
+	"tags" jsonb
 );
 --> statement-breakpoint
 CREATE TABLE "form_submissions" (
@@ -54,17 +54,18 @@ CREATE TABLE "form_submissions" (
 );
 --> statement-breakpoint
 CREATE TABLE "form_version_items" (
-	"item_id" uuid,
+	"item_id" uuid NOT NULL,
 	"parent_id" uuid,
-	"parent_path" text,
 	"form" text NOT NULL,
 	"form_version" uuid,
-	"path" text,
+	"path" text NOT NULL,
 	"relevance" jsonb,
 	"config" jsonb,
-	"tags" text[] DEFAULT '{}'::text[],
-	"data_key" text,
-	CONSTRAINT "form_version_items_pkey" PRIMARY KEY("form_version","item_id","path")
+	"tags" jsonb,
+	"id" uuid DEFAULT gen_random_uuid(),
+	"added_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "form_version_items_pkey" PRIMARY KEY("form_version","id")
 );
 --> statement-breakpoint
 CREATE TABLE "form_versions" (
@@ -141,7 +142,6 @@ CREATE INDEX "form_version_items_item_id_index" ON "form_version_items" ("item_i
 CREATE INDEX "form_version_items_form_index" ON "form_version_items" ("form");--> statement-breakpoint
 CREATE INDEX "form_version_items_form_version_index" ON "form_version_items" ("form_version");--> statement-breakpoint
 CREATE INDEX "form_version_items_path_index" ON "form_version_items" ("path");--> statement-breakpoint
-CREATE INDEX "form_version_items_data_key_index" ON "form_version_items" ("data_key") WHERE ("data_key" is not null);--> statement-breakpoint
 CREATE INDEX "form_version_items_parent_id_index" ON "form_version_items" ("parent_id");--> statement-breakpoint
 CREATE INDEX "form_versions_form_index" ON "form_versions" ("form");--> statement-breakpoint
 CREATE INDEX "form_versions_parent_id_index" ON "form_versions" ("parent_id") WHERE ("parent_id" is not null);--> statement-breakpoint
@@ -166,7 +166,7 @@ ALTER TABLE "dataset_refs" ADD CONSTRAINT "dataset_refs_dataset_datasets_id_fkey
 ALTER TABLE "datasets" ADD CONSTRAINT "datasets_parent_id_datasets_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "datasets"("id") ON DELETE SET NULL ON UPDATE CASCADE;--> statement-breakpoint
 ALTER TABLE "form_submissions" ADD CONSTRAINT "form_submissions_form_version_form_form_versions_id_form_fkey" FOREIGN KEY ("form_version","form") REFERENCES "form_versions"("id","form") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint
 ALTER TABLE "form_submissions" ADD CONSTRAINT "form_submissions_form_form_definitions_slug_fkey" FOREIGN KEY ("form") REFERENCES "form_definitions"("slug") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint
-ALTER TABLE "form_version_items" ADD CONSTRAINT "form_version_items_uQN3IPdgvV5n_fkey" FOREIGN KEY ("form_version","parent_id","parent_path") REFERENCES "form_version_items"("form_version","item_id","path") ON DELETE SET NULL ON UPDATE CASCADE;--> statement-breakpoint
+ALTER TABLE "form_version_items" ADD CONSTRAINT "form_version_items_ouTNLkvQNAbQ_fkey" FOREIGN KEY ("form_version","parent_id") REFERENCES "form_version_items"("form_version","id") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint
 ALTER TABLE "form_version_items" ADD CONSTRAINT "form_version_items_item_id_form_items_id_fkey" FOREIGN KEY ("item_id") REFERENCES "form_items"("id") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint
 ALTER TABLE "form_version_items" ADD CONSTRAINT "form_version_items_form_form_definitions_slug_fkey" FOREIGN KEY ("form") REFERENCES "form_definitions"("slug") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint
 ALTER TABLE "form_version_items" ADD CONSTRAINT "form_version_items_form_version_form_form_versions_id_form_fkey" FOREIGN KEY ("form_version","form") REFERENCES "form_versions"("id","form") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint

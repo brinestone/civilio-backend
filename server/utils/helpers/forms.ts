@@ -1,54 +1,82 @@
 import { and, eq, ne, not, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import _ from "lodash";
-import { provideDb } from "../db";
+import { excluded, provideDb } from "../db";
 import { formItems, forms, formVersionItems, formVersions } from "../db/schema";
-import { FormItemDefinition, NewFormItemDefinition } from "../dto/form";
+import { FormItemDefinition, NewFormItemDefinition, Tag } from "../dto/form";
 import Logger from "../logger";
 import { randomString } from "../misc";
 import { ConnectionLike } from "../types/types";
 
-export async function deleteItemsFromForm(tx: ConnectionLike, slug: string, version: string, ids: string[]) {
-	await tx.transaction(async tx => {
-
-	})
+export async function removeFormItems(tx: ConnectionLike, slug: string, version: string, ids: string[]) {
+	const fvi = alias(formVersionItems, 'fvi');
+	return await tx.transaction(async tx => {
+		let deleted = 0;
+		for (const id of ids) {
+			const result = await tx.delete(fvi)
+				.where(and(
+					eq(fvi.form, slug),
+					eq(fvi.formVersion, version),
+					eq(fvi.id, id)
+				));
+			deleted += result.rowCount ?? 0;
+		}
+		if (deleted > 0) {
+			const now = new Date();
+			await tx.update(fvi)
+				.set({ updatedAt: now }).where(and(
+					eq(fvi.form, slug),
+					eq(fvi.id, version)
+				));
+			await tx.update(forms)
+				.set({
+					updatedAt: now
+				})
+				.where(eq(forms.slug, slug));
+		}
+		return deleted;
+	});
 }
 
 export async function updateFormItems(tx: ConnectionLike, slug: string, version: string, items: FormItemDefinition[], parentId?: string) {
 	Logger.info(`Attempting to update ${items.length} form item(s) under form: ${slug}`);
-	const fvi = alias(formVersionItems, 'fvi');
+	// const fvi = alias(formVersionItems, 'fvi');
 	const ids = Array<string>();
 	await tx.transaction(async tx => {
 		for (const item of items) {
-			const { config, path, relevance, itemId, tags, id: linkId } = item;
-			const [{ returnedId }] = await tx.insert(fvi)
+			const { config, path, relevance, itemId, tags, id: linkId, metaTag } = item;
+			const [{ returnedId }] = await tx.insert(formVersionItems)
 				.values({
 					id: linkId,
 					path,
 					relevance,
 					parentId,
 					tags,
+					metaTag,
 					config,
 					form: slug,
 					formVersion: version,
 					itemId: itemId ?? null
 				})
 				.onConflictDoUpdate({
-					target: [fvi.formVersion, fvi.itemId, fvi.id],
+					target: [formVersionItems.formVersion, formVersionItems.id],
 					set: {
-						tags,
-						parentId: sql`excluded.parent`,
-						relevance,
+						tags: excluded(formVersionItems.tags),
+						parentId: excluded(formVersionItems.parentId),
+						relevance: excluded(formVersionItems.relevance),
+						path: excluded(formVersionItems.path),
+						config: excluded(formVersionItems.config),
+						itemId: excluded(formVersionItems.itemId),
+						metaTag: excluded(formVersionItems.metaTag)
 					}
-				}).returning({ returnedId: fvi.id });
-
+				}).returning({ returnedId: formVersionItems.id });
 			ids.push(returnedId);
 		}
 		const now = new Date();
-		await tx.update(fvi)
+		await tx.update(formVersionItems)
 			.set({ updatedAt: now }).where(and(
-				eq(fvi.form, slug),
-				eq(fvi.id, version)
+				eq(formVersionItems.form, slug),
+				eq(formVersionItems.id, version)
 			));
 		await tx.update(forms)
 			.set({
@@ -81,7 +109,10 @@ export async function createFormItems(tx: ConnectionLike, slug: string, version:
 			const [{ id: itemId }] = await tx.insert(formItems)
 				.values({
 					type: item.type,
+					id: item.itemId || undefined,
 					config: _.omit(item.config, ['dataKey']),
+				}).onConflictDoNothing({
+					target: [formItems.id]
 				}).returning({ id: formItems.id });
 
 			const [{ ref }] = await tx.insert(formVersionItems)
@@ -193,12 +224,15 @@ export async function findFormVersionDefinition(slug: string, version?: string) 
 	const fi = alias(formItems, 'fi');
 	const formItemsQuery = db.select({
 		type: fi.type,
-		id: fi.id,
+		id: fvi.id,
+		itemId: fi.id.as('itemId'),
 		path: fvi.path,
 		relevance: fvi.relevance,
 		config: sql`COALESCE(${fi.config}, '{}'::JSONB) || ${fvi.config}`.as('config'),
-		tags: sql<string[]>`COALESCE(${fi.tags}, '{}'::TEXT[]) || COALESCE(${fvi.tags}, '{}'::TEXT[])`.as('tags'),
-		// dataKey: fvi.dataKey,
+		tags: sql<Tag[]>`COALESCE(${fi.tags}, '[]'::JSONB) || COALESCE(${fvi.tags}, '[]'::JSONB)`.as('tags'),
+		addedAt: fvi.addedAt.as('addedAt'),
+		updatedAt: fvi.updatedAt.as('updatedAt'),
+		metaTag: fvi.metaTag.as('metaTag')
 	}).from(fi)
 		.innerJoin(fvi, eq(fvi.itemId, fi.id))
 		.where(eq(fv.id, fvi.formVersion))

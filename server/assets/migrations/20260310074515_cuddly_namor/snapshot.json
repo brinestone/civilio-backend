@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "3e983293-c7f2-4bf9-ba21-979991b27ca1",
+  "id": "53320cec-779a-4078-bd8f-1d9194ae8e31",
   "prevIds": [
-    "0b8dc8b0-57e1-467f-a6f2-b81ee69a5f51"
+    "7f4581e6-d998-40e9-b981-057dcd35b14b"
   ],
   "ddl": [
     {
@@ -446,11 +446,11 @@
       "table": "form_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
@@ -552,19 +552,6 @@
     {
       "type": "text",
       "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "parent_path",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "form_version_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
       "default": null,
@@ -628,14 +615,27 @@
       "table": "form_version_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
       "entityType": "columns",
       "schema": "public",
       "table": "form_version_items"
@@ -2111,19 +2111,17 @@
       "nameExplicit": false,
       "columns": [
         "form_version",
-        "parent_id",
-        "parent_path"
+        "parent_id"
       ],
       "schemaTo": "public",
       "tableTo": "form_version_items",
       "columnsTo": [
         "form_version",
-        "item_id",
-        "path"
+        "id"
       ],
       "onUpdate": "CASCADE",
-      "onDelete": "SET NULL",
-      "name": "form_version_items_uQN3IPdgvV5n_fkey",
+      "onDelete": "CASCADE",
+      "name": "form_version_items_ouTNLkvQNAbQ_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "form_version_items"
@@ -2354,8 +2352,7 @@
     {
       "columns": [
         "form_version",
-        "item_id",
-        "path"
+        "id"
       ],
       "nameExplicit": false,
       "name": "form_version_items_pkey",

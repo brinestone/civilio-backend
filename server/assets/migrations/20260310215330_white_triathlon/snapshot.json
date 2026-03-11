@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "0b8dc8b0-57e1-467f-a6f2-b81ee69a5f51",
+  "id": "4e5d82e8-db8e-4681-a964-9db289458735",
   "prevIds": [
-    "b43bfee6-f816-4a20-9968-e526e7576629"
+    "6874b348-ff47-448e-9c03-e9a2d2646aa0"
   ],
   "ddl": [
     {
@@ -446,11 +446,11 @@
       "table": "form_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
@@ -552,19 +552,6 @@
     {
       "type": "text",
       "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "parent_path",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "form_version_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
       "default": null,
@@ -615,6 +602,19 @@
       "table": "form_version_items"
     },
     {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "meta_tag",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
       "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
@@ -628,14 +628,53 @@
       "table": "form_version_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "added_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
       "entityType": "columns",
       "schema": "public",
       "table": "form_version_items"
@@ -2085,19 +2124,17 @@
       "nameExplicit": false,
       "columns": [
         "form_version",
-        "parent_id",
-        "parent_path"
+        "parent_id"
       ],
       "schemaTo": "public",
       "tableTo": "form_version_items",
       "columnsTo": [
         "form_version",
-        "item_id",
-        "path"
+        "id"
       ],
       "onUpdate": "CASCADE",
-      "onDelete": "SET NULL",
-      "name": "form_version_items_uQN3IPdgvV5n_fkey",
+      "onDelete": "CASCADE",
+      "name": "form_version_items_ouTNLkvQNAbQ_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "form_version_items"
@@ -2328,8 +2365,7 @@
     {
       "columns": [
         "form_version",
-        "item_id",
-        "path"
+        "id"
       ],
       "nameExplicit": false,
       "name": "form_version_items_pkey",

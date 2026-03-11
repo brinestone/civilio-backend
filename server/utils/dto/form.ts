@@ -11,32 +11,37 @@ const RelevanceLogicExpressionOperatorSchema = z.enum([
 const NumberRangeSchema = z.object({
 	start: z.number().nullable(),
 	end: z.number().nullable()
-}).strict();
+});
 
 const RelevanceLogicExpressionSchema = z.object({
 	field: z.string(),
 	operator: RelevanceLogicExpressionOperatorSchema,
 	negated: z.boolean(),
 	value: z.string().nullish().default(null)
-}).strict();
+});
 
 const RelevanceConditionSchema = z.object({
 	operator: z.enum(['and', 'or']),
 	expressions: z.array(RelevanceLogicExpressionSchema)
-}).strict();
+});
 
 const RelevanceDefinitionSchema = z.object({
 	enabled: z.boolean().default(true),
 	operator: z.enum(['and', 'or']).default('and'),
 	logic: z.array(RelevanceConditionSchema)
-}).strict();
+});
+
+const TagSchema = z.object({ key: z.string().nullish(), value: z.string().nullish() });
+export type Tag = z.infer<typeof TagSchema>;
 
 // Base Form Item Definition
 const BaseNewFormItemDefinitionSchema = z.object({
 	path: z.string(),
 	relevance: RelevanceDefinitionSchema.nullable(),
-	tags: z.string().array().nullish().default([])
-}).strict();
+	tags: TagSchema.array().nullish().default([]),
+	itemId: z.string().nullish(),
+	metaTag: z.string().nullish()
+});
 
 // Field Config schemas
 const BaseFieldPropsSchema = z.object({
@@ -45,41 +50,41 @@ const BaseFieldPropsSchema = z.object({
 	dataKey: z.string().trim().nullish(),
 	title: z.string(),
 	description: z.string().nullable()
-}).strict();
+});
 
 // Date field schemas
 const BaseDateFieldPropsSchema = BaseFieldPropsSchema.extend({
 	min: z.number().nullable(),
 	max: z.number().nullable()
-}).strict();
+});
 
 const SimpleDateFieldConfigSchema = BaseDateFieldPropsSchema.extend({
 	type: z.enum(['date', 'date-time']),
 	defaultValue: z.number().nullable()
-}).strict();
+});
 
 const RangeDateFieldConfigSchema = BaseDateFieldPropsSchema.extend({
 	type: z.literal('date-range'),
 	defaultValue: NumberRangeSchema
-}).strict();
+});
 
 const MultiDateFieldConfigSchema = BaseDateFieldPropsSchema.extend({
 	type: z.literal('multi-date'),
 	minSelection: z.number().int().nullable(),
 	maxSelection: z.number().int().nullable(),
 	defaultValue: z.array(z.number()).nullable()
-}).strict();
+});
 
 // GeoPoint schemas
 const GeoPointSchema = z.object({
 	lat: z.number().min(-90).max(90),
 	long: z.number().min(-180).max(180)
-}).strict();
+});
 
 const GeoPointFieldConfigSchema = BaseFieldPropsSchema.extend({
 	type: z.literal('geo-point'),
 	defaultValue: GeoPointSchema.nullable()
-}).strict();
+});
 
 // Number field config
 const NumberFieldConfigSchema = BaseFieldPropsSchema.extend({
@@ -87,14 +92,14 @@ const NumberFieldConfigSchema = BaseFieldPropsSchema.extend({
 	min: z.number().nullable(),
 	max: z.number().nullable(),
 	defaultValue: z.number().nullable()
-}).strict();
+});
 
 // Boolean field config
 const BooleanFieldConfigSchema = BaseFieldPropsSchema.extend({
 	type: z.literal('boolean'),
 	defaultValue: z.boolean().default(false).nullable(),
 	renderAs: z.enum(['select', 'checkbox']).default('checkbox').nullable()
-}).strict();
+});
 
 // Text field config
 const TextFieldConfigSchema = BaseFieldPropsSchema.extend({
@@ -103,7 +108,7 @@ const TextFieldConfigSchema = BaseFieldPropsSchema.extend({
 	minlength: z.number().nullable(),
 	maxlength: z.number().nullable(),
 	defaultValue: z.string().nullable()
-}).strict();
+});
 
 // Select field config
 const SelectFieldConfigSchema = BaseFieldPropsSchema.extend({
@@ -113,8 +118,8 @@ const SelectFieldConfigSchema = BaseFieldPropsSchema.extend({
 	hardItems: z.array(z.object({
 		label: z.string().nullable(),
 		value: z.string().nullable()
-	}).strict()).default([])
-}).strict();
+	})).default([])
+});
 
 // Field Item Config union
 const FieldItemConfigSchema = z.discriminatedUnion('type', [
@@ -131,7 +136,7 @@ const FieldItemConfigSchema = z.discriminatedUnion('type', [
 // Other item config schemas
 const SeparatorItemConfigSchema = z.object({
 	orientation: z.enum(['vertical', 'horizontal']).optional()
-}).strict();
+});
 
 const ImageItemConfigSchema = z.object({
 	url: z.string(),
@@ -140,58 +145,57 @@ const ImageItemConfigSchema = z.object({
 	height: z.number().nullable(),
 	aspectRatio: z.number().nullable(),
 	filter: z.enum(['none', 'shadow']).nullable()
-}).strict();
+});
 
 const NoteItemConfigSchema = z.object({
 	fontSize: z.number().int().default(13)
-}).strict();
+});
 
 // Form Item Definitions
-const NewFormItemGroupSchema = BaseNewFormItemDefinitionSchema.extend({
-	type: z.literal('group'),
-	config: z.object({
-		fields: z.array(z.lazy(() => NewFormItemFieldSchema))
-	}).strict()
-}).strict();
-
 const NewFormItemImageSchema = BaseNewFormItemDefinitionSchema.extend({
 	type: z.literal('image'),
 	url: z.string(),
 	config: ImageItemConfigSchema
-}).strict();
+});
 
 const NewFormItemNoteSchema = BaseNewFormItemDefinitionSchema.extend({
 	type: z.literal('note'),
 	config: NoteItemConfigSchema
-}).strict();
+});
 
 const NewFormItemSeparatorSchema = BaseNewFormItemDefinitionSchema.extend({
 	type: z.literal('separator'),
 	config: SeparatorItemConfigSchema.optional()
-}).strict();
+});
 
 const NewFormItemFieldSchema = BaseNewFormItemDefinitionSchema.extend({
 	type: z.literal('field'),
 	config: FieldItemConfigSchema
-}).strict();
-const BaseFormItemDefinitionSchema = BaseNewFormItemDefinitionSchema.extend({
+});
+const NewFormItemGroupSchema = BaseNewFormItemDefinitionSchema.extend({
+	type: z.literal('group'),
+	config: z.object({
+		fields: NewFormItemFieldSchema.array()
+	})
+});
+const FormItemExtrasSchema = BaseNewFormItemDefinitionSchema.extend({
 	id: z.uuid(),
 	itemId: z.uuid()
-})
+});
+const FormItemExtras = FormItemExtrasSchema.shape;
 
+export const FormItemFieldSchema = NewFormItemFieldSchema.extend(FormItemExtras);
 export const FormItemGroupSchema = NewFormItemGroupSchema.extend({
-	// id: z.string().trim().pipe(z.uuid()),
 	config: NewFormItemGroupSchema.shape.config.extend({
 		fields: z.union([
-			NewFormItemGroupSchema.shape.config.shape.fields.unwrap(),
-			z.lazy(() => FormItemFieldSchema)
+			FormItemFieldSchema,
+			NewFormItemFieldSchema
 		]).array()
 	})
-})/* .and(BaseFormItemDefinitionSchema); */
-export const FormItemNoteSchema = NewFormItemNoteSchema/* .and(BaseFormItemDefinitionSchema); */
-export const FormItemFieldSchema = NewFormItemFieldSchema/* .and(BaseFormItemDefinitionSchema); */
-export const FormItemImageSchema = NewFormItemImageSchema/* .and(BaseFormItemDefinitionSchema); */
-export const FormItemSeparatorSchema = NewFormItemSeparatorSchema/* .and(BaseFormItemDefinitionSchema); */
+}).extend(FormItemExtras);
+export const FormItemNoteSchema = NewFormItemNoteSchema.extend(FormItemExtras);
+export const FormItemImageSchema = NewFormItemImageSchema.extend(FormItemExtras);
+export const FormItemSeparatorSchema = NewFormItemSeparatorSchema.extend(FormItemExtras);
 
 // Main FormItemDefinition union
 export const FormItemDefinitionSchema = z.discriminatedUnion('type', [
@@ -200,7 +204,7 @@ export const FormItemDefinitionSchema = z.discriminatedUnion('type', [
 	FormItemFieldSchema,
 	FormItemImageSchema,
 	FormItemSeparatorSchema
-]).and(BaseFormItemDefinitionSchema);
+]);
 
 export const NewFormItemDefinitionSchema = z.discriminatedUnion('type', [
 	NewFormItemGroupSchema,
@@ -210,6 +214,7 @@ export const NewFormItemDefinitionSchema = z.discriminatedUnion('type', [
 	NewFormItemSeparatorSchema
 ]);
 
+export type FormItemImage = z.infer<typeof FormItemImageSchema>;
 export type FormItemGroup = z.infer<typeof FormItemGroupSchema>;
 export type NewFormItemGroup = z.infer<typeof NewFormItemGroupSchema>;
 export type FormItemDefinition = z.infer<typeof FormItemDefinitionSchema>;

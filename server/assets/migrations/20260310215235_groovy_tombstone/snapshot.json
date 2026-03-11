@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "b2107474-80ab-4100-b3d7-4d9b36140105",
+  "id": "c2af865b-6003-4346-a1d1-6c1cd6ac1847",
   "prevIds": [
-    "f8e65a2e-124f-4375-b0f9-65736d89a744"
+    "53320cec-779a-4078-bd8f-1d9194ae8e31"
   ],
   "ddl": [
     {
@@ -446,11 +446,11 @@
       "table": "form_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
@@ -602,6 +602,19 @@
       "table": "form_version_items"
     },
     {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "metaTag",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
       "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
@@ -615,11 +628,11 @@
       "table": "form_version_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
@@ -2120,7 +2133,7 @@
         "id"
       ],
       "onUpdate": "CASCADE",
-      "onDelete": "SET NULL",
+      "onDelete": "CASCADE",
       "name": "form_version_items_ouTNLkvQNAbQ_fkey",
       "entityType": "fks",
       "schema": "public",

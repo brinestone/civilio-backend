@@ -8,7 +8,7 @@ import {
 	validateZodRequestBody,
 	validateZodRouterParams
 } from "~/utils/dto/zod";
-import { createFormItems, deleteItemsFromForm, formVersionExistsTx, updateFormItems } from "~/utils/helpers/forms";
+import { createFormItems, removeFormItems, formVersionExistsTx, updateFormItems } from "~/utils/helpers/forms";
 import Logger from "~/utils/logger";
 import { fromExecutionError } from '~/utils/misc';
 import { ExecutionError, UnprocessibleError } from "~/utils/types/errors";
@@ -40,22 +40,26 @@ export default defineEventHandler(async event => {
 });
 
 async function processDeletedItems(tx: ConnectionLike, form: string, version: string, ids: string[]) {
-	Logger.info(`Removing ${ids.length} items from form: ${form}`)
+	Logger.info(`Removing ${ids.length} items from form: ${form}`);
+
+	await removeFormItems(tx, form, version, ids);
 }
 
 async function processUpdatedItems(tx: ConnectionLike, form: string, version: string, items: FormItemDefinition[]) {
 	const { group: updatedGroups, ...otherTypes } = _.groupBy(items, 'type');
 
 	Logger.info(`Processing ${items.length} updated item(s) in form: ${form} version: ${version}`);
-	Logger.info(`Processing ${updatedGroups.length} updated group(s) in form: ${form} version: ${version}`);
-	for (const group of updatedGroups as FormItemGroup[]) {
-		const { config, ...rest } = group;
-		Logger.info(`Processing updates for field group: ${group.id} in form: ${form} version: ${version}`);
-		const [groupId] = await updateFormItems(tx, form, version, [{ ...rest, config: { ...config, fields: [] } as any }]);
-		const { undefined: newFields, ...updatedChildItems } = _.groupBy(config.fields);
-		await createFormItems(tx, form, version, newFields, groupId);
-		for (const items of _.values(updatedChildItems) as unknown as FormItemDefinition[][]) {
-			await updateFormItems(tx, form, version, items);
+	if (updatedGroups) {
+		Logger.info(`Processing ${updatedGroups.length} updated group(s) in form: ${form} version: ${version}`);
+		for (const group of updatedGroups as FormItemGroup[]) {
+			const { config, ...rest } = group;
+			Logger.info(`Processing updates for field group: ${group.id} in form: ${form} version: ${version}`);
+			const [groupId] = await updateFormItems(tx, form, version, [{ ...rest, config: { ...config, fields: [] } as any }]);
+			const { undefined: newFields, ...updatedChildItems } = _.groupBy(config.fields);
+			await createFormItems(tx, form, version, newFields, groupId);
+			for (const items of _.values(updatedChildItems) as unknown as FormItemDefinition[][]) {
+				await updateFormItems(tx, form, version, items);
+			}
 		}
 	}
 	for (const items of _.values(otherTypes)) {
@@ -67,14 +71,15 @@ async function processAddedItems(tx: ConnectionLike, form: string, version: stri
 	const { group: addedGroups, ...otherTypes } = _.groupBy(items, 'type');
 	Logger.info(`Processing ${items.length} new item(s) into form: ${form} version: ${version}`);
 
-	Logger.info(`Processing ${addedGroups.length} new groups into form: ${form} version: ${version}`);
-	for (const group of addedGroups as NewFormItemGroup[]) {
-		const { config, ...rest } = group;
-		const [groupId] = await createFormItems(tx, form, version, [{ ...rest, config: { ...config, fields: [] } }]);
-		Logger.info(`Field group: ${groupId} created, in form: ${form} version: ${version}, adding ${config.fields.length} fields to it.`);
-		await createFormItems(tx, form, version, config.fields, groupId);
+	if (addedGroups) {
+		Logger.info(`Processing ${addedGroups.length} new groups into form: ${form} version: ${version}`);
+		for (const group of addedGroups as NewFormItemGroup[]) {
+			const { config, ...rest } = group;
+			const [groupId] = await createFormItems(tx, form, version, [{ ...rest, config: { ...config, fields: [] } }]);
+			Logger.info(`Field group: ${groupId} created, in form: ${form} version: ${version}, adding ${config.fields.length} fields to it.`);
+			await createFormItems(tx, form, version, config.fields, groupId);
+		}
 	}
-
 	for (const [type, items] of _.entries(otherTypes)) {
 		Logger.info(`Processing ${items.length} ${type} items to form: ${form}, version: ${version}`)
 		await createFormItems(tx, form, version, items)

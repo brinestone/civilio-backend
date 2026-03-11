@@ -175,7 +175,7 @@ export const formItems = pgTable('form_items', {
 	id: uuid().notNull().defaultRandom().primaryKey(),
 	config: jsonb(),
 	// dataKey: text('data_key'),
-	tags: text().array().default([]),
+	tags: jsonb(),
 }, t => [
 	// index().on(t.dataKey).where(isNotNull(t.dataKey)),
 ]);
@@ -188,8 +188,9 @@ export const formVersionItems = pgTable('form_version_items', {
 	formVersion: uuid('form_version').notNull(),
 	path: text().notNull(),
 	relevance: jsonb(),
+	metaTag: text('meta_tag'),
 	config: jsonb(),
-	tags: text().array().default([]),
+	tags: jsonb(),
 	id: uuid().notNull().defaultRandom(),
 	addedAt: timestamp('added_at', { mode: 'date', withTimezone: true }).defaultNow().notNull(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).defaultNow().notNull().$onUpdate(() => new Date())
@@ -203,7 +204,7 @@ export const formVersionItems = pgTable('form_version_items', {
 	foreignKey({
 		columns: [t.formVersion, t.parentId],
 		foreignColumns: [t.formVersion, t.id]
-	}).onDelete('set null').onUpdate('cascade'),
+	}).onDelete('cascade').onUpdate('cascade'),
 	foreignKey({
 		columns: [t.itemId],
 		foreignColumns: [formItems.id]

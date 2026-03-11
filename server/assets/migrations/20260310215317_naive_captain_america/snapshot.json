@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "b43bfee6-f816-4a20-9968-e526e7576629",
+  "id": "6874b348-ff47-448e-9c03-e9a2d2646aa0",
   "prevIds": [
-    "7f4581e6-d998-40e9-b981-057dcd35b14b"
+    "c2af865b-6003-4346-a1d1-6c1cd6ac1847"
   ],
   "ddl": [
     {
@@ -446,11 +446,11 @@
       "table": "form_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
@@ -552,19 +552,6 @@
     {
       "type": "text",
       "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "parent_path",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "form_version_items"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
       "default": null,
@@ -628,11 +615,11 @@
       "table": "form_version_items"
     },
     {
-      "type": "text",
+      "type": "jsonb",
       "typeSchema": null,
       "notNull": false,
-      "dimensions": 1,
-      "default": "'{}'",
+      "dimensions": 0,
+      "default": null,
       "generated": null,
       "identity": null,
       "name": "tags",
@@ -641,14 +628,40 @@
       "table": "form_version_items"
     },
     {
-      "type": "text",
+      "type": "uuid",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
       "dimensions": 0,
-      "default": null,
+      "default": "gen_random_uuid()",
       "generated": null,
       "identity": null,
-      "name": "data_key",
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "added_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "form_version_items"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
       "entityType": "columns",
       "schema": "public",
       "table": "form_version_items"
@@ -1604,27 +1617,6 @@
       "nameExplicit": false,
       "columns": [
         {
-          "value": "data_key",
-          "isExpression": false,
-          "asc": true,
-          "nullsFirst": false,
-          "opclass": null
-        }
-      ],
-      "isUnique": false,
-      "where": "(\"data_key\" is not null)",
-      "with": "",
-      "method": "btree",
-      "concurrently": false,
-      "name": "form_version_items_data_key_index",
-      "entityType": "indexes",
-      "schema": "public",
-      "table": "form_version_items"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        {
           "value": "parent_id",
           "isExpression": false,
           "asc": true,
@@ -2119,19 +2111,17 @@
       "nameExplicit": false,
       "columns": [
         "form_version",
-        "parent_id",
-        "parent_path"
+        "parent_id"
       ],
       "schemaTo": "public",
       "tableTo": "form_version_items",
       "columnsTo": [
         "form_version",
-        "item_id",
-        "path"
+        "id"
       ],
       "onUpdate": "CASCADE",
-      "onDelete": "SET NULL",
-      "name": "form_version_items_uQN3IPdgvV5n_fkey",
+      "onDelete": "CASCADE",
+      "name": "form_version_items_ouTNLkvQNAbQ_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "form_version_items"
@@ -2362,8 +2352,7 @@
     {
       "columns": [
         "form_version",
-        "item_id",
-        "path"
+        "id"
       ],
       "nameExplicit": false,
       "name": "form_version_items_pkey",

@@ -222,7 +222,13 @@ defineRouteMeta({
 									config: {
 										type: 'object',
 										additionalProperties: false,
+										required: ['orientation', 'fields', 'title', 'repeatable'],
 										properties: {
+											title: { type: 'string', nullable: true, default: null },
+											description: { type: 'string', nullable: true, default: null },
+											repeatable: { type: 'boolean', default: true },
+											divisionCount: { type: 'integer', minimum: 1, default: 1 },
+											orientation: { type: 'string', enum: ['horizonal', 'vertical'], nullable: true, default: null },
 											fields: {
 												type: 'array',
 												default: [],
@@ -371,21 +377,32 @@ defineRouteMeta({
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
 							{
 								type: 'object',
-								required: ['id', 'addedAt', 'updatedAt',],
+								required: ['id', 'itemId', 'addedAt', 'updatedAt',],
 								additionalProperties: false,
 								properties: {
 									id: { type: 'string', format: 'uuid' },
-									addedAt: { type: 'string', format: 'date-time' },
-									updatedAt: { type: 'string', format: 'date-time' }
+									addedAt: { type: 'string', },
+									updatedAt: { type: 'string', },
+									itemId: { type: 'string', format: 'uuid' }
 								}
 							}
 						]
+					},
+					Tag: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['key', 'value'],
+						properties: {
+							key: { type: 'string', nullable: true, default: null },
+							value: { type: 'string', nullable: true, default: null }
+						}
 					},
 					BaseFormItemDefinitionWithoutId: {
 						type: 'object',
 						additionalProperties: false,
 						required: ['path', 'relevance', 'tags'],
 						properties: {
+							itemId: { type: 'string', format: 'uuid', nullable: true },
 							path: {
 								type: 'string', nullable: true,
 								default: null
@@ -393,10 +410,11 @@ defineRouteMeta({
 							tags: {
 								type: 'array',
 								items: {
-									type: 'string',
+									$ref: '#/components/schemas/Tag'
 								},
 								default: []
 							},
+							metaTag: { type: 'string', nullable: true, default: null },
 							relevance: {
 								$ref: '#/components/schemas/RelevanceDefinition'
 							},
