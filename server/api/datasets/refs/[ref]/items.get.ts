@@ -1,9 +1,10 @@
 import { defineEventHandler, setHeader } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { findDatasetRefItems } from "~/utils/datasets";
+import { findDatasetRefItems } from "~/utils/helpers/datasets";
 import { validateZodRouterParams } from "~/utils/dto/zod";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
+import { ExecutionError } from "~/utils/types/errors";
+import { fromExecutionError } from "~/utils/misc";
 
 const pathSchema = z.object({
 	ref: z.string().trim().nonempty('ref cannot be empty')
@@ -16,7 +17,13 @@ defineRouteMeta({
 		description: 'Get the items under a dataset reference',
 		operationId: 'findDatasetRefItems',
 		parameters: [
-			{ in: 'path', name: 'ref', schema: { type: 'string' }, required: true, allowEmptyValue: false, description: 'The ID of the reference' }
+			{
+				in: 'path',
+				name: 'ref',
+				schema: { type: 'string' },
+				required: true,
+				description: 'The ID of the reference'
+			}
 		],
 		responses: {
 			'400': { description: 'Bad request' },
@@ -24,8 +31,16 @@ defineRouteMeta({
 			'200': {
 				description: 'OK',
 				headers: {
-					'x-dataset-title': { description: 'The title of the referenced dataset', required: true, schema: { type: 'string' } },
-					'x-dataset-id': { description: 'The ID of the referenced dataset', required: true, schema: { type: 'string', format: 'uuid' } },
+					'x-dataset-title': {
+						description: 'The title of the referenced dataset',
+						required: true,
+						schema: { type: 'string' }
+					},
+					'x-dataset-id': {
+						description: 'The ID of the referenced dataset',
+						required: true,
+						schema: { type: 'string', format: 'uuid' }
+					},
 				},
 				content: {
 					'application/json': {

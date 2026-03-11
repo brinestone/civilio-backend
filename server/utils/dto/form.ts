@@ -1,234 +1,222 @@
 import z from "zod";
-import { FieldKeySchema, FormTypeSchema, GeoPointSchema, OptionSchema } from "../types";
 
-const FieldValueBaseSchema = z.union([z.string(), z.number(), z.date(), z.boolean(), OptionSchema]);
-const FieldValueSchema = z.union([FieldValueBaseSchema, FieldValueBaseSchema.array()]);
-const ParsedValueSchema = z.union([
-  z.string(),
-  z.boolean(),
-  z.null(),
-  z.undefined().pipe(z.transform(() => null)),
-  GeoPointSchema,
-  z.number()
-])
-export const ValueProviderFnSchema = z.function({
-  input: z.tuple([FieldKeySchema], FieldKeySchema),
-  output: z.record(FieldKeySchema, z.union([FieldValueSchema, FieldValueSchema.array()]).nullable())
-});
-export const RelevancePredicateSchema = z.function({
-  input: [z.record(FieldKeySchema, z.union([ParsedValueSchema, ParsedValueSchema.array()]))],
-  output: z.boolean()
-});
-export const RelevanceDefinitionSchema = z.object({
-  predicate: RelevancePredicateSchema,
-  dependencies: FieldKeySchema.array()
-});
-const ValidateFnSchema = z.function({
-  input: [z.union([ParsedValueSchema, ParsedValueSchema.array()])],
-  output: z.union([z.null(), z.string()])
-});
 
-const BaseFieldDefinitionSchema = z.object({
-  key: z.union([FieldKeySchema, z.object({
-    value: FieldKeySchema,
-    titleArgs: z.record(z.string(), z.unknown())
-  })]),
-  required: z.literal(true).optional(),
-  validate: ValidateFnSchema.optional(),
-  relevance: z.object({
-    predicate: RelevancePredicateSchema,
-    dependencies: FieldKeySchema.array()
-  }).optional(),
-  span: z.union([
-    z.literal(1),
-    z.literal(2),
-    z.literal(3),
-    z.literal(4),
-    z.literal(6),
-    z.literal(7),
-    z.literal(8),
-    z.literal(9),
-    z.literal(10),
-    z.literal(11),
-    z.literal(12),
-  ]).optional().default(12),
-  readonly: z.boolean().optional(),
-  default: z.any().optional()
-});
-
-const TextFieldDefinitionSchema = BaseFieldDefinitionSchema.extend({
-  type: z.literal('text'),
-  pattern: z.string().optional(),
-  autocomplete: z.boolean().optional(),
-  multiline: z.boolean().optional(),
-  validValues: z.string().array().optional()
-})
-
-const SelectionFieldDefinitionSchema = BaseFieldDefinitionSchema.extend({
-  optionsGroupKey: z.string(),
-  parent: FieldKeySchema.optional(),
-  type: z.union([z.literal('single-selection'), z.literal('multi-selection')])
-});
-
-const DateFieldDefinitionSchema = BaseFieldDefinitionSchema.extend({
-  type: z.literal('date'),
-  min: z.union([z.iso.date(), z.number(), z.date()]).optional(),
-  max: z.union([z.iso.date(), z.number(), z.date()]).optional(),
-  defaultToToday: z.literal(true).optional()
-});
-
-const GeoPointFieldDefinitionSchema = BaseFieldDefinitionSchema.extend({
-  type: z.literal('point'),
-})
-
-const BooleanFieldDefinitionSchema = BaseFieldDefinitionSchema.omit({
-  required: true
-}).extend({
-  type: z.literal('boolean'),
-});
-
-const NumberFieldDefinitionSchema = BaseFieldDefinitionSchema.extend({
-  type: z.union([z.literal('float'), z.literal('int')]),
-  min: z.number().optional(),
-  max: z.number().optional(),
-  unit: z.string().optional(),
-  precision: z.number().optional()
-});
-
-export const BaseColumnDefinition = z.object({
-  visible: z.literal(false).optional(),
-  key: FieldKeySchema,
-  draggable: z.boolean().optional(),
-  width: z.int().optional(),
-  editable: z.literal(false).optional(),
-  default: z.any().optional(),
-  relevance: RelevanceDefinitionSchema.optional()
-});
-
-export const TextColumnDefinitionSchema = BaseColumnDefinition.extend({
-  type: z.literal('text')
-})
-
-export const NumberColumnDefinitionSchema = BaseColumnDefinition.extend({
-  min: z.number().optional(),
-  max: z.number().optional(),
-  type: z.literal('number')
-})
-
-export const SelectionColumnDefinitionSchema = BaseColumnDefinition.extend({
-  optionGroupKey: z.string(),
-  type: z.enum(['single-selection', 'multi-selection'])
-})
-
-export const BooleanColumnDefinitionSchema = BaseColumnDefinition.extend({
-  type: z.literal('boolean')
-});
-
-export const DateColumnDefinitionSchema = BaseColumnDefinition.extend({
-  type: z.literal('date'),
-  min: z.coerce.date().optional(),
-  max: z.coerce.date().optional()
-});
-
-export const ColumnDefinitionSchema = z.discriminatedUnion('type', [
-  DateColumnDefinitionSchema,
-  BooleanColumnDefinitionSchema,
-  SelectionColumnDefinitionSchema,
-  NumberColumnDefinitionSchema,
-  TextColumnDefinitionSchema
+// Relevance Logic schemas
+const RelevanceLogicExpressionOperatorSchema = z.enum([
+	'in', 'eq', 'ne', 'gt', 'lt', 'lte', 'gte', 'empty', 'between',
+	'match', 'isNull', 'isNotNull', 'checked', 'unchecked', 'selectedAny', 'notEmpty',
+	'selectedAll', 'noselection', 'before', 'after', 'afterOrOn', 'beforeOrOn'
 ]);
 
-const TabularFieldDefinitionSchema = BaseFieldDefinitionSchema
-  .omit({
-    span: true,
-    required: true,
-    default: true,
-  }).extend({
-    type: z.literal('table'),
-    columns: z.record(z.string(), ColumnDefinitionSchema),
-    identifierColumn: FieldKeySchema
-  });
-
-const GroupFieldDefinitionSchema = BaseFieldDefinitionSchema.omit({
-  span: true,
-  required: true,
-  default: true,
-}).extend({
-  type: z.literal('group'),
-  identifierKey: z.string(),
-  fields: z.discriminatedUnion('type', [
-    BooleanFieldDefinitionSchema.extend({
-      cssClass: z.string().optional(),
-      visible: z.literal(false).optional()
-    }),
-    DateFieldDefinitionSchema.extend({
-      cssClass: z.string().optional(),
-      visible: z.literal(false).optional()
-    }),
-    SelectionFieldDefinitionSchema.extend({
-      cssClass: z.string().optional(),
-      visible: z.literal(false).optional()
-    }),
-    TextFieldDefinitionSchema.extend({
-      cssClass: z.string().optional(),
-      visible: z.literal(false).optional()
-    }),
-    NumberFieldDefinitionSchema.extend({
-      cssClass: z.string().optional(),
-      visible: z.literal(false).optional()
-    })
-  ]).array()
+const NumberRangeSchema = z.object({
+	start: z.number().nullable(),
+	end: z.number().nullable()
 });
 
-export const FieldDefinitionSchema = z.discriminatedUnion('type', [
-  BooleanFieldDefinitionSchema,
-  GeoPointFieldDefinitionSchema,
-  DateFieldDefinitionSchema,
-  SelectionFieldDefinitionSchema,
-  TextFieldDefinitionSchema,
-  NumberFieldDefinitionSchema,
-  TabularFieldDefinitionSchema,
-  GroupFieldDefinitionSchema
-])
-
-const GroupBaseSchema = z.object({
-  id: z.string(),
-  fields: FieldDefinitionSchema.array(),
-  relevance: RelevanceDefinitionSchema.optional(),
-});
-export const FormGroupSchema = GroupBaseSchema.extend({
-  children: GroupBaseSchema.array().optional(),
-  columns: z.union([
-    z.int(),
-    z.string().array()
-  ]).optional()
+const RelevanceLogicExpressionSchema = z.object({
+	field: z.string(),
+	operator: RelevanceLogicExpressionOperatorSchema,
+	negated: z.boolean(),
+	value: z.string().nullish().default(null)
 });
 
-export type GroupDefinition = z.output<typeof FormGroupSchema>;
-
-export const FormModelDefinitionSchema = z.object({
-  sections: FormGroupSchema.array(),
-  meta: z.object({
-    form: FormTypeSchema,
-    label: z.string().optional()
-  })
+const RelevanceConditionSchema = z.object({
+	operator: z.enum(['and', 'or']),
+	expressions: z.array(RelevanceLogicExpressionSchema)
 });
 
-// const DefinitionLikeSchema = z.object({
-//   type:
-// });
+const RelevanceDefinitionSchema = z.object({
+	enabled: z.boolean().default(true),
+	operator: z.enum(['and', 'or']).default('and'),
+	logic: z.array(RelevanceConditionSchema)
+});
 
-export type FieldSchema = z.output<typeof FieldDefinitionSchema>;
-export type GroupFieldSchema = Extract<FieldSchema, { type: 'group' }>;
-export type TabularFieldSchema = Extract<FieldSchema, { type: 'table' }>;
-export type FormSchema = z.output<typeof FormModelDefinitionSchema>;
-export type SectionSchema = z.output<typeof FormGroupSchema>;
-export type ValueProviderFn = z.output<typeof ValueProviderFnSchema>;
-export type RelevanceFn = z.output<typeof RelevancePredicateSchema>;
-export type RelevanceDefinition = z.output<typeof RelevanceDefinitionSchema>;
-export type ColumnDefinition = z.output<typeof ColumnDefinitionSchema>;
-export type DefinitionLike = {
-  type: FieldSchema['type'] | ColumnDefinition['type'],
-  relevance?: RelevanceDefinition,
-  default?: any
-};
+const TagSchema = z.object({ key: z.string().nullish(), value: z.string().nullish() });
+export type Tag = z.infer<typeof TagSchema>;
+
+// Base Form Item Definition
+const BaseNewFormItemDefinitionSchema = z.object({
+	path: z.string(),
+	relevance: RelevanceDefinitionSchema.nullable(),
+	tags: TagSchema.array().nullish().default([]),
+	itemId: z.string().nullish(),
+	metaTag: z.string().nullish()
+});
+
+// Field Config schemas
+const BaseFieldPropsSchema = z.object({
+	required: z.boolean().default(true).nullable(),
+	readonly: z.boolean().default(false).nullable(),
+	dataKey: z.string().trim().nullish(),
+	title: z.string(),
+	description: z.string().nullable()
+});
+
+// Date field schemas
+const BaseDateFieldPropsSchema = BaseFieldPropsSchema.extend({
+	min: z.number().nullable(),
+	max: z.number().nullable()
+});
+
+const SimpleDateFieldConfigSchema = BaseDateFieldPropsSchema.extend({
+	type: z.enum(['date', 'date-time']),
+	defaultValue: z.number().nullable()
+});
+
+const RangeDateFieldConfigSchema = BaseDateFieldPropsSchema.extend({
+	type: z.literal('date-range'),
+	defaultValue: NumberRangeSchema
+});
+
+const MultiDateFieldConfigSchema = BaseDateFieldPropsSchema.extend({
+	type: z.literal('multi-date'),
+	minSelection: z.number().int().nullable(),
+	maxSelection: z.number().int().nullable(),
+	defaultValue: z.array(z.number()).nullable()
+});
+
+// GeoPoint schemas
+const GeoPointSchema = z.object({
+	lat: z.number().min(-90).max(90),
+	long: z.number().min(-180).max(180)
+});
+
+const GeoPointFieldConfigSchema = BaseFieldPropsSchema.extend({
+	type: z.literal('geo-point'),
+	defaultValue: GeoPointSchema.nullable()
+});
+
+// Number field config
+const NumberFieldConfigSchema = BaseFieldPropsSchema.extend({
+	type: z.enum(['integer', 'float']),
+	min: z.number().nullable(),
+	max: z.number().nullable(),
+	defaultValue: z.number().nullable()
+});
+
+// Boolean field config
+const BooleanFieldConfigSchema = BaseFieldPropsSchema.extend({
+	type: z.literal('boolean'),
+	defaultValue: z.boolean().default(false).nullable(),
+	renderAs: z.enum(['select', 'checkbox']).default('checkbox').nullable()
+});
+
+// Text field config
+const TextFieldConfigSchema = BaseFieldPropsSchema.extend({
+	type: z.enum(['text', 'multiline']),
+	pattern: z.string().nullable(),
+	minlength: z.number().nullable(),
+	maxlength: z.number().nullable(),
+	defaultValue: z.string().nullable()
+});
+
+// Select field config
+const SelectFieldConfigSchema = BaseFieldPropsSchema.extend({
+	type: z.enum(['single-select', 'multi-select']),
+	itemSourceRef: z.string().nullable(),
+	defaultValue: z.string().nullable(),
+	hardItems: z.array(z.object({
+		label: z.string().nullable(),
+		value: z.string().nullable()
+	})).default([])
+});
+
+// Field Item Config union
+const FieldItemConfigSchema = z.discriminatedUnion('type', [
+	GeoPointFieldConfigSchema,
+	NumberFieldConfigSchema,
+	BooleanFieldConfigSchema,
+	TextFieldConfigSchema,
+	SelectFieldConfigSchema,
+	MultiDateFieldConfigSchema,
+	SimpleDateFieldConfigSchema,
+	RangeDateFieldConfigSchema
+]);
+
+// Other item config schemas
+const SeparatorItemConfigSchema = z.object({
+	orientation: z.enum(['vertical', 'horizontal']).optional()
+});
+
+const ImageItemConfigSchema = z.object({
+	url: z.string(),
+	width: z.number().min(10),
+	caption: z.string().nullable(),
+	height: z.number().nullable(),
+	aspectRatio: z.number().nullable(),
+	filter: z.enum(['none', 'shadow']).nullable()
+});
+
+const NoteItemConfigSchema = z.object({
+	fontSize: z.number().int().default(13)
+});
+
+// Form Item Definitions
+const NewFormItemImageSchema = BaseNewFormItemDefinitionSchema.extend({
+	type: z.literal('image'),
+	url: z.string(),
+	config: ImageItemConfigSchema
+});
+
+const NewFormItemNoteSchema = BaseNewFormItemDefinitionSchema.extend({
+	type: z.literal('note'),
+	config: NoteItemConfigSchema
+});
+
+const NewFormItemSeparatorSchema = BaseNewFormItemDefinitionSchema.extend({
+	type: z.literal('separator'),
+	config: SeparatorItemConfigSchema.optional()
+});
+
+const NewFormItemFieldSchema = BaseNewFormItemDefinitionSchema.extend({
+	type: z.literal('field'),
+	config: FieldItemConfigSchema
+});
+const NewFormItemGroupSchema = BaseNewFormItemDefinitionSchema.extend({
+	type: z.literal('group'),
+	config: z.object({
+		fields: NewFormItemFieldSchema.array()
+	})
+});
+const FormItemExtrasSchema = BaseNewFormItemDefinitionSchema.extend({
+	id: z.uuid(),
+	itemId: z.uuid()
+});
+const FormItemExtras = FormItemExtrasSchema.shape;
+
+export const FormItemFieldSchema = NewFormItemFieldSchema.extend(FormItemExtras);
+export const FormItemGroupSchema = NewFormItemGroupSchema.extend({
+	config: NewFormItemGroupSchema.shape.config.extend({
+		fields: z.union([
+			FormItemFieldSchema,
+			NewFormItemFieldSchema
+		]).array()
+	})
+}).extend(FormItemExtras);
+export const FormItemNoteSchema = NewFormItemNoteSchema.extend(FormItemExtras);
+export const FormItemImageSchema = NewFormItemImageSchema.extend(FormItemExtras);
+export const FormItemSeparatorSchema = NewFormItemSeparatorSchema.extend(FormItemExtras);
+
+// Main FormItemDefinition union
+export const FormItemDefinitionSchema = z.discriminatedUnion('type', [
+	FormItemGroupSchema,
+	FormItemNoteSchema,
+	FormItemFieldSchema,
+	FormItemImageSchema,
+	FormItemSeparatorSchema
+]);
+
+export const NewFormItemDefinitionSchema = z.discriminatedUnion('type', [
+	NewFormItemGroupSchema,
+	NewFormItemNoteSchema,
+	NewFormItemFieldSchema,
+	NewFormItemImageSchema,
+	NewFormItemSeparatorSchema
+]);
+
+export type FormItemImage = z.infer<typeof FormItemImageSchema>;
+export type FormItemGroup = z.infer<typeof FormItemGroupSchema>;
+export type NewFormItemGroup = z.infer<typeof NewFormItemGroupSchema>;
+export type FormItemDefinition = z.infer<typeof FormItemDefinitionSchema>;
+export type NewFormItemDefinition = z.infer<typeof NewFormItemDefinitionSchema>;
+export type NewFormItemField = Extract<NewFormItemDefinition, { type: 'field' }>;

@@ -1,7 +1,7 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { lookupDatasets } from "~/utils/datasets";
+import { lookupDatasets } from "~/utils/helpers/datasets";
 import { validateZodQueryParams } from "~/utils/dto/zod";
 
 const querySchema = z.object({
@@ -26,8 +26,10 @@ defineRouteMeta({
 						required: ['id', 'title', 'key', 'createdAt', 'updatedAt', 'itemCount'],
 						properties: {
 							id: { type: 'string', format: 'uuid' },
+							parentId: { type: 'string', format: 'uuid', nullable: true, default: null },
 							title: { type: 'string' },
-							description: { type: 'string', nullable: true },
+							key: { type: 'string' },
+							description: { type: 'string', nullable: true, default: null },
 							createdAt: { type: 'string', format: 'date-time' },
 							updatedAt: { type: 'string', format: 'date-time' },
 							itemCount: { type: 'integer', minimum: 0 }

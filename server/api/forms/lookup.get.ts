@@ -1,7 +1,8 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { ExecutionError, fromExecutionError } from "~/utils/errors";
-import { lookupForms } from "~/utils/forms";
+import { ExecutionError } from "~/utils/types/errors";
+import { lookupForms } from "~/utils/helpers/forms";
+import { fromExecutionError } from "~/utils/misc";
 
 const handler = async () => {
 	try {
@@ -18,6 +19,7 @@ defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
 		summary: 'Lookup forms',
+		operationId: 'lookupForms',
 		description: 'Lookup all forms',
 		$global: {
 			components: {
@@ -25,21 +27,27 @@ defineRouteMeta({
 					FormLookup: {
 						type: "object",
 						additionalProperties: false,
-						required: ["slug", "label", "createdAt", "updatedAt"],
+						required: ["slug", "title", /* "createdAt", */ "updatedAt"],
 						properties: {
 							slug: { type: "string" },
-							logo: { type: "string", nullable: true },
-							label: { type: "string" },
-							description: { type: "string", nullable: true },
+							title: { type: "string" },
+							// description: { type: "string", nullable: true },
 							createdBy: { type: "string", nullable: true },
-							createdAt: { type: "string", format: "date-time" },
-							updatedAt: { type: "string", format: "date-time" }
+							// createdAt: { type: "string", format: "date-time" },
+							updatedAt: { type: "string", format: "date-time" },
+							currentVersion: {
+								type: 'object',
+								nullable: true,
+								additionalProperties: false,
+								properties: {
+									id: { type: 'string', format: 'uuid' }
+								}
+							}
 						}
 					}
 				}
 			}
 		},
-		operationId: 'lookupFormDefinitions',
 		responses: {
 			'200': {
 				description: 'OK',

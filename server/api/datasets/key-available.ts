@@ -1,7 +1,7 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import { z } from "zod";
-import { datasetKeyAvailable } from "~/utils/datasets";
+import { datasetKeyAvailable } from "~/utils/helpers/datasets";
 import { validateZodQueryParams } from "~/utils/dto/zod";
 
 defineRouteMeta({
@@ -32,8 +32,8 @@ defineRouteMeta({
 				in: 'query',
 				name: 'key',
 				required: true,
-				example: 'commune',
-				description: 'The key value to use to check'
+				description: 'The key value to use to check',
+				schema: { type: 'string' }
 			},
 			{
 				in: 'query',

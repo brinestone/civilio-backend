@@ -1,9 +1,13 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
-import { ExecutionError, fromExecutionError, NotFoundError } from "~/utils/errors";
-import { findFormDefinition } from "~/utils/forms";
+import {
+	validateZodQueryParams,
+	validateZodRouterParams
+} from "~/utils/dto/zod";
+import { ExecutionError, NotFoundError } from "~/utils/types/errors";
+import { findFormVersionDefinition } from "~/utils/helpers/forms";
+import { fromExecutionError } from "~/utils/misc";
 
 const pathSchema = z.object({
 	form: z.string().trim().nonempty()
@@ -16,7 +20,7 @@ export default defineEventHandler(async event => {
 	const queryParams = await validateZodQueryParams(event, querySchema);
 
 	try {
-		const result = await findFormDefinition(pathParams.form, queryParams.version);
+		const result = await findFormVersionDefinition(pathParams.form, queryParams.version);
 
 		if (!result)
 			throw new NotFoundError('definition not found');
@@ -27,16 +31,26 @@ export default defineEventHandler(async event => {
 		}
 		throw e;
 	}
-})
+});
 defineRouteMeta({
 	openAPI: {
 		tags: ['Forms'],
 		summary: 'Get form version definition',
 		description: 'Get a form\'s definition by version',
-		operationId: 'getFormDefinitionByVersion',
+		operationId: 'findFormDefinitionByVersion',
 		parameters: [
-			{ in: 'query', required: false, name: 'version' },
-			{ in: 'path', required: true, name: 'form' }
+			{
+				schema: { type: 'string', format: 'uuid' },
+				in: 'query',
+				required: false,
+				name: 'version'
+			},
+			{
+				in: 'path',
+				required: true,
+				name: 'form',
+				schema: { type: 'string' }
+			}
 		],
 		$global: {
 			components: {
@@ -46,18 +60,18 @@ defineRouteMeta({
 						additionalProperties: false,
 						properties: {
 							id: { type: 'string', format: 'uuid' },
-							parentId: { nullable: true, type: 'string', format: 'uuid' },
-							items: { nullable: false, type: 'array', items: { $ref: '#/components/schemas/FormItemDefinition' } }
+							parentId: {
+								nullable: true,
+								type: 'string',
+								format: 'uuid'
+							},
+							items: {
+								nullable: false,
+								type: 'array',
+								items: { $ref: '#/components/schemas/FormItemDefinition' }
+							}
 						},
 						required: ['id', 'items']
-					},
-					FormItemParentRef: {
-						type: 'object',
-						additionalProperties: false,
-						required: ['id'],
-						properties: {
-							id: { type: 'string', format: 'uuid' }
-						}
 					},
 					RelevanceLogicExpressionOperator: {
 						type: 'string',
@@ -70,6 +84,7 @@ defineRouteMeta({
 							'lte',
 							'gte',
 							'empty',
+							'notEmpty',
 							'between',
 							'match',
 							'isNull',
@@ -78,6 +93,8 @@ defineRouteMeta({
 							'unchecked',
 							'selectedAny',
 							'selectedAll',
+							'startsWith',
+							'endsWith',
 							'noselection',
 							'before',
 							'after',
@@ -98,14 +115,16 @@ defineRouteMeta({
 					RelevanceLogicExpression: {
 						type: 'object',
 						additionalProperties: false,
-						required: ['field', 'operator'],
+						required: ['field', 'operator', 'negated'],
 						properties: {
-							field: { type: 'string' },
+							field: { type: 'string', nullable: true, default: null },
 							operator: {
+								nullable: true, default: null,
 								$ref: '#/components/schemas/RelevanceLogicExpressionOperator'
 							},
+							negated: { type: 'boolean', default: false },
 							value: {
-								nullable: true, type: 'string'
+								nullable: true, type: 'string', default: null,
 							}
 						}
 					},
@@ -129,7 +148,11 @@ defineRouteMeta({
 						additionalProperties: false,
 						properties: {
 							enabled: { type: 'boolean', default: true },
-							operator: { type: 'string', enum: ['and', 'or'], default: 'and' },
+							operator: {
+								type: 'string',
+								enum: ['and', 'or'],
+								default: 'and'
+							},
 							logic: {
 								type: 'array',
 								items: { $ref: '#/components/schemas/RelevanceCondition' }
@@ -157,18 +180,62 @@ defineRouteMeta({
 							{ $ref: '#/components/schemas/FormItemSeparator' }
 						]
 					},
+					NewFormItemDefinition: {
+						type: 'object',
+						discriminator: {
+							propertyName: 'type',
+							mapping: {
+								note: '#/components/schemas/NewFormItemNote',
+								field: '#/components/schemas/NewFormItemField',
+								separator: '#/components/schemas/NewFormItemSeparator',
+								image: '#/components/schemas/NewFormItemImage',
+								group: '#/components/schemas/NewFormItemGroup'
+							}
+						},
+						oneOf: [
+							{ $ref: '#/components/schemas/NewFormItemGroup' },
+							{ $ref: '#/components/schemas/NewFormItemNote' },
+							{ $ref: '#/components/schemas/NewFormItemField' },
+							{ $ref: '#/components/schemas/NewFormItemImage' },
+							{ $ref: '#/components/schemas/NewFormItemSeparator' }
+						]
+					},
 					FormItemGroup: {
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
-							{ $ref: '#/components/schemas/BaseFormItemDefinition' },
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
+							{ $ref: '#/components/schemas/NewFormItemGroup' }
+						]
+					},
+					NewFormItemGroup: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
 							{
 								type: 'object',
 								additionalProperties: false,
-								required: ['children'],
+								required: ['config', 'type'],
 								properties: {
 									type: { type: 'string', enum: ['group'] },
-									children: { type: 'array', items: { $ref: '#/components/schemas/FormItemDefinition' } }
+									config: {
+										type: 'object',
+										additionalProperties: false,
+										required: ['orientation', 'fields', 'title', 'repeatable'],
+										properties: {
+											title: { type: 'string', nullable: true, default: null },
+											description: { type: 'string', nullable: true, default: null },
+											repeatable: { type: 'boolean', default: true },
+											divisionCount: { type: 'integer', minimum: 1, default: 1 },
+											orientation: { type: 'string', enum: ['horizonal', 'vertical'], nullable: true, default: null },
+											fields: {
+												type: 'array',
+												default: [],
+												items: { $ref: '#/components/schemas/NewFormItemField' }
+											}
+										}
+									}
 								}
 							}
 						]
@@ -177,17 +244,40 @@ defineRouteMeta({
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
-							{ $ref: '#/components/schemas/BaseFormItemDefinition' },
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
+							{ $ref: '#/components/schemas/NewFormItemImage' }
+						]
+					},
+					NewFormItemImage: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
 							{
 								type: 'object',
 								additionalProperties: false,
-								required: ['url', 'meta'],
+								required: ['type', 'config'],
 								properties: {
 									type: { type: 'string', enum: ['image'] },
-									url: { type: 'string' },
-									meta: {
-										$ref: '#/components/schemas/ImageItemMeta'
+									config: {
+										$ref: '#/components/schemas/ImageItemConfig'
 									}
+								}
+							}
+						]
+					},
+					NewFormItemNote: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
+							{
+								type: 'object',
+								required: ['type', 'config'],
+								additionalProperties: false,
+								properties: {
+									type: { type: 'string', enum: ['note'] },
+									config: { $ref: '#/components/schemas/NoteItemConfig' }
 								}
 							}
 						]
@@ -196,94 +286,141 @@ defineRouteMeta({
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
-							{ $ref: '#/components/schemas/BaseFormItemDefinition' },
-							{
-								type: 'object',
-								required: ['type', 'title', 'meta'],
-								additionalProperties: false,
-								properties: {
-									type: { type: 'string', enum: ['note'] },
-									title: { type: 'string' },
-									meta: { $ref: '#/components/schemas/NoteItemMeta' }
-								}
-							}
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
+							{ $ref: '#/components/schemas/NewFormItemNote' }
 						]
 					},
-					FormItemSeparator: {
+					NewFormItemSeparator: {
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
-							{ $ref: '#/components/schemas/BaseFormItemDefinition' },
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
 							{
 								type: 'object',
 								required: ['type'],
 								additionalProperties: false,
 								properties: {
-									meta: { $ref: '#/components/schemas/SeparatorItemMeta' },
-									type: { type: 'string', enum: ['separator'] }
+									config: { $ref: '#/components/schemas/SeparatorItemConfig' },
+									type: {
+										type: 'string',
+										enum: ['separator']
+									}
 								}
 							}
 						],
 					},
-					FormItemField: {
+					FormItemSeparator: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
+							{ $ref: '#/components/schemas/NewFormItemSeparator' }
+						]
+					},
+					NewFormItemField: {
 						type: 'object', additionalProperties: false,
 						allOf: [
-							{ $ref: '#/components/schemas/BaseFormItemDefinition' },
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
 							{
 								type: 'object',
-								required: ['type', 'title', 'meta'],
+								required: ['type', 'title', 'config'],
 								properties: {
 									type: { type: 'string', enum: ['field'] },
-									title: { type: 'string' },
-									description: { type: 'string', nullable: true },
-									meta: { $ref: '#/components/schemas/FieldItemMeta' }
+									config: { $ref: '#/components/schemas/FieldItemConfig' }
 								}
 							}
 						]
 					},
-
-					// --- FIELD META DISCRIMINATOR ---
-					FieldItemMeta: {
+					FormItemField: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
+							{ $ref: '#/components/schemas/NewFormItemField' }
+						]
+					},
+					// --- FIELD CONFIG DISCRIMINATOR ---
+					FieldItemConfig: {
 						type: 'object',
 						discriminator: {
 							propertyName: 'type',
 							mapping: {
-								'geo-point': '#/components/schemas/GeoPointFieldMeta',
-								'integer': '#/components/schemas/NumberFieldMeta',
-								'float': '#/components/schemas/NumberFieldMeta',
-								'boolean': '#/components/schemas/BooleanFieldMeta',
-								'text': '#/components/schemas/TextFieldMeta',
-								'multiline': '#/components/schemas/TextFieldMeta',
-								'single-select': '#/components/schemas/SelectFieldMeta',
-								'multi-select': '#/components/schemas/SelectFieldMeta',
-								'date': '#/components/schemas/SimpleDateFieldMeta',
-								'date-time': '#/components/schemas/SimpleDateFieldMeta',
-								'date-range': '#/components/schemas/RangeDateFieldMeta',
-								'multi-date': '#/components/schemas/MultiDateFieldMeta'
+								'geo-point': '#/components/schemas/GeoPointFieldConfig',
+								'integer': '#/components/schemas/NumberFieldConfig',
+								'float': '#/components/schemas/NumberFieldConfig',
+								'boolean': '#/components/schemas/BooleanFieldConfig',
+								'text': '#/components/schemas/TextFieldConfig',
+								'multiline': '#/components/schemas/TextFieldConfig',
+								'single-select': '#/components/schemas/SelectFieldConfig',
+								'multi-select': '#/components/schemas/SelectFieldConfig',
+								'date': '#/components/schemas/SimpleDateFieldConfig',
+								'date-time': '#/components/schemas/SimpleDateFieldConfig',
+								'date-range': '#/components/schemas/RangeDateFieldConfig',
+								'multi-date': '#/components/schemas/MultiDateFieldConfig'
 							}
 						},
 						oneOf: [
-							{ $ref: '#/components/schemas/GeoPointFieldMeta' },
-							{ $ref: '#/components/schemas/NumberFieldMeta' },
-							{ $ref: '#/components/schemas/BooleanFieldMeta' },
-							{ $ref: '#/components/schemas/TextFieldMeta' },
-							{ $ref: '#/components/schemas/SelectFieldMeta' },
-							{ $ref: '#/components/schemas/MultiDateFieldMeta' },
-							{ $ref: '#/components/schemas/SimpleDateFieldMeta' },
-							{ $ref: '#/components/schemas/RangeDateFieldMeta' },
+							{ $ref: '#/components/schemas/GeoPointFieldConfig' },
+							{ $ref: '#/components/schemas/NumberFieldConfig' },
+							{ $ref: '#/components/schemas/BooleanFieldConfig' },
+							{ $ref: '#/components/schemas/TextFieldConfig' },
+							{ $ref: '#/components/schemas/SelectFieldConfig' },
+							{ $ref: '#/components/schemas/MultiDateFieldConfig' },
+							{ $ref: '#/components/schemas/SimpleDateFieldConfig' },
+							{ $ref: '#/components/schemas/RangeDateFieldConfig' },
 						]
 					},
-					BaseFormItemDefinition: {
+					BaseFormItemDefinitionWithId: {
 						type: 'object',
-						required: ['id', 'path'], additionalProperties: false,
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
+							{
+								type: 'object',
+								required: ['id', 'itemId', 'addedAt', 'updatedAt',],
+								additionalProperties: false,
+								properties: {
+									id: { type: 'string', format: 'uuid' },
+									addedAt: { type: 'string', },
+									updatedAt: { type: 'string', },
+									itemId: { type: 'string', format: 'uuid' }
+								}
+							}
+						]
+					},
+					Tag: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['key', 'value'],
 						properties: {
-							id: { type: 'string', format: 'uuid' },
-							path: { type: 'string' },
-							relevance: { $ref: '#/components/schemas/RelevanceDefinition', nullable: true }
+							key: { type: 'string', nullable: true, default: null },
+							value: { type: 'string', nullable: true, default: null }
 						}
 					},
-
-					SimpleDateFieldMeta: {
+					BaseFormItemDefinitionWithoutId: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['path', 'relevance', 'tags'],
+						properties: {
+							itemId: { type: 'string', format: 'uuid', nullable: true },
+							path: {
+								type: 'string', nullable: true,
+								default: null
+							},
+							tags: {
+								type: 'array',
+								items: {
+									$ref: '#/components/schemas/Tag'
+								},
+								default: []
+							},
+							metaTag: { type: 'string', nullable: true, default: null },
+							relevance: {
+								$ref: '#/components/schemas/RelevanceDefinition'
+							},
+						}
+					},
+					SimpleDateFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseDateFieldProps' },
@@ -291,8 +428,15 @@ defineRouteMeta({
 								type: 'object',
 								required: ['type'], additionalProperties: false,
 								properties: {
-									type: { type: 'string', enum: ['date', 'date-time'] },
-									defaultValue: { type: 'number', nullable: true }
+									type: {
+										type: 'string',
+										enum: ['date', 'date-time']
+									},
+									defaultValue: {
+										type: 'number',
+										nullable: true,
+										default: null
+									}
 								}
 							}
 						]
@@ -305,23 +449,27 @@ defineRouteMeta({
 							end: { type: 'number', nullable: true }
 						}
 					},
-					RangeDateFieldMeta: {
+					RangeDateFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseDateFieldProps' },
 							{
 								type: 'object',
-								required: ['type'], additionalProperties: false,
+								required: ['type', 'defaultValue'], additionalProperties: false,
 								properties: {
-									type: { type: 'string', enum: ['date-range'] },
+									type: {
+										type: 'string',
+										enum: ['date-range']
+									},
 									defaultValue: {
-										$ref: '#/components/schemas/NumberRange'
+										$ref: '#/components/schemas/NumberRange',
+										default: { start: null, end: null }
 									}
 								}
 							}
 						]
 					},
-					MultiDateFieldMeta: {
+					MultiDateFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseDateFieldProps' },
@@ -329,12 +477,24 @@ defineRouteMeta({
 								type: 'object',
 								required: ['type'], additionalProperties: false,
 								properties: {
-									type: { type: 'string', enum: ['multi-date'] },
-									minSelection: { type: 'integer', nullable: true },
-									maxSelection: { type: 'integer', nullable: true },
+									type: {
+										type: 'string',
+										enum: ['multi-date']
+									},
+									minSelection: {
+										type: 'integer',
+										nullable: true,
+										default: null
+									},
+									maxSelection: {
+										type: 'integer',
+										nullable: true,
+										default: null
+									},
 									defaultValue: {
 										type: 'array',
 										nullable: true,
+										default: [],
 										items: { type: 'number' }
 									}
 								}
@@ -348,49 +508,97 @@ defineRouteMeta({
 							{ $ref: '#/components/schemas/BaseFieldProps' },
 							{
 								type: 'object', additionalProperties: false,
+								required: ['min', 'max'],
 								properties: {
-									min: { type: 'number', nullable: true },
-									max: { type: 'number', nullable: true }
+									min: {
+										type: 'number', nullable: true,
+										default: null
+									},
+									max: {
+										type: 'number', nullable: true,
+										default: null
+									}
 								}
 							}
 						]
 					},
-
 					BaseFieldProps: {
 						type: 'object', additionalProperties: false,
+						required: ['required', 'readonly', 'title', 'tags'],
 						properties: {
-							required: { type: 'boolean', default: true, nullable: true },
-							span: { type: 'integer', default: 12, nullable: true },
-							readonly: { type: 'boolean', default: false, nullable: true }
+							required: {
+								type: 'boolean',
+								default: true,
+								nullable: true
+							},
+							readonly: {
+								type: 'boolean',
+								default: false,
+								nullable: true
+							},
+							title: { type: 'string', default: '' },
+							description: {
+								type: 'string',
+								nullable: true,
+								default: null,
+							},
+							dataKey: {
+								type: 'string',
+								nullable: true,
+								default: null
+							}
 						}
 					},
-					SeparatorItemMeta: {
+					SeparatorItemConfig: {
 						type: 'object',
 						additionalProperties: false,
+						required: ['orientation'],
 						properties: {
-							orientation: { type: 'string', enum: ['vertical', 'horizontal'] },
+							orientation: {
+								type: 'string',
+								default: 'vertical',
+								enum: ['vertical', 'horizontal']
+							},
 						}
 					},
-					ImageItemMeta: {
+					ImageItemConfig: {
 						type: 'object',
 						additionalProperties: false,
-						required: ['width'],
+						required: ['width', 'url'],
 						properties: {
-							width: { type: 'number', minimum: 10 },
-							caption: { type: 'string', nullable: true },
-							height: { type: 'number', nullable: true },
-							aspectRatio: { type: 'number', nullable: true },
-							filter: { type: 'string', enum: ['none', 'shadow'], nullable: true }
+							url: { type: 'string' },
+							width: {
+								type: 'number', minimum: 10,
+								default: 10
+							},
+							caption: {
+								type: 'string', nullable: true,
+								default: null
+							},
+							height: {
+								type: 'number', nullable: true,
+								default: null
+							},
+							aspectRatio: {
+								type: 'number', nullable: true,
+								default: null
+							},
+							filter: {
+								type: 'string',
+								enum: ['none', 'shadow'],
+								nullable: true,
+								default: null
+							}
 						}
 					},
-					NoteItemMeta: {
+					NoteItemConfig: {
 						type: 'object', additionalProperties: false,
 						required: ['fontSize'],
 						properties: {
 							fontSize: { type: 'integer', default: 13 }
 						}
 					},
-					NumberFieldMeta: {
+					NumberFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFieldProps' },
@@ -398,10 +606,23 @@ defineRouteMeta({
 								type: 'object', additionalProperties: false,
 								required: ['type'],
 								properties: {
-									type: { type: 'string', enum: ['integer', 'float'] },
-									min: { type: 'number', nullable: true },
-									max: { type: 'number', nullable: true },
-									defaultValue: { type: 'number', nullable: true }
+									type: {
+										type: 'string',
+										enum: ['integer', 'float']
+									},
+									min: {
+										type: 'number', nullable: true,
+										default: null
+									},
+									max: {
+										type: 'number', nullable: true,
+										default: null
+									},
+									defaultValue: {
+										type: 'number',
+										nullable: true,
+										default: null
+									}
 								}
 							}
 						]
@@ -412,10 +633,14 @@ defineRouteMeta({
 						required: ['lat', 'long'],
 						properties: {
 							lat: { type: 'number', minimum: -90, maximum: 90 },
-							long: { type: 'number', minimum: -180, maximum: 180 }
+							long: {
+								type: 'number',
+								minimum: -180,
+								maximum: 180
+							}
 						}
 					},
-					GeoPointFieldMeta: {
+					GeoPointFieldConfig: {
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
@@ -424,49 +649,43 @@ defineRouteMeta({
 								type: 'object', additionalProperties: false,
 								required: ['type'],
 								properties: {
-									type: { type: 'string', enum: ['geo-point'] },
+									type: {
+										type: 'string',
+										enum: ['geo-point']
+									},
 									defaultValue: {
 										nullable: true,
-										$ref: '#/components/schemas/GeoPoint'
+										$ref: '#/components/schemas/GeoPoint',
+										default: null
 									}
 								}
 							}
 						]
 					},
-					BooleanFieldMeta: {
+					BooleanFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFieldProps' },
 							{
 								type: 'object', additionalProperties: false,
-								required: ['type'],
+								required: ['type', 'renderAs'],
 								properties: {
 									type: { type: 'string', enum: ['boolean'] },
-									defaultValue: { type: 'boolean', default: false, nullable: true },
-									renderAs: { nullable: true, type: 'string', enum: ['select', 'checkbox'], default: 'checkbox' }
+									defaultValue: {
+										type: 'boolean',
+										default: false,
+									},
+									renderAs: {
+										nullable: true,
+										type: 'string',
+										enum: ['select', 'checkbox'],
+										default: 'checkbox'
+									}
 								}
 							}
 						]
 					},
-					TextFieldMeta: {
-						type: 'object', additionalProperties: false,
-						allOf: [
-							{ $ref: '#/components/schemas/BaseFieldProps' },
-							{
-								type: 'object', additionalProperties: false,
-								required: ['type'],
-								properties: {
-									type: { type: 'string', enum: ['text', 'multiline'] },
-									pattern: { type: 'string', nullable: true },
-									minlength: { type: 'number', nullable: true },
-									maxlength: { type: 'number', nullable: true },
-									defaultValue: { type: 'string', nullable: true }
-								}
-							}
-						]
-					},
-
-					SelectFieldMeta: {
+					TextFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFieldProps' },
@@ -475,9 +694,57 @@ defineRouteMeta({
 								additionalProperties: false,
 								required: ['type'],
 								properties: {
-									type: { type: 'string', enum: ['single-select', 'multi-select'] },
-									itemSourceRef: { type: 'string', nullable: true },
-									defaultValue: { type: 'string', nullable: true },
+									type: {
+										type: 'string',
+										enum: ['text', 'multiline']
+									},
+									pattern: {
+										type: 'string',
+										nullable: true,
+										default: null
+									},
+									minlength: {
+										type: 'number',
+										nullable: true,
+										default: null
+									},
+									maxlength: {
+										type: 'number',
+										nullable: true,
+										default: null
+									},
+									defaultValue: {
+										type: 'string',
+										nullable: true,
+										default: null
+									}
+								}
+							}
+						]
+					},
+					SelectFieldConfig: {
+						type: 'object', additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFieldProps' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['type'],
+								properties: {
+									type: {
+										type: 'string',
+										enum: ['single-select', 'multi-select']
+									},
+									itemSourceRef: {
+										type: 'string',
+										nullable: true,
+										default: null
+									},
+									defaultValue: {
+										type: 'string',
+										nullable: true,
+										default: null
+									},
 									hardItems: {
 										type: 'array',
 										default: [],
@@ -485,8 +752,16 @@ defineRouteMeta({
 											additionalProperties: false,
 											type: 'object',
 											properties: {
-												label: { type: 'string', nullable: true },
-												value: { type: 'string', nullable: true }
+												label: {
+													type: 'string',
+													nullable: true,
+													default: null
+												},
+												value: {
+													type: 'string',
+													nullable: true,
+													default: null
+												}
 											}
 										}
 									}

@@ -1,0 +1,1 @@
+ALTER TABLE "form_version_items" ADD COLUMN "meta_tag" text;

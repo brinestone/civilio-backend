@@ -3,7 +3,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import { createError, defineEventHandler, readMultipartFormData, setResponseStatus } from 'h3';
 import { defineRouteMeta, useRuntimeConfig } from 'nitropack/runtime';
 import path from 'path';
-import { hashTheseMd5 } from '~/utils/helpers';
+import { hashTheseMd5 } from '~/utils/misc';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
@@ -68,8 +68,9 @@ export default defineEventHandler(async (event) => {
 defineRouteMeta({
 	openAPI: {
 		summary: 'File uploads',
+		operationId: 'uploadFiles',
 		description: 'Dedicated endpoint for handling file uploads',
-		tags: ['Miscellaneous', 'Upload'],
+		tags: ['Miscellaneous'],
 		requestBody: {
 			required: true,
 			content: {
@@ -117,20 +118,6 @@ defineRouteMeta({
 								example: 'image/jpeg'
 							},
 							urlPath: { type: 'string', example: '/uploads/profile-pic-1234567890abc.jpg' }
-						}
-					},
-					FileUploadResponseBody: {
-						type: 'object',
-						additionalProperties: false,
-						properties: {
-							message: {
-								type: 'string',
-								example: '2 file(s) uploaded successfully'
-							},
-							files: {
-								type: 'array',
-								items: { $ref: '#/components/schemas/UploadedFileInfo' }
-							}
 						}
 					},
 					FileUploadResponse: {

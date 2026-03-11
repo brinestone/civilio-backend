@@ -2,29 +2,33 @@ import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
 import { validateZodQueryParams } from "~/utils/dto/zod";
-import { formSlugAvailable } from "~/utils/helpers/forms";
+import { formTitleAvailable } from "~/utils/helpers/forms";
 
 const querySchema = z.object({
-	slug: z.string().trim().regex(/^[a-zA-Z0-9_]+$/g, 'Invalid slug value')
+	title: z.string().trim()
+});
+
+export default defineEventHandler(async event => {
+	const data = await validateZodQueryParams(event, querySchema);
+
+	return await formTitleAvailable(data.title);
 });
 
 defineRouteMeta({
 	openAPI: {
-		deprecated: true,
 		tags: ['Forms'],
-		summary: 'Check slug',
-		operationId: 'isSlugAvailable',
-		description: 'Check whether a form slug is available',
+		summary: 'Check title availability',
+		operationId: 'isFormTitleAvailable',
 		parameters: [
 			{
 				in: 'query',
-				name: 'slug',
+				name: 'title',
 				required: true,
 				schema: { type: 'string' }
-			},
+			}
 		],
 		responses: {
-			'200': {
+			200: {
 				'description': 'OK',
 				content: {
 					'application/json': {
@@ -33,13 +37,7 @@ defineRouteMeta({
 						}
 					}
 				}
-			},
+			}
 		}
 	}
-})
-export default defineEventHandler(async event => {
-	const data = await validateZodQueryParams(event, querySchema);
-
-	const result = await formSlugAvailable(data.slug);
-	return { available: !result };
-})
+});

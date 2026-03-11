@@ -1,8 +1,8 @@
 import { defineEventHandler, setResponseStatus } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { upsertFormOptions } from "~/utils/datasets";
-import { DatasetUpsertRequestSchema } from "~/utils/dto";
+import { upsertFormOptions } from "~/utils/helpers/datasets";
 import { validateZodRequestBody } from "~/utils/dto/zod";
+import { DatasetUpsertRequestSchema } from "~/utils/dto/dataset";
 
 const bodySchema = DatasetUpsertRequestSchema;
 defineRouteMeta({
@@ -13,31 +13,6 @@ defineRouteMeta({
 		operationId: 'upsertDataset',
 		$global: {
 			components: {
-				requestBodies: {
-					UpsertFormDatasetRequest: {
-						required: true,
-						content: {
-							'application/json': {
-								schema: {
-									type: 'array',
-									items: {
-										oneOf: [
-											{ $ref: '#/components/schemas/DatasetInsert' },
-											{ $ref: '#/components/schemas/DatasetUpdate' }
-										],
-										discriminator: {
-											propertyName: 'isNew',
-											mapping: {
-												true: '#/components/schemas/DatasetInsert',
-												false: '#/components/schemas/DatasetUpdate'
-											}
-										}
-									}
-								} as any
-							}
-						}
-					}
-				},
 				schemas: {
 					NewDatasetItem: {
 						type: 'object',
@@ -128,7 +103,27 @@ defineRouteMeta({
 			},
 		},
 		requestBody: {
-			$ref: '#/components/requestBodies/UpsertFormDatasetRequest'
+			required: true,
+			content: {
+				'application/json': {
+					schema: {
+						type: 'array',
+						items: {
+							oneOf: [
+								{ $ref: '#/components/schemas/DatasetInsert' },
+								{ $ref: '#/components/schemas/DatasetUpdate' }
+							],
+							discriminator: {
+								propertyName: 'isNew',
+								mapping: {
+									true: '#/components/schemas/DatasetInsert',
+									false: '#/components/schemas/DatasetUpdate'
+								}
+							}
+						}
+					} as any
+				}
+			}
 		},
 		responses: {
 			'202': {

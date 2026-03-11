@@ -1,25 +1,12 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
 import z from "zod";
-import { lookupDatasetItems } from "~/utils/datasets";
+import { lookupDatasetItems } from "~/utils/helpers/datasets";
 import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
 
 const pathSchema = z.object({
 	dataset: z.string().trim().nonempty('dataset cannot be empty').pipe(z.uuid('Invalid UUID'))
 });
-
-/* DatasetItem: {
-						type: 'object',
-						additionalProperties: false,
-						required: ['id', 'label', 'ordinal', 'value'],
-						properties: {
-							id: { type: 'string', 'format': 'uuid' },
-							label: { type: 'string' },
-							parentValue: { type: 'string' },
-							ordinal: { type: 'integer', minimum: 0 },
-							value: { type: 'string' },
-						}
-					} */
 
 const querySchema = z.object({
 	page: z.string().trim().optional().default('0').pipe(z.coerce.number()).pipe(z.int('Value must be a positive integer').min(0, 'Value cannot be less than 0')),

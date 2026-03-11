@@ -1,1 +1,0 @@
-ALTER TABLE "dataset_refs" RENAME COLUMN "inUse" TO "in_use";

@@ -1,12 +1,13 @@
 import { defineEventHandler } from "h3";
 import { defineRouteMeta } from "nitropack/runtime";
-import { findAllDatasets } from "~/utils/datasets";
+import { findAllDatasets } from "~/utils/helpers/datasets";
 
 defineRouteMeta({
 	openAPI: {
 		deprecated: true,
 		tags: ['Datasets'],
-		summary: 'Get Datasets',
+		operationId: 'findDatasets',
+		summary: 'Find Datasets',
 		responses: {
 			'200': {
 				description: 'Datasets payload',

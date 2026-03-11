@@ -1,0 +1,1 @@
+ALTER TABLE "form_version_items" DROP COLUMN "metaTag";
