@@ -175,7 +175,7 @@ export const formItems = pgTable('form_items', {
 	id: uuid().notNull().defaultRandom().primaryKey(),
 	config: jsonb(),
 	// dataKey: text('data_key'),
-	tags: jsonb(),
+	tags: jsonb().default([]),
 }, t => [
 	// index().on(t.dataKey).where(isNotNull(t.dataKey)),
 ]);
@@ -190,7 +190,7 @@ export const formVersionItems = pgTable('form_version_items', {
 	relevance: jsonb(),
 	metaTag: text('meta_tag'),
 	config: jsonb(),
-	tags: jsonb(),
+	tags: jsonb().default([]),
 	id: uuid().notNull().defaultRandom(),
 	addedAt: timestamp('added_at', { mode: 'date', withTimezone: true }).defaultNow().notNull(),
 	updatedAt: timestamp('updated_at', { mode: 'date', withTimezone: true }).defaultNow().notNull().$onUpdate(() => new Date())

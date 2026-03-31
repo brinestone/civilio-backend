@@ -48,6 +48,7 @@ const BaseFieldPropsSchema = z.object({
 	required: z.boolean().default(true).nullable(),
 	readonly: z.boolean().default(false).nullable(),
 	dataKey: z.string().trim().nullish(),
+	autoDataKey: z.boolean().nullish(),
 	title: z.string(),
 	description: z.string().nullable()
 });
@@ -170,12 +171,18 @@ const NewFormItemSeparatorSchema = BaseNewFormItemDefinitionSchema.extend({
 
 const NewFormItemFieldSchema = BaseNewFormItemDefinitionSchema.extend({
 	type: z.literal('field'),
-	config: FieldItemConfigSchema
+	config: FieldItemConfigSchema,
+	parentId: z.uuid().nullish()
 });
 const NewFormItemGroupSchema = BaseNewFormItemDefinitionSchema.extend({
 	type: z.literal('group'),
 	config: z.object({
-		fields: NewFormItemFieldSchema.array()
+		// fields: NewFormItemFieldSchema.array(),
+		title: z.string().trim(),
+		description: z.string().trim().nullish(),
+		repeatable: z.boolean().nullish().default(true),
+		divisionCount: z.int().min(1).nullish().default(1),
+		orientation: z.enum(['horizontal', 'vertical']).nullish().default('vertical')
 	})
 });
 const FormItemExtrasSchema = BaseNewFormItemDefinitionSchema.extend({
@@ -196,6 +203,22 @@ export const FormItemGroupSchema = NewFormItemGroupSchema.extend({
 export const FormItemNoteSchema = NewFormItemNoteSchema.extend(FormItemExtras);
 export const FormItemImageSchema = NewFormItemImageSchema.extend(FormItemExtras);
 export const FormItemSeparatorSchema = NewFormItemSeparatorSchema.extend(FormItemExtras);
+
+export const FormItemNoteUpdateSchema = FormItemNoteSchema.extend({});
+export const FormItemImageUpdateSchema = FormItemImageSchema.extend({});
+export const FormItemFieldUpdateSchema = FormItemFieldSchema.extend({
+	parentId: z.uuid().nullish()
+});
+export const FormItemSeparatorUpdateSchema = FormItemSeparatorSchema.extend({});
+export const FormItemGroupUpdateSchema = NewFormItemGroupSchema.extend(FormItemExtras);
+
+export const FormItemDefinitionUpdateSchema = z.discriminatedUnion('type', [
+	FormItemNoteUpdateSchema,
+	FormItemImageUpdateSchema,
+	FormItemFieldUpdateSchema,
+	FormItemSeparatorUpdateSchema,
+	FormItemGroupUpdateSchema
+])
 
 // Main FormItemDefinition union
 export const FormItemDefinitionSchema = z.discriminatedUnion('type', [
@@ -220,3 +243,6 @@ export type NewFormItemGroup = z.infer<typeof NewFormItemGroupSchema>;
 export type FormItemDefinition = z.infer<typeof FormItemDefinitionSchema>;
 export type NewFormItemDefinition = z.infer<typeof NewFormItemDefinitionSchema>;
 export type NewFormItemField = Extract<NewFormItemDefinition, { type: 'field' }>;
+export type FormItemDefinitionUpdate = z.infer<typeof FormItemDefinitionUpdateSchema>;
+export type FormItemGroupUpdate = Extract<FormItemDefinitionUpdate, { type: 'group' }>;
+export type FormItemFieldUpdate = Extract<FormItemDefinitionUpdate, { type: 'field' }>;

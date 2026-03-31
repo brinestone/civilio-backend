@@ -13,6 +13,7 @@ const pathSchema = z.object({
 	form: z.string().trim().nonempty()
 })
 const querySchema = z.object({
+	archived: z.boolean().optional().default(false),
 	version: z.string().trim().optional().pipe(z.uuid('version must be a UUID').optional())
 });
 export default defineEventHandler(async event => {
@@ -20,7 +21,7 @@ export default defineEventHandler(async event => {
 	const queryParams = await validateZodQueryParams(event, querySchema);
 
 	try {
-		const result = await findFormVersionDefinition(pathParams.form, queryParams.version);
+		const result = await findFormVersionDefinition(pathParams.form, queryParams.archived, queryParams.version);
 
 		if (!result)
 			throw new NotFoundError('definition not found');
@@ -40,6 +41,12 @@ defineRouteMeta({
 		operationId: 'findFormDefinitionByVersion',
 		parameters: [
 			{
+				schema: { type: 'boolean', default: false },
+				in: 'query',
+				required: false,
+				name: 'archived',
+			},
+			{
 				schema: { type: 'string', format: 'uuid' },
 				in: 'query',
 				required: false,
@@ -55,6 +62,21 @@ defineRouteMeta({
 		$global: {
 			components: {
 				schemas: {
+					ArchivedFormVersionDefinition: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/FormVersionDefinition' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								properties: {
+									archived: { type: 'boolean' }
+								},
+								required: ['archived']
+							}
+						]
+					},
 					FormVersionDefinition: {
 						type: 'object',
 						additionalProperties: false,
@@ -200,15 +222,91 @@ defineRouteMeta({
 							{ $ref: '#/components/schemas/NewFormItemSeparator' }
 						]
 					},
+					FormItemDefinitionUpdate: {
+						type: 'object',
+						discriminator: {
+							propertyName: 'type',
+							mapping: {
+								note: '#/components/schemas/FormItemNoteUpdate',
+								field: '#/components/schemas/FormItemFieldUpdate',
+								separator: '#/components/schemas/FormItemSeparatorUpdate',
+								image: '#/components/schemas/FormItemImageUpdate',
+								group: '#/components/schemas/FormItemGroupUpdate'
+							}
+						},
+						oneOf: [
+							{ $ref: '#/components/schemas/FormItemNoteUpdate' },
+							{ $ref: '#/components/schemas/FormItemImageUpdate' },
+							{ $ref: '#/components/schemas/FormItemFieldUpdate' },
+							{ $ref: '#/components/schemas/FormItemSeparatorUpdate' },
+							{ $ref: '#/components/schemas/FormItemGroupUpdate' },
+						]
+					},
+					FormItemGroupUpdate: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
+							{ $ref: '#/components/schemas/BaseFormItemGroup' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['config'],
+								properties: {
+									config: {
+										$ref: '#/components/schemas/BaseGroupItemConfig'
+									}
+								}
+							}
+						]
+					},
+					FormItemSeparatorUpdate: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/FormItemSeparator' }
+						]
+					},
+					FormItemFieldUpdate: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/FormItemField' }
+						]
+					},
+					FormItemImageUpdate: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/FormItemImage' }
+						]
+					},
+					FormItemNoteUpdate: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/FormItemNote' }
+						]
+					},
 					FormItemGroup: {
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
-							{ $ref: '#/components/schemas/NewFormItemGroup' }
+							{ $ref: '#/components/schemas/BaseFormItemGroup' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['config'],
+								properties: {
+									config: {
+										$ref: '#/components/schemas/GroupItemConfig'
+									}
+								}
+							}
 						]
 					},
-					NewFormItemGroup: {
+					BaseFormItemGroup: {
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
@@ -216,25 +314,25 @@ defineRouteMeta({
 							{
 								type: 'object',
 								additionalProperties: false,
-								required: ['config', 'type'],
+								required: ['type'],
 								properties: {
 									type: { type: 'string', enum: ['group'] },
+								}
+							}
+						]
+					},
+					NewFormItemGroup: {
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFormItemGroup' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['config'],
+								properties: {
 									config: {
-										type: 'object',
-										additionalProperties: false,
-										required: ['orientation', 'fields', 'title', 'repeatable'],
-										properties: {
-											title: { type: 'string', nullable: true, default: null },
-											description: { type: 'string', nullable: true, default: null },
-											repeatable: { type: 'boolean', default: true },
-											divisionCount: { type: 'integer', minimum: 1, default: 1 },
-											orientation: { type: 'string', enum: ['horizonal', 'vertical'], nullable: true, default: null },
-											fields: {
-												type: 'array',
-												default: [],
-												items: { $ref: '#/components/schemas/NewFormItemField' }
-											}
-										}
+										$ref: '#/components/schemas/NewGroupItemConfig'
 									}
 								}
 							}
@@ -326,6 +424,7 @@ defineRouteMeta({
 								required: ['type', 'title', 'config'],
 								properties: {
 									type: { type: 'string', enum: ['field'] },
+									parentId: { type: 'string', format: 'uuid', nullable: true, default: null },
 									config: { $ref: '#/components/schemas/FieldItemConfig' }
 								}
 							}
@@ -336,7 +435,67 @@ defineRouteMeta({
 						additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
-							{ $ref: '#/components/schemas/NewFormItemField' }
+							{ $ref: '#/components/schemas/NewFormItemField' },
+						]
+					},
+					NewGroupItemConfig: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['config'],
+						allOf: [
+							{ $ref: '#/components/schemas/BaseGroupItemConfig' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['fields'],
+								properties: {
+									fields: {
+										type: 'array',
+										default: [],
+										items: { $ref: '#/components/schemas/NewFormItemField' }
+									}
+								}
+							}
+						]
+					},
+					BaseGroupItemConfig: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['orientation', 'fields', 'title', 'repeatable'],
+						properties: {
+							title: { type: 'string', nullable: true, default: null },
+							description: { type: 'string', nullable: true, default: null },
+							repeatable: { type: 'boolean', default: false },
+							divisionCount: { type: 'integer', minimum: 1, default: 1 },
+							orientation: { type: 'string', enum: ['horizonal', 'vertical'], default: 'vertical' },
+						}
+					},
+					GroupItemEntry: {
+						type: 'object',
+						additionalProperties: false,
+						oneOf: [
+							{ $ref: '#/components/schemas/NewFormItemField' },
+							{ $ref: '#/components/schemas/FormItemField' }
+						]
+					},
+					GroupItemConfig: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['config'],
+						allOf: [
+							{ $ref: '#/components/schemas/BaseGroupItemConfig' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['fields'],
+								properties: {
+									fields: {
+										type: 'array',
+										default: [],
+										items: { $ref: '#/components/schemas/FormItemField' }
+									}
+								}
+							}
 						]
 					},
 					// --- FIELD CONFIG DISCRIMINATOR ---
@@ -383,7 +542,8 @@ defineRouteMeta({
 									id: { type: 'string', format: 'uuid' },
 									addedAt: { type: 'string', },
 									updatedAt: { type: 'string', },
-									itemId: { type: 'string', format: 'uuid' }
+									itemId: { type: 'string', format: 'uuid' },
+									// parentId: { type: 'string', format: 'uuid', nullable: true, default: null }
 								}
 							}
 						]
@@ -524,7 +684,7 @@ defineRouteMeta({
 					},
 					BaseFieldProps: {
 						type: 'object', additionalProperties: false,
-						required: ['required', 'readonly', 'title', 'tags'],
+						required: ['required', 'readonly', 'title', 'tags', 'autoDataKey'],
 						properties: {
 							required: {
 								type: 'boolean',
@@ -546,6 +706,10 @@ defineRouteMeta({
 								type: 'string',
 								nullable: true,
 								default: null
+							},
+							autoDataKey: {
+								type: 'boolean',
+								default: true
 							}
 						}
 					},
@@ -698,6 +862,11 @@ defineRouteMeta({
 										type: 'string',
 										enum: ['text', 'multiline']
 									},
+									placeholder: {
+										type: 'string',
+										nullable: true,
+										default: null
+									},
 									pattern: {
 										type: 'string',
 										nullable: true,
@@ -778,7 +947,12 @@ defineRouteMeta({
 				content: {
 					'application/json': {
 						schema: {
-							$ref: '#/components/schemas/FormVersionDefinition'
+							type: 'object',
+							additionalProperties: false,
+							oneOf: [
+								{ $ref: '#/components/schemas/FormVersionDefinition' },
+								{ $ref: '#/components/schemas/ArchivedFormVersionDefinition' }
+							]
 						}
 					}
 				}
