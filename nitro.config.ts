@@ -10,7 +10,7 @@ export default defineNitroConfig({
 		{ baseURL: uploadsBase, dir: 'public/uploads', maxAge: 60 * 60 * 24 * 7 }
 	],
 	devServer: {
-		watch: ['server/assets/migrations', 'server/assets/seed']
+		watch: ['server/assets/migrations', 'server/assets/seed', '.env']
 	},
 	routeRules: {
 		'/api/**': {

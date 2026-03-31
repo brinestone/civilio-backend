@@ -1,26 +1,25 @@
-import { and, eq, ne, not, sql } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, isNull, ne, not, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import _ from "lodash";
 import { excluded, provideDb } from "../db";
 import { formItems, forms, formVersionItems, formVersions } from "../db/schema";
-import { FormItemDefinition, NewFormItemDefinition, Tag } from "../dto/form";
+import { FormItemDefinitionUpdate, NewFormItemDefinition, Tag } from "../dto/form";
 import Logger from "../logger";
 import { randomString } from "../misc";
+import { UnprocessibleError } from "../types/errors";
 import { ConnectionLike } from "../types/types";
 
 export async function removeFormItems(tx: ConnectionLike, slug: string, version: string, ids: string[]) {
-	const fvi = alias(formVersionItems, 'fvi');
+	const fvi = formVersionItems;
 	return await tx.transaction(async tx => {
 		let deleted = 0;
-		for (const id of ids) {
-			const result = await tx.delete(fvi)
-				.where(and(
-					eq(fvi.form, slug),
-					eq(fvi.formVersion, version),
-					eq(fvi.id, id)
-				));
-			deleted += result.rowCount ?? 0;
-		}
+		const result = await tx.delete(fvi)
+			.where(and(
+				eq(fvi.form, slug),
+				eq(fvi.formVersion, version),
+				inArray(fvi.id, ids)
+			));
+		deleted += result.rowCount ?? 0;
 		if (deleted > 0) {
 			const now = new Date();
 			await tx.update(fvi)
@@ -38,25 +37,39 @@ export async function removeFormItems(tx: ConnectionLike, slug: string, version:
 	});
 }
 
-export async function updateFormItems(tx: ConnectionLike, slug: string, version: string, items: FormItemDefinition[], parentId?: string) {
+export async function updateFormItems(tx: ConnectionLike, slug: string, version: string, items: FormItemDefinitionUpdate[], parentId?: string) {
 	Logger.info(`Attempting to update ${items.length} form item(s) under form: ${slug}`);
 	// const fvi = alias(formVersionItems, 'fvi');
 	const ids = Array<string>();
 	await tx.transaction(async tx => {
 		for (const item of items) {
-			const { config, path, relevance, itemId, tags, id: linkId, metaTag } = item;
+			const { config, path, relevance, itemId, tags, id: linkId, metaTag, } = item;
+			let _itemId = itemId
+			if (!itemId) {
+				const [{ id }] = await tx.insert(formItems)
+					.values({
+						type: item.type,
+						config,
+						tags
+					}).returning({ id: formItems.id });
+				_itemId = id;
+			}
+			if (item.type == 'field' && item.parentId) {
+				const parentIsInFom = await formVersionHasItemTx(tx, version, slug, item.parentId);
+				if (!parentIsInFom) throw new UnprocessibleError(`Specified parent item for item: ${linkId} was not found under form: ${slug}, version: ${version}`);
+			}
 			const [{ returnedId }] = await tx.insert(formVersionItems)
 				.values({
 					id: linkId,
 					path,
 					relevance,
-					parentId,
+					parentId: (item.type == 'field' ? item.parentId ?? parentId : parentId) ?? undefined,
 					tags,
 					metaTag,
 					config,
 					form: slug,
 					formVersion: version,
-					itemId: itemId ?? null
+					itemId: _itemId ?? null
 				})
 				.onConflictDoUpdate({
 					target: [formVersionItems.formVersion, formVersionItems.id],
@@ -72,17 +85,19 @@ export async function updateFormItems(tx: ConnectionLike, slug: string, version:
 				}).returning({ returnedId: formVersionItems.id });
 			ids.push(returnedId);
 		}
-		const now = new Date();
-		await tx.update(formVersionItems)
-			.set({ updatedAt: now }).where(and(
-				eq(formVersionItems.form, slug),
-				eq(formVersionItems.id, version)
-			));
-		await tx.update(forms)
-			.set({
-				updatedAt: now
-			})
-			.where(eq(forms.slug, slug));
+		if (ids.length > 0) {
+			const now = new Date();
+			await tx.update(formVersionItems)
+				.set({ updatedAt: now }).where(and(
+					eq(formVersionItems.form, slug),
+					eq(formVersionItems.id, version)
+				));
+			await tx.update(forms)
+				.set({
+					updatedAt: now
+				})
+				.where(eq(forms.slug, slug));
+		}
 	});
 	return ids;
 }
@@ -110,6 +125,7 @@ export async function createFormItems(tx: ConnectionLike, slug: string, version:
 				.values({
 					type: item.type,
 					id: item.itemId || undefined,
+					tags: item.tags,
 					config: _.omit(item.config, ['dataKey']),
 				}).onConflictDoNothing({
 					target: [formItems.id]
@@ -120,24 +136,27 @@ export async function createFormItems(tx: ConnectionLike, slug: string, version:
 					itemId: itemId,
 					form: slug,
 					formVersion: version,
+					tags: item.tags,
 					path: item.path,
-					parentId,
+					parentId: parentId ?? (item.type === 'field' ? item.parentId : null),
 					config: item.config,
 					relevance: item.relevance,
 				} as typeof formVersionItems.$inferInsert))
 				.returning({ ref: formVersionItems.id });
 			ids.push(ref)
 		}
-		await tx.update(formVersions)
-			.set({ updatedAt: now }).where(and(
-				eq(formVersions.form, slug),
-				eq(formVersions.id, version)
-			));
-		await tx.update(forms)
-			.set({
-				updatedAt: now
-			})
-			.where(eq(forms.slug, slug));
+		if (ids.length > 0) {
+			await tx.update(formVersions)
+				.set({ updatedAt: now }).where(and(
+					eq(formVersions.form, slug),
+					eq(formVersions.id, version)
+				));
+			await tx.update(forms)
+				.set({
+					updatedAt: now
+				})
+				.where(eq(forms.slug, slug));
+		}
 		return ids;
 	});
 }
@@ -217,25 +236,64 @@ export async function formVersionExistsTx(tx: ConnectionLike, slug: string, vers
  * // Get specific form version
  * const form = await findFormDefinition('contact-form', 'v1.2.0');
  */
-export async function findFormVersionDefinition(slug: string, version?: string) {
+export async function findFormVersionDefinition(slug: string, includeArchived = false, version?: string) {
 	const db = provideDb();
 	const fv = alias(formVersions, 'fv');
 	const fvi = alias(formVersionItems, 'fvi');
+	const children = alias(formVersionItems, 'ch');
+	const childItems = alias(formItems, 'chi');
 	const fi = alias(formItems, 'fi');
+
+	const formItemsFilters = [
+		eq(fv.id, fvi.formVersion),
+		isNull(fvi.parentId)
+	];
+
+	// const childItems = db.select().from(children)
+
 	const formItemsQuery = db.select({
 		type: fi.type,
 		id: fvi.id,
 		itemId: fi.id.as('itemId'),
 		path: fvi.path,
 		relevance: fvi.relevance,
-		config: sql`COALESCE(${fi.config}, '{}'::JSONB) || ${fvi.config}`.as('config'),
+		config: sql`
+			COALESCE(${fi.config}, '{}'::JSONB) ||
+			COALESCE(${fvi.config}, '{}'::JSONB) ||
+			(
+				CASE WHEN ${eq(fi.type, 'group')} THEN
+					jsonb_build_object(
+						'fields', COALESCE(jsonb_agg(jsonb_build_object(
+							'type', ${childItems.type},
+							'id', ${children.id},
+							'path', ${children.path},
+							'relevance', ${children.relevance},
+							'config', COALESCE(${childItems.config}, '{}'::JSONB) || COALESCE(${children.config}, '{}'::JSONB),
+							'tags', COALESCE(${childItems.tags}, '[]'::JSONB) || COALESCE(${children.tags}, '[]'::JSONB),
+							'addedAt', ${children.addedAt},
+							'updatedAt', ${children.updatedAt},
+							'metaTag', ${children.metaTag},
+							'parentId', ${children.parentId},
+							'itemId', ${children.itemId}
+						)) FILTER (WHERE ${isNotNull(children.id)}), '[]'::JSONB)
+					)
+				ELSE
+					'{}'::JSONB
+				END
+			)`.as('config'),
 		tags: sql<Tag[]>`COALESCE(${fi.tags}, '[]'::JSONB) || COALESCE(${fvi.tags}, '[]'::JSONB)`.as('tags'),
 		addedAt: fvi.addedAt.as('addedAt'),
 		updatedAt: fvi.updatedAt.as('updatedAt'),
 		metaTag: fvi.metaTag.as('metaTag')
 	}).from(fi)
 		.innerJoin(fvi, eq(fvi.itemId, fi.id))
-		.where(eq(fv.id, fvi.formVersion))
+		.leftJoin(children, eq(children.parentId, fvi.id))
+		.leftJoin(childItems, eq(childItems.id, children.itemId))
+		.where(and(...formItemsFilters))
+		.groupBy(
+			fi.type, fvi.id, fi.id, fvi.path, fvi.relevance, fvi.config, fi.config, fvi.tags, fvi.addedAt, fvi.updatedAt, fvi.metaTag
+		)
+		.orderBy(fvi.path)
 		.as('t');
 
 	const aggregatedItemsQuery = db.select({
@@ -243,6 +301,14 @@ export async function findFormVersionDefinition(slug: string, version?: string) 
 	}).from(formItemsQuery)
 		.as('items');
 
+	const mainQueryFilters = [
+		eq(fv.form, slug),
+		version ? eq(fv.id, version) : eq(fv.isCurrent, true)
+	];
+	if (includeArchived) {
+		// formItemsFilters.push(isNull(fvi.))
+		mainQueryFilters.push(isNull(fv.archivedAt));
+	}
 	const [result] = await db.select({
 		id: fv.id,
 		parentId: fv.parentId,
@@ -250,10 +316,7 @@ export async function findFormVersionDefinition(slug: string, version?: string) 
 	}).from(fv)
 		.leftJoinLateral(
 			aggregatedItemsQuery, sql`${true}`
-		).where(and(
-			eq(fv.form, slug),
-			version ? eq(fv.id, version) : eq(fv.isCurrent, true)
-		));
+		).where(and(...mainQueryFilters));
 	return result;
 }
 
