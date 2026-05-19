@@ -1,5 +1,5 @@
 import { defineEventHandler } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import { findAllDatasets } from "~/utils/helpers/datasets";
 
 defineRouteMeta({

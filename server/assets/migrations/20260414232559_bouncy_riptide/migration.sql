@@ -1,0 +1,1 @@
+ALTER TABLE "devices" RENAME COLUMN "userAgent" TO "user_agent";

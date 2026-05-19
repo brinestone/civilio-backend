@@ -1,0 +1,1 @@
+ALTER TABLE "devices" ALTER COLUMN "added_at" SET DEFAULT now();

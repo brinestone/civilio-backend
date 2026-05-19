@@ -1,4 +1,4 @@
-import { defineRelations, isNotNull, sql } from "drizzle-orm";
+import { eq, getColumns, isNotNull, sql } from "drizzle-orm";
 import {
 	bigint,
 	bigserial,
@@ -9,6 +9,7 @@ import {
 	jsonb,
 	pgEnum,
 	pgTable,
+	pgView,
 	primaryKey,
 	text,
 	timestamp,
@@ -128,6 +129,7 @@ export const forms = pgTable('form_definitions', {
 		mode: 'date',
 		withTimezone: true
 	}).notNull().defaultNow(),
+	// ownerDevice: text().references(() => devices.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 	updatedAt: timestamp('updated_at', {
 		mode: 'date',
 		withTimezone: true
@@ -174,7 +176,7 @@ export const formItems = pgTable('form_items', {
 	type: formItemType().notNull(),
 	id: uuid().notNull().defaultRandom().primaryKey(),
 	config: jsonb(),
-	// dataKey: text('data_key'),
+	// ownerDevice: text().references(() => devices.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 	tags: jsonb().default([]),
 }, t => [
 	// index().on(t.dataKey).where(isNotNull(t.dataKey)),
@@ -222,6 +224,27 @@ export const formVersionItems = pgTable('form_version_items', {
 	})
 ]);
 
+export const libraryItems = pgTable('library_items', {
+	owner: text(),
+	itemId: uuid().notNull(),
+	addedAt: timestamp('added_at', { mode: 'date', withTimezone: true })
+}, t => [
+	foreignKey({
+		columns: [t.owner],
+		foreignColumns: [devices.id],
+	}).onDelete('set null')
+		.onUpdate('cascade'),
+	foreignKey({
+		columns: [t.itemId],
+		foreignColumns: [formItems.id]
+	}).onDelete('cascade'),
+	primaryKey({
+		columns: [
+			t.itemId, t.owner
+		]
+	})
+]);
+
 export const formSubmissions = pgTable('form_submissions', {
 	index: bigserial('_index', { mode: 'number' }).notNull(),
 	recordedAt: timestamp('recorded_at', {
@@ -235,7 +258,7 @@ export const formSubmissions = pgTable('form_submissions', {
 	index().on(t.form),
 	index().on(t.formVersion),
 	index().on(t.form, t.formVersion),
-	primaryKey({ columns: [t.index, t.form] }),
+	primaryKey({ columns: [t.index, t.form, t.formVersion] }),
 	foreignKey({
 		columns: [t.formVersion, t.form],
 		foreignColumns: [formVersions.id, formVersions.form]
@@ -248,7 +271,7 @@ export const formSubmissions = pgTable('form_submissions', {
 
 export const submissionVersions = pgTable('submission_versions', {
 	changeNotes: text('change_notes').notNull(),
-	// id: uuid().notNull().defaultRandom(),
+	id: uuid().notNull().defaultRandom(),
 	tag: text().notNull(),
 	index: bigint('submission_index', { mode: 'number' }).notNull(),
 	formVersion: uuid('form_version').notNull(),
@@ -269,6 +292,7 @@ export const submissionVersions = pgTable('submission_versions', {
 	index().on(t.formVersion),
 	index().on(t.index, t.form),
 	index().on(t.formVersion, t.form),
+	index().on(t.formVersion, t.index),
 	primaryKey({
 		columns: [t.tag, t.formVersion, t.index, t.form]
 	}),
@@ -288,24 +312,27 @@ export const submissionVersions = pgTable('submission_versions', {
 
 export const submissionResponses = pgTable('submission_responses', {
 	submissionIndex: bigint('submission_index', { mode: 'number' }).notNull(),
-	fieldId: uuid('field_id').notNull(),
+	itemId: uuid('item_id').notNull(),
 	formVersion: uuid('form_version').notNull(),
 	submissionTag: text('submission_tag').notNull(),
+	responseId: uuid('response_id').notNull().defaultRandom(),
 	form: text().notNull(),
 	value: text(),
+	addedAt: timestamp('added_at', { mode: 'date', withTimezone: true }).notNull().defaultNow()
 }, t => [
 	index().on(t.form),
-	index().on(t.fieldId),
+	index().on(t.itemId),
 	index().on(t.formVersion),
 	index().on(t.submissionTag),
-	primaryKey({ columns: [t.submissionIndex, t.fieldId, t.formVersion, t.submissionTag] }),
+	primaryKey({ columns: [t.submissionIndex, t.itemId, t.formVersion, t.submissionTag] }),
 	foreignKey({
 		columns: [t.submissionTag, t.formVersion, t.submissionIndex, t.form],
 		foreignColumns: [submissionVersions.tag, submissionVersions.formVersion, submissionVersions.index, submissionVersions.form]
-	}).onDelete('cascade'),
+	}).onDelete('cascade')
+		.onUpdate('cascade'),
 	foreignKey({
-		columns: [t.fieldId],
-		foreignColumns: [formItems.id]
+		columns: [t.formVersion, t.itemId],
+		foreignColumns: [formVersionItems.formVersion, formVersionItems.id]
 	}).onDelete('cascade')
 		.onUpdate('cascade'),
 	foreignKey({
@@ -314,80 +341,40 @@ export const submissionResponses = pgTable('submission_responses', {
 	}).onUpdate('cascade'),
 ]);
 
-export const relations = defineRelations({
-	formDefinitions: forms,
-	formVersions,
-	formItems,
-	formSubmissions,
-	formVersionItems,
-	submissionVersions,
-	submissionResponses,
-	datasets,
-	datasetItems,
-}, r => ({
-	datasets: {
-		items: r.many.datasetItems({
-			from: r.datasets.id,
-			to: r.datasetItems.dataset
-		}),
-		parent: r.one.datasets({
-			optional: true,
-			from: r.datasets.parentId,
-			to: r.datasets.id
-		})
-	},
-	datasetItems: {
-		parentDataset: r.one.datasets({
-			from: r.datasetItems.dataset,
-			to: r.datasets.id,
-			optional: true,
-		})
-	},
-	formDefinitions: {
-		versions: r.many.formVersions({
-			from: r.formDefinitions.slug,
-			to: r.formVersions.form
-		}),
-		currentVersion: r.one.formVersions({
-			from: r.formDefinitions.slug,
-			to: r.formVersions.form,
-			optional: true,
-			where: {
-				isCurrent: true
-			},
-		}),
-	},
-	formVersions: {
-		formRef: r.one.formDefinitions({
-			from: r.formVersions.form,
-			to: r.formDefinitions.slug,
-		}),
-		parent: r.one.formVersions({
-			from: r.formVersions.parentId,
-			to: r.formVersions.id,
-			optional: true,
-		}),
-		items: r.many.formItems({
-			from: r.formVersions.id.through(r.formVersionItems.formVersion),
-			to: r.formItems.id.through(r.formVersionItems.itemId),
-		}),
-		submissions: r.many.formSubmissions({
-			from: r.formVersions.id,
-			to: r.formSubmissions.formVersion
-		})
-	},
-	formSubmissions: {
-		versions: r.many.submissionVersions({
-			from: [r.formSubmissions.formVersion, r.formSubmissions.index, r.formSubmissions.form],
-			to: [r.submissionVersions.formVersion, r.submissionVersions.index, r.submissionVersions.form],
-		}),
-		currentVersion: r.one.submissionVersions({
-			from: [r.formSubmissions.formVersion, r.formSubmissions.index, r.formSubmissions.form],
-			to: [r.submissionVersions.formVersion, r.submissionVersions.index, r.submissionVersions.form],
-			optional: true,
-			where: {
-				isCurrent: true
-			}
-		})
-	}
-}));
+export const devices = pgTable('devices', {
+	id: text().primaryKey(),
+	userAgent: text('user_agent').notNull(),
+	addedAt: timestamp('added_at', { withTimezone: true, mode: 'date' }).defaultNow()
+});
+
+export const syncChanges = pgTable('sync_changes', {
+	rev: bigserial('rev', { mode: 'number' }).primaryKey().notNull(),
+	entityId: uuid('entity_id').notNull(),
+	entityTable: varchar('entity_table', { length: 63 }).notNull(),
+	type: integer('type').notNull(),
+	data: jsonb(),
+	createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull()
+});
+
+export const changeOperations = pgEnum('change_ops', [
+	'insert', 'update', 'delete'
+])
+export const docChanges = pgTable('doc_changes', {
+	id: uuid().notNull().primaryKey().defaultRandom(),
+	entityKey: text('entity_key').notNull(),
+	collection: text().notNull(),
+	operation: changeOperations().notNull(),
+	data: jsonb().notNull(),
+	recordedAt: timestamp('recorded_at', { mode: 'date' }).defaultNow().notNull()
+}, t => [
+	index().on(t.collection, t.recordedAt),
+	index().on(t.entityKey, t.recordedAt),
+]);
+export const vwDocChanges = pgView('vw_doc_states').as(qb =>
+	qb.select({
+		...getColumns(docChanges),
+		isDeleted: eq(docChanges.operation, 'delete').as<boolean>('is_deleted'),
+		data: sql<boolean>`${docChanges.data} || jsonb_build_object('isDeleted', ${eq(docChanges.operation, 'delete')})`.as('data')
+	}).from(docChanges)
+		.orderBy(docChanges.recordedAt)
+);

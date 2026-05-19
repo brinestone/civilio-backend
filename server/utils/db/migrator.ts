@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { DrizzleError, sql } from 'drizzle-orm';
-import { useStorage } from 'nitropack/runtime';
 import Logger from '../logger';
+import { useStorage } from 'nitro/storage';
 import { Connection } from '../types/types';
 
 const statementSeparator = '--> statement-breakpoint';
@@ -79,7 +79,7 @@ async function checkMigrations(table: string, db: Connection): Promise<{
 
 	// Extract sequence number (e.g., "0001_name.sql" -> 1)
 	const lastSequence = lastAppliedName
-		? parseInt(lastAppliedName.split('_')[0])
+		? parseInt(lastAppliedName.split('_', 2)[0])
 		: -1;
 
 	// 4. Filter: Only migrations with a prefix GREATER than the last applied sequence

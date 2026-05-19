@@ -1,9 +1,10 @@
-import { defineNitroPlugin, runTask, useRuntimeConfig } from "nitropack/runtime";
 import { initPool, closePool } from "~/utils/db";
 import { pause } from "~/utils/misc";
 import Logger from "~/utils/logger";
+import { useRuntimeConfig } from "nitro/runtime-config";
+import { definePlugin } from "nitro";
 
-export default defineNitroPlugin(async app => {
+export default definePlugin(async app => {
 	let priorFail = false;
 	while (true) {
 		try {
@@ -27,7 +28,7 @@ export default defineNitroPlugin(async app => {
 	if (import.meta.dev) {
 		try {
 			Logger.info('Running database migrations');
-			await runTask('db:migrate');
+			// await runTask('db:migrate');
 		} catch (e) {
 			Logger.error(e);
 			throw e;

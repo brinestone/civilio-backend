@@ -1,10 +1,10 @@
-import { defineNitroConfig } from "nitropack/config";
+import { defineConfig } from "nitro";
 
-const compatibilityDate = "2026-01-03";
+const compatibilityDate = "2026-19-05";
 const uploadsBase = 'uploads';
 
 // https://nitro.build/config
-export default defineNitroConfig({
+export default defineConfig({
 	imports: { autoImport: false },
 	publicAssets: [
 		{ baseURL: uploadsBase, dir: 'public/uploads', maxAge: 60 * 60 * 24 * 7 }
@@ -32,7 +32,7 @@ export default defineNitroConfig({
 	},
 	scheduledTasks: {},
 	compatibilityDate,
-	srcDir: "server",
+	serverDir: "server",
 	runtimeConfig: {
 		uploadsBase: `/${uploadsBase}`,
 		publicOrigin: 'http://localhost:3000',
@@ -49,7 +49,6 @@ export default defineNitroConfig({
 		ui: {
 			scalar: {
 				route: '/_docs/scalar',
-				theme: 'deepSpace'
 			}
 		}
 	}

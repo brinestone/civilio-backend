@@ -50,7 +50,7 @@ export async function updateFormItems(tx: ConnectionLike, slug: string, version:
 					.values({
 						type: item.type,
 						config,
-						tags
+						tags,
 					}).returning({ id: formItems.id });
 				_itemId = id;
 			}
@@ -330,13 +330,19 @@ export async function formSlugAvailable(slug: string) {
 	return result.rows[0].exists;
 }
 
-export async function lookupFormVersionsByFormSlug(slug: string) {
-	const db = provideDb();
-
-	return await db.query.formVersions.findMany({
-		where: {
-			form: slug
-		},
+export async function lookupFormVersionsByFormSlug(tx: ConnectionLike, limit: number, offset?: number | null, slug?: string) {
+	const whereCondition: Record<string, any> = {};
+	if (slug) {
+		whereCondition.form = slug;
+	}
+	if (offset) {
+		whereCondition.createdAt = {
+			gt: new Date(offset)
+		}
+	}
+	return await tx.query.formVersions.findMany({
+		limit,
+		where: whereCondition || undefined
 	});
 }
 

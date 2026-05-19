@@ -11,7 +11,7 @@ const levels = {
 };
 
 const level = () => {
-  return import.meta.dev ? 'debug' : 'warn';
+  return import.meta.dev ? 'debug' : 'info';
 };
 
 const colors = {

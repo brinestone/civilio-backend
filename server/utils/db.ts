@@ -4,6 +4,7 @@ import * as schema from './db/schema';
 import Logger from "./logger";
 import { PgColumn } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import { relations } from "./db/relations";
 
 let pool: Pool;
 
@@ -36,7 +37,7 @@ export function provideDb() {
 				Logger.verbose(`query: ${query} ${(params && params.length > 0) ? `-- ${JSON.stringify(params)}` : ''}`);
 			}
 		},
-		relations: schema.relations,
+		relations,
 		schema
 	})
 }

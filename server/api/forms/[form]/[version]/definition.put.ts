@@ -1,6 +1,6 @@
 import { defineEventHandler, setResponseStatus } from "h3";
 import _ from "lodash";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
 import { provideDb } from "~/utils/db";
 import { FormItemDefinitionUpdate, FormItemDefinitionUpdateSchema, FormItemFieldUpdate, FormItemGroupUpdate, NewFormItemDefinition, NewFormItemDefinitionSchema, NewFormItemGroup } from "~/utils/dto/form";
@@ -8,34 +8,38 @@ import {
 	validateZodRequestBody,
 	validateZodRouterParams
 } from "~/utils/dto/zod";
+import { requireAuth } from "~/utils/helpers/auth";
 import { createFormItems, formVersionExistsTx, removeFormItems, updateFormItems } from "~/utils/helpers/forms";
 import Logger from "~/utils/logger";
 import { fromExecutionError } from '~/utils/misc';
 import { ExecutionError, UnprocessibleError } from "~/utils/types/errors";
 import { ConnectionLike } from "~/utils/types/types";
 
-export default defineEventHandler(async event => {
-	const { addedItems, removedItems, updatedItems } = await validateZodRequestBody(event, bodySchema);
-	const params = await validateZodRouterParams(event, pathSchema);
-	try {
-		const db = provideDb();
-		await db.transaction(async tx => {
-			const formVersionExists = await formVersionExistsTx(tx, params.form, params.version);
-			if (!formVersionExists) throw new UnprocessibleError(`No such form version: ${params.version} exists`);
+export default defineEventHandler({
+	onRequest: [requireAuth],
+	handler: async event => {
+		const { addedItems, removedItems, updatedItems } = await validateZodRequestBody(event, bodySchema);
+		const params = await validateZodRouterParams(event, pathSchema);
+		try {
+			const db = provideDb();
+			await db.transaction(async tx => {
+				const formVersionExists = await formVersionExistsTx(tx, params.form, params.version);
+				if (!formVersionExists) throw new UnprocessibleError(`No such form version: ${params.version} exists`);
 
-			if (addedItems && addedItems.length > 0)
-				await processAddedItems(tx, params.form, params.version, addedItems);
-			if (updatedItems && updatedItems.length > 0)
-				await processUpdatedItems(tx, params.form, params.version, updatedItems)
-			if (removedItems && removedItems.length > 0)
-				await processDeletedItems(tx, params.form, params.version, removedItems);
-		});
-		setResponseStatus(event, 202);
-	} catch (e) {
-		if (e instanceof ExecutionError) {
-			throw fromExecutionError(e);
+				if (addedItems && addedItems.length > 0)
+					await processAddedItems(tx, params.form, params.version, addedItems);
+				if (updatedItems && updatedItems.length > 0)
+					await processUpdatedItems(tx, params.form, params.version, updatedItems)
+				if (removedItems && removedItems.length > 0)
+					await processDeletedItems(tx, params.form, params.version, removedItems);
+			});
+			setResponseStatus(event, 202);
+		} catch (e) {
+			if (e instanceof ExecutionError) {
+				throw fromExecutionError(e);
+			}
+			throw e;
 		}
-		throw e;
 	}
 });
 
@@ -135,12 +139,22 @@ defineRouteMeta({
 				schema: { type: 'string', format: 'uuid' }
 			},
 		],
+		security: [
+			{ ApiKeyAuth: [] }
+		],
 		tags: ['Forms'],
 		operationId: 'updateFormVersionDefinition',
 		summary: 'Update form definition',
 		description: 'Update a form version\'s definition',
 		$global: {
 			components: {
+				securitySchemes: {
+					ApiKeyAuth: {
+						type: 'apiKey',
+						in: 'header',
+						name: 'Authorization'
+					}
+				},
 				schemas: {
 					UpdateFormDefinitionRequest: {
 						type: 'object',

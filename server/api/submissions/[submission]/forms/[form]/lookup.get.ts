@@ -1,5 +1,5 @@
 import { defineEventHandler } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
 import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
 import { lookupSubmissionVersions } from "~/utils/helpers/submissions";
@@ -70,11 +70,13 @@ defineRouteMeta({
 							'recordedAt',
 							'tag',
 							'validationCode',
+							'id',
 							'changeNotes'
 						],
 						properties: {
 							next: { type: 'integer', nullable: true },
 							prev: { type: 'integer', nullable: true },
+							id: { type: 'string', format: 'uuid' },
 							tag: { type: 'string' },
 							form: { type: 'string' },
 							changeNotes: { type: 'string' },

@@ -1,6 +1,6 @@
 {
     "name": "civilio-backend",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "private": true,
     "packageManager": "pnpm@10.17.0",
     "scripts": {
@@ -24,7 +24,7 @@
         "dotenv": "^17.2.3",
         "drizzle-kit": "1.0.0-beta.20",
         "h3": "^1.15.4",
-        "nitropack": "^2.12.4",
+        "nitro": "latest",
         "standard-version": "^9.5.0"
     },
     "dependencies": {

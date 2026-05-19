@@ -1,10 +1,10 @@
-import { validateZodQueryParams } from "~/utils/dto/zod";
-import { defineEventHandler } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineEventHandler } from "nitro/h3";
+import { defineRouteMeta } from "nitro";
 import { LookupFormSubmissionsRequestSchema } from "~/utils/dto/submission";
-import { ExecutionError, } from "~/utils/types/errors";
+import { validateZodQueryParams } from "~/utils/dto/zod";
 import { lookupFormSubmissions } from "~/utils/helpers/submissions";
 import { fromExecutionError } from "~/utils/misc";
+import { ExecutionError, } from "~/utils/types/errors";
 
 export default defineEventHandler(async event => {
 	const {
@@ -91,8 +91,9 @@ defineRouteMeta({
 					SubmissionLookup: {
 						additionalProperties: false,
 						type: 'object',
-						required: ['form', 'formVersion', 'index', 'recordedAt', 'versionCount'],
+						required: ['form', 'formVersion', 'index', 'recordedAt', 'versionCount', 'id'],
 						properties: {
+							id: { type: 'string', format: 'uuid', default: '' },
 							slug: { type: 'string' },
 							form: { type: 'string' },
 							formVersion: { type: 'string', format: 'uuid' },

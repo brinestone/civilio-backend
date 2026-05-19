@@ -1,0 +1,2 @@
+DROP VIEW "vw_doc_changes";--> statement-breakpoint
+CREATE VIEW "vw_doc_changes" AS (select "id", "entity_key", "collection", "operation", "data", "recorded_at", "operation" = 'delete' from "doc_changes" order by "doc_changes"."recorded_at");

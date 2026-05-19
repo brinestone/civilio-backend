@@ -1,5 +1,5 @@
 import { defineEventHandler, setResponseStatus } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
 import { validateZodQueryParams, validateZodRouterParams } from "~/utils/dto/zod";
 import { toggleApprovalStatus } from "~/utils/helpers/submissions";

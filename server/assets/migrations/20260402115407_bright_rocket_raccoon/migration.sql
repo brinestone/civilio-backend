@@ -1,0 +1,5 @@
+ALTER TABLE "submission_responses" DROP CONSTRAINT "submission_responses_field_id_form_items_id_fkey";--> statement-breakpoint
+ALTER TABLE "submission_responses" RENAME COLUMN "field_id" TO "item_id";--> statement-breakpoint
+CREATE INDEX "submission_versions_form_version_submission_index_index" ON "submission_versions" ("form_version","submission_index");--> statement-breakpoint
+ALTER TABLE "submission_responses" ADD CONSTRAINT "submission_responses_3nTg8L5TbQe6_fkey" FOREIGN KEY ("form_version","item_id") REFERENCES "form_version_items"("form_version","id") ON DELETE CASCADE ON UPDATE CASCADE;--> statement-breakpoint
+ALTER TABLE "submission_responses" DROP CONSTRAINT "submission_responses_uz4m945uEVUl_fkey", ADD CONSTRAINT "submission_responses_uz4m945uEVUl_fkey" FOREIGN KEY ("submission_tag","form_version","submission_index","form") REFERENCES "submission_versions"("tag","form_version","submission_index","form") ON DELETE CASCADE ON UPDATE CASCADE;

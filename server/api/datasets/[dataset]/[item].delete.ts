@@ -1,8 +1,8 @@
-import { defineEventHandler, setResponseStatus } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
+import { defineEventHandler } from "nitro/h3";
 import z from "zod";
-import { deleteOption } from "~/utils/helpers/datasets";
 import { validateZodRouterParams } from "~/utils/dto/zod";
+import { deleteOption } from "~/utils/helpers/datasets";
 
 defineRouteMeta({
 	openAPI: {
@@ -30,6 +30,6 @@ export default defineEventHandler(async event => {
 	const data = await validateZodRouterParams(event, paramsSchema);
 
 	await deleteOption(data.dataset, data.item);
-	setResponseStatus(event, 204);
+	event.res.status = 204
 	return;
 })

@@ -1,19 +1,19 @@
-import { defineNitroPlugin } from 'nitropack/runtime';
 import Logger from '~/utils/logger';
+import { definePlugin } from 'nitro'
 import { requestLogger } from '~/utils/logging';
 
-export default defineNitroPlugin((nitroApp) => {
+export default definePlugin((nitroApp) => {
   // Add request logging middleware
   nitroApp.hooks.hook('request', (event) => {
-    requestLogger(event.node.req, event.node.res);
+    requestLogger(event.req, event.req);
   });
 
   // Add error logging
   nitroApp.hooks.hook('error', (error, { event }) => {
     Logger.error({
       message: error.message,
-      url: event?.node.req.url,
-      method: event?.node.req.method,
+      url: event?.req.url,
+      method: event?.req.method,
       stack: error.stack,
     });
   });

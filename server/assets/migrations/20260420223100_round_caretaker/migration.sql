@@ -1,0 +1,1 @@
+ALTER TABLE "submission_responses" ADD COLUMN "response_id" uuid DEFAULT gen_random_uuid() NOT NULL;

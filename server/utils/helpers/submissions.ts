@@ -5,6 +5,7 @@ import { provideDb } from "../db";
 import {
 	forms,
 	formSubmissions,
+	formVersionItems,
 	formVersions,
 	submissionResponses,
 	submissionVersions
@@ -16,8 +17,10 @@ import {
 } from "../dto/submission";
 import Logger from "../logger";
 import { NotFoundError, UnprocessibleError } from "../types/errors";
-import { Connection, Transaction } from "../types/types";
+import { Connection, ConnectionLike, Transaction } from "../types/types";
 import { formVersionExistsTx, getCurrentFormVersionTx } from "./forms";
+
+export type SubmissionResponseMeta = Omit<typeof submissionResponses['$inferSelect'], 'value'>
 
 export async function findSparseSubmissionIndexRanges(
 	form: string, limit: number, includeArchived = false, cursor?: number,
@@ -227,37 +230,60 @@ async function getCurrentSubmissionVersionTx(conn: Connection | Transaction, for
  * const responses = await findSubmissionResponses('form-123', 0);
  * const responsesWithVersion = await findSubmissionResponses('form-123', 0, 'v1', 'v1-sub');
  */
-export async function findSubmissionResponses(form: string, submissionIndex: number, formVersion?: string, submissionVersion?: string) {
-	const db = provideDb();
+export async function findSubmissionResponses(tx: ConnectionLike, form: string, submissionIndex: number, formVersion?: string, submissionVersion?: string) {
 
 	let formVersionId: string;
 	if (formVersion) {
-		const formVersionExists = await formVersionExistsTx(db, form, formVersion);
+		const formVersionExists = await formVersionExistsTx(tx, form, formVersion);
 		if (!formVersionExists) throw new NotFoundError(`Version: "${formVersion}" does not exist for the form: "${form}"`);
 		formVersionId = formVersion;
 	} else {
-		const currentFormVersionRef = await getCurrentFormVersionTx(db, form);
+		const currentFormVersionRef = await getCurrentFormVersionTx(tx, form);
 		if (!currentFormVersionRef) throw new NotFoundError(`The form: "${form}" has no version marked as "current" set, or the form does not exist`);
 		formVersionId = currentFormVersionRef.id;
 	}
 
 	let submissionTag: string;
 	if (submissionVersion) {
-		const submissionVersionExists = await submissionVersionExistsTx(db, submissionVersion);
+		const submissionVersionExists = await submissionVersionExistsTx(tx, submissionVersion);
 		if (!submissionVersionExists) throw new Error(`Version for submission: "${submissionIndex}" does not exist.`);
 		submissionTag = submissionVersion;
 	} else {
-		const currentSubmissionVersionRef = await getCurrentSubmissionVersionTx(db, form, submissionIndex, formVersionId);
+		const currentSubmissionVersionRef = await getCurrentSubmissionVersionTx(tx, form, submissionIndex, formVersionId);
 		if (!currentSubmissionVersionRef) throw new NotFoundError(`The form: "${form}" has no submission version under index: "${submissionIndex}" marked as "current", or either the form, form version or submission does not exist`);
 		submissionTag = currentSubmissionVersionRef.tag;
 	}
 
-	const result = await db.query.submissionResponses.findMany({
-		where: {
-			submissionTag
-		},
-	});
-	return result;
+	const sr = alias(submissionResponses, 'sr');
+	const fvi = alias(formVersionItems, 'fvi');
+
+	const responsesQuery = tx.select({
+		data: sql<Record<string, unknown>>`jsonb_build_object(
+			${fvi.config} ->> 'dataKey', ${sr.value}
+		)`.as('data')
+	})
+		.from(sr)
+		.innerJoin(fvi, and(
+			eq(fvi.formVersion, sr.formVersion),
+			eq(fvi.id, sr.itemId),
+			sql<boolean>`${fvi.config} @> '{"type": "field"}'::JSONB`
+		))
+		.where(and(
+			eq(sr.submissionTag, submissionTag),
+			eq(sr.formVersion, formVersionId),
+			eq(sr.submissionIndex, submissionIndex),
+			eq(sr.form, form),
+		))
+		.as('all_responses');
+
+	const result = await tx.select({
+		data: sql<Record<string, unknown>>`jsonb_object_agg(sub.key, sub.value)`
+	}).from(sql`(
+		SELECT jsonb_object_keys(data) AS key, data -> jsonb_object_keys(data) AS value
+		FROM ${responsesQuery}
+	) AS sub`);
+
+	return { data: result[0]?.data || {}, meta: { formVersion: formVersionId, submissionIndex, form, submissionVersion: submissionTag } };
 }
 
 /**

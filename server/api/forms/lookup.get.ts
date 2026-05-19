@@ -1,5 +1,5 @@
 import { defineEventHandler } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import { ExecutionError } from "~/utils/types/errors";
 import { lookupForms } from "~/utils/helpers/forms";
 import { fromExecutionError } from "~/utils/misc";

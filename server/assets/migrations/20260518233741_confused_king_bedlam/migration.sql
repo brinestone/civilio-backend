@@ -1,0 +1,2 @@
+DROP VIEW "vw_doc_states";--> statement-breakpoint
+CREATE VIEW "vw_doc_states" AS (select "id", "entity_key", "collection", "operation", "data" || jsonb_build_object('isDeleted', "doc_changes"."operation" = 'delete') as "data", "recorded_at", "operation" = 'delete' as "is_deleted" from "doc_changes" order by "doc_changes"."recorded_at");

@@ -1,0 +1,1 @@
+ALTER VIEW "vw_doc_changes" RENAME TO "vw_doc_states";

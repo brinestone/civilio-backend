@@ -1,4 +1,4 @@
-import { defineTask } from "nitropack/runtime";
+import { defineTask } from 'nitro/task';
 import { provideDb } from "~/utils/db";
 import { seedDatabase } from "~/utils/db/seeding";
 

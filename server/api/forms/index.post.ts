@@ -1,5 +1,5 @@
 import { defineEventHandler, setResponseStatus } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
 import { validateZodRequestBody } from "~/utils/dto/zod";
 import { ExecutionError, } from "~/utils/types/errors";

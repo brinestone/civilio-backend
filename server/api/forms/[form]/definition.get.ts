@@ -1,5 +1,5 @@
 import { defineEventHandler } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
 import {
 	validateZodQueryParams,
@@ -22,7 +22,6 @@ export default defineEventHandler(async event => {
 
 	try {
 		const result = await findFormVersionDefinition(pathParams.form, queryParams.archived, queryParams.version);
-
 		if (!result)
 			throw new NotFoundError('definition not found');
 		return result;
@@ -146,7 +145,15 @@ defineRouteMeta({
 							},
 							negated: { type: 'boolean', default: false },
 							value: {
-								nullable: true, type: 'string', default: null,
+								type: 'object',
+								additionalProperties: false,
+								nullable: true,
+								default: null,
+								oneOf: [
+									{ type: ['string', 'number', 'boolean'] },
+									{ type: 'array', items: { type: ['string', 'number', 'boolean'] } },
+									{ $ref: '#/components/schemas/NumberRange' }
+								]
 							}
 						}
 					},
@@ -294,6 +301,7 @@ defineRouteMeta({
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
 							{ $ref: '#/components/schemas/BaseFormItemGroup' },
+							{ $ref: '#/components/schemas/HasLibraryStatus' },
 							{
 								type: 'object',
 								additionalProperties: false,
@@ -343,7 +351,8 @@ defineRouteMeta({
 						additionalProperties: false,
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
-							{ $ref: '#/components/schemas/NewFormItemImage' }
+							{ $ref: '#/components/schemas/NewFormItemImage' },
+							{ $ref: '#/components/schemas/HasLibraryStatus' }
 						]
 					},
 					NewFormItemImage: {
@@ -384,6 +393,7 @@ defineRouteMeta({
 						type: 'object',
 						additionalProperties: false,
 						allOf: [
+							{ $ref: '#/components/schemas/HasLibraryStatus' },
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
 							{ $ref: '#/components/schemas/NewFormItemNote' }
 						]
@@ -436,6 +446,7 @@ defineRouteMeta({
 						allOf: [
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithId' },
 							{ $ref: '#/components/schemas/NewFormItemField' },
+							{ $ref: '#/components/schemas/HasLibraryStatus' }
 						]
 					},
 					NewGroupItemConfig: {
@@ -458,17 +469,33 @@ defineRouteMeta({
 							}
 						]
 					},
+					HasDataKey: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['dataKey', 'autoDataKey'],
+						properties: {
+							dataKey: { type: 'string', nullable: true, default: null },
+							autoDataKey: { type: 'boolean', default: true, summary: 'Whether the data key fhouls be computed or not' },
+						}
+					},
 					BaseGroupItemConfig: {
 						type: 'object',
 						additionalProperties: false,
-						required: ['orientation', 'fields', 'title', 'repeatable'],
-						properties: {
-							title: { type: 'string', nullable: true, default: null },
-							description: { type: 'string', nullable: true, default: null },
-							repeatable: { type: 'boolean', default: false },
-							divisionCount: { type: 'integer', minimum: 1, default: 1 },
-							orientation: { type: 'string', enum: ['horizonal', 'vertical'], default: 'vertical' },
-						}
+						allOf: [
+							{ $ref: '#/components/schemas/HasDataKey' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['orientation', 'fields', 'title', 'repeatable'],
+								properties: {
+									title: { type: 'string', nullable: true, default: null },
+									description: { type: 'string', nullable: true, default: null },
+									repeatable: { type: 'boolean', default: false },
+									divisionCount: { type: 'integer', minimum: 1, default: 1 },
+									orientation: { type: 'string', enum: ['horizonal', 'vertical'], default: 'vertical' },
+								}
+							}
+						]
 					},
 					GroupItemEntry: {
 						type: 'object',
@@ -511,7 +538,7 @@ defineRouteMeta({
 								'text': '#/components/schemas/TextFieldConfig',
 								'multiline': '#/components/schemas/TextFieldConfig',
 								'single-select': '#/components/schemas/SelectFieldConfig',
-								'multi-select': '#/components/schemas/SelectFieldConfig',
+								'multi-select': '#/components/schemas/MultiSelectFieldConfig',
 								'date': '#/components/schemas/SimpleDateFieldConfig',
 								'date-time': '#/components/schemas/SimpleDateFieldConfig',
 								'date-range': '#/components/schemas/RangeDateFieldConfig',
@@ -524,6 +551,7 @@ defineRouteMeta({
 							{ $ref: '#/components/schemas/BooleanFieldConfig' },
 							{ $ref: '#/components/schemas/TextFieldConfig' },
 							{ $ref: '#/components/schemas/SelectFieldConfig' },
+							{ $ref: '#/components/schemas/MultiSelectFieldConfig' },
 							{ $ref: '#/components/schemas/MultiDateFieldConfig' },
 							{ $ref: '#/components/schemas/SimpleDateFieldConfig' },
 							{ $ref: '#/components/schemas/RangeDateFieldConfig' },
@@ -536,7 +564,7 @@ defineRouteMeta({
 							{ $ref: '#/components/schemas/BaseFormItemDefinitionWithoutId' },
 							{
 								type: 'object',
-								required: ['id', 'itemId', 'addedAt', 'updatedAt',],
+								required: ['id', 'itemId', 'addedAt', 'updatedAt'],
 								additionalProperties: false,
 								properties: {
 									id: { type: 'string', format: 'uuid' },
@@ -547,6 +575,14 @@ defineRouteMeta({
 								}
 							}
 						]
+					},
+					HasLibraryStatus: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['inLibrary'],
+						properties: {
+							inLibrary: { type: 'boolean', default: false }
+						}
 					},
 					Tag: {
 						type: 'object',
@@ -683,35 +719,33 @@ defineRouteMeta({
 						]
 					},
 					BaseFieldProps: {
-						type: 'object', additionalProperties: false,
-						required: ['required', 'readonly', 'title', 'tags', 'autoDataKey'],
-						properties: {
-							required: {
-								type: 'boolean',
-								default: true,
-								nullable: true
-							},
-							readonly: {
-								type: 'boolean',
-								default: false,
-								nullable: true
-							},
-							title: { type: 'string', default: '' },
-							description: {
-								type: 'string',
-								nullable: true,
-								default: null,
-							},
-							dataKey: {
-								type: 'string',
-								nullable: true,
-								default: null
-							},
-							autoDataKey: {
-								type: 'boolean',
-								default: true
+						type: 'object',
+						additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/HasDataKey' },
+							{
+								type: 'object', additionalProperties: false,
+								required: ['required', 'readonly', 'title', 'tags', 'autoDataKey'],
+								properties: {
+									required: {
+										type: 'boolean',
+										default: true,
+										nullable: true
+									},
+									readonly: {
+										type: 'boolean',
+										default: false,
+										nullable: true
+									},
+									title: { type: 'string', default: '' },
+									description: {
+										type: 'string',
+										nullable: true,
+										default: null,
+									}
+								}
 							}
-						}
+						]
 					},
 					SeparatorItemConfig: {
 						type: 'object',
@@ -891,6 +925,54 @@ defineRouteMeta({
 							}
 						]
 					},
+					MultiSelectFieldConfig: {
+						type: 'object', additionalProperties: false,
+						allOf: [
+							{ $ref: '#/components/schemas/BaseFieldProps' },
+							{
+								type: 'object',
+								additionalProperties: false,
+								required: ['type'],
+								properties: {
+									type: {
+										type: 'string',
+										enum: ['multi-select']
+									},
+									itemSourceRef: {
+										type: 'string',
+										nullable: true,
+										default: null
+									},
+									defaultValue: {
+										type: 'array',
+										items: { type: 'string' },
+										nullable: true,
+										default: []
+									},
+									hardItems: {
+										type: 'array',
+										default: [],
+										items: {
+											additionalProperties: false,
+											type: 'object',
+											properties: {
+												label: {
+													type: 'string',
+													nullable: true,
+													default: null
+												},
+												value: {
+													type: 'string',
+													nullable: true,
+													default: null
+												}
+											}
+										}
+									}
+								}
+							}
+						]
+					},
 					SelectFieldConfig: {
 						type: 'object', additionalProperties: false,
 						allOf: [
@@ -902,7 +984,7 @@ defineRouteMeta({
 								properties: {
 									type: {
 										type: 'string',
-										enum: ['single-select', 'multi-select']
+										enum: ['single-select']
 									},
 									itemSourceRef: {
 										type: 'string',

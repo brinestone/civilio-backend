@@ -1,4 +1,5 @@
-import { defineNitroPlugin, useRuntimeConfig } from 'nitropack/runtime';
+import { definePlugin } from 'nitro';
+import { useRuntimeConfig } from 'nitro/runtime-config';
 import dgram from 'node:dgram';
 import Logger from '~/utils/logger';
 
@@ -6,7 +7,7 @@ const CLIENT_CODES = {
   civilio: 'g8eULU5uY6u1ZQSuGTUeDQABLgArt2yOTDKJ0AB1Y13GYCHt6Hkj7Q0qsUGWtRqS'
 } as const;
 
-export default defineNitroPlugin((app) => {
+export default definePlugin((app) => {
   const PORT = 5534; // Shared port between client and server
   const server = dgram.createSocket('udp4');
 

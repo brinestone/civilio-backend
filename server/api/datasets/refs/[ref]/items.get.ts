@@ -1,5 +1,5 @@
 import { defineEventHandler, setHeader } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
 import { findDatasetRefItems } from "~/utils/helpers/datasets";
 import { validateZodRouterParams } from "~/utils/dto/zod";

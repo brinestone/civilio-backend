@@ -1,7 +1,7 @@
 
 export type ErrorData = any;
 
-export type ErrorCode = 'resource_conflict' | 'unprocessible' | 'resource_not_found';
+export type ErrorCode = 'unauthorized' | 'resource_conflict' | 'unprocessible' | 'resource_not_found';
 export class ExecutionError extends Error {
 	constructor(readonly code: ErrorCode, message?: string, readonly data?: ErrorData) {
 		super(message);
@@ -16,10 +16,12 @@ function extendExecutionError(code: ErrorCode) {
 }
 export class ConflictError extends extendExecutionError('resource_conflict') { }
 export class UnprocessibleError extends extendExecutionError('unprocessible') { }
-export class NotFoundError extends extendExecutionError('resource_not_found'){}
+export class NotFoundError extends extendExecutionError('resource_not_found') { }
+export class UnauthorizedError extends extendExecutionError('unauthorized'){}
 
 export function toStatusCode(code: ErrorCode) {
 	switch (code) {
+		case 'unauthorized': return 401;
 		case 'resource_conflict': return 409;
 		case 'unprocessible': return 422;
 		case 'resource_not_found': return 404;

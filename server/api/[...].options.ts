@@ -1,11 +1,12 @@
-import { defineRouteMeta, defineCachedEventHandler } from "nitropack/runtime"
+import { defineRouteMeta } from "nitro"
+import { defineCachedHandler } from 'nitro/cache'
 
 defineRouteMeta({
   openAPI: {
     tags: ['Internal']
   }
 })
-export default defineCachedEventHandler(event => {
+export default defineCachedHandler(event => {
   // handleCors(event, {
   //   origin: '*',
   //   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE',],

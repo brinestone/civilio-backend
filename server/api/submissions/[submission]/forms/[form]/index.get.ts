@@ -1,35 +1,38 @@
-import {
-	validateZodRouterParams,
-	validateZodQueryParams
-} from "~/utils/dto/zod";
 import { defineEventHandler } from "h3";
-import { defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
 import z from "zod";
-import { ExecutionError, } from "~/utils/types/errors";
+import { provideDb } from "~/utils/db";
+import {
+	validateZodQueryParams,
+	validateZodRouterParams
+} from "~/utils/dto/zod";
 import { findSubmissionResponses } from "~/utils/helpers/submissions";
 import { fromExecutionError } from "~/utils/misc";
+import { ExecutionError, } from "~/utils/types/errors";
 
 const pathSchema = z.object({
-	submission: z.coerce.number()
+	submission: z.coerce.number(),
+	form: z.string(),
 });
 
 const querySchema = z.object({
-	form: z.string(),
 	fv: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional()),
 	sv: z.string().trim().optional().pipe(z.uuid('Invalid UUID').optional())
 });
 
 
 export default defineEventHandler(async event => {
-	const pathResult = await validateZodRouterParams(event, pathSchema);
-	const queryResult = await validateZodQueryParams(event, querySchema);
+	const pathParams = await validateZodRouterParams(event, pathSchema);
+	const queryParams = await validateZodQueryParams(event, querySchema);
 
 	try {
+		const db = provideDb();
 		return await findSubmissionResponses(
-			queryResult.form,
-			pathResult.submission,
-			queryResult.fv,
-			queryResult.sv
+			db,
+			pathParams.form,
+			pathParams.submission,
+			queryParams.fv,
+			queryParams.sv
 		);
 	} catch (e) {
 		if (e instanceof ExecutionError) {
@@ -74,38 +77,30 @@ defineRouteMeta({
 		$global: {
 			components: {
 				schemas: {
-					SubmissionResponse: {
-						additionalProperties: false,
+					SubmissionData: {
+						additionalProperties: true,
 						type: 'object',
 						description: 'A single submission response',
+					},
+					SubmissionMetaData: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['formVersion', 'submissionIndex', 'form', 'submissionVersion'],
 						properties: {
-							submissionIndex: {
-								type: 'integer',
-								description: 'The index of the submission'
-							},
-							fieldId: {
-								type: 'string',
-								format: 'uuid',
-								description: 'UUID of the form field'
-							},
-							formVersion: {
-								type: 'string',
-								format: 'uuid',
-								description: 'UUID of the form version'
-							},
-							submissionTag: {
-								type: 'string',
-							},
-							form: {
-								type: 'string',
-								description: 'The form identifier/slug'
-							},
-							value: {
-								type: ['string', 'null'],
-								description: 'The response value for the field'
-							}
-						},
-						required: ['submissionIndex', 'fieldId', 'formVersion', 'submissionTag', 'form']
+							formVersion: { type: 'string', format: 'uuid' },
+							submissionIndex: { type: 'integer', minimum: 1 },
+							form: { type: 'string' },
+							submissionVersion: { type: 'string', format: 'uuid' }
+						}
+					},
+					SubmissionDataResponse: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['data', 'meta'],
+						properties: {
+							data: { $ref: '#/components/schemas/SubmissionData' },
+							meta: { $ref: '#/components/schemas/SubmissionMetaData' }
+						}
 					}
 				}
 			}
@@ -116,11 +111,7 @@ defineRouteMeta({
 				content: {
 					'application/json': {
 						schema: {
-							type: 'array',
-							description: 'Array of submission responses',
-							items: {
-								$ref: '#/components/schemas/SubmissionResponse'
-							}
+							$ref: '#/components/schemas/SubmissionDataResponse'
 						}
 					}
 				}

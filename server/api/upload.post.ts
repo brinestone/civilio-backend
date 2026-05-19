@@ -1,9 +1,10 @@
 import { existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
-import { createError, defineEventHandler, readMultipartFormData, setResponseStatus } from 'h3';
-import { defineRouteMeta, useRuntimeConfig } from 'nitropack/runtime';
+import { createError, defineEventHandler, readMultipartFormData, setResponseStatus } from 'nitro/h3';
 import path from 'path';
 import { hashTheseMd5 } from '~/utils/misc';
+import { useRuntimeConfig } from 'nitro/runtime-config';
+import { defineRouteMeta } from 'nitro';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event) => {
 	if (!files || files.length == 0) {
 		throw createError({ statusCode: 400, statusMessage: 'No file uploaded' });
 	}
-	const { uploadsBase } = useRuntimeConfig(event);
+	const { uploadsBase } = useRuntimeConfig();
 
 	const uploadedFiles = [];
 	for (const field of files) {
@@ -120,6 +121,18 @@ defineRouteMeta({
 							urlPath: { type: 'string', example: '/uploads/profile-pic-1234567890abc.jpg' }
 						}
 					},
+					UploadedFileRef: {
+						type: 'object',
+						additionalProperties: false,
+						required: ['originalName', 'filename', 'size', 'type',],
+						properties: {
+							originalName: { type: 'string' },
+							filename: { type: 'string' },
+							size: { type: 'number' },
+							type: { type: 'string' },
+							urlPath: { type: 'string' },
+						}
+					},
 					FileUploadResponse: {
 						type: 'object',
 						additionalProperties: false,
@@ -128,7 +141,10 @@ defineRouteMeta({
 								type: 'number',
 								example: 200
 							},
-							body: { $ref: '#/components/schemas/FileUploadResponseBody' }
+							body: {
+								type: 'array',
+								items: { $ref: '#/components/schemas/UploadedFileRef' }
+							}
 						}
 					}
 				}

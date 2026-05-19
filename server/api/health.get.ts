@@ -1,4 +1,5 @@
-import { defineCachedEventHandler, defineRouteMeta } from "nitropack/runtime";
+import { defineRouteMeta } from "nitro";
+import { defineCachedHandler } from "nitro/cache";
 
 defineRouteMeta({
 	openAPI: {
@@ -33,6 +34,6 @@ defineRouteMeta({
 		}
 	}
 })
-export default defineCachedEventHandler(event => {
+export default defineCachedHandler(event => {
 	return { ok: true };
 });

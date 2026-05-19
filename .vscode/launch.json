@@ -5,10 +5,15 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Nitro",
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nitropack",
+      "runtimeExecutable": "${workspaceFolder}/.vfox/sdks/nodejs/node",
       "runtimeArgs": [
+        "${workspaceFolder}/node_modules/nitropack/dist/cli/index.mjs",
         "dev"
       ],
+      "env": {
+        "NODE_ENV": "development",
+        "NODE_PATH": "${workspaceFolder}/node_modules/.pnpm/nitropack@2.12.9_@azure+ide_31f83974f4a3ebf6a802fb5c76ba73ab/node_modules"
+      },
       "outputCapture": "std",
       "restart": true,
       "console": "internalConsole",
